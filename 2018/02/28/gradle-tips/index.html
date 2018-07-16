@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="null">
+    <meta name="keyword"  content="undefined">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          Android 构建那些事 - 商明超的博客  | Frank&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="https://franksblog.top/2018/02/28/gradle-tips/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Frank&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archives/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="https://franksblog.top/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#Gradle" title="Gradle">Gradle</a>
+                        
+                    </div>
+                    <h1>Android 构建那些事</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by Frank on
+                        2018-02-28
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h1 id="Android-构建系统"><a href="#Android-构建系统" class="headerlink" title="Android 构建系统"></a>Android 构建系统</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>构建 APK 的过程是个相当复杂的过程，Android 构建系统需要将应用的资源文件和源文件一同打包到最终的 APK 文件中。应用可能会依赖一些外部库，构建工具要灵活地管理这些依赖的下载、编译、打包(包括合并、解决冲突、资源优化)等过程。应用的源码可能包括 Java 、RenderScript、AIDL 以及 Native 代码，构建工具需要分别处理这些语言的编译打包过程，而有些时候我们需要生成不同配置(如不同 CPU 架构、不同 SDK 版本、不同应用商店配置等)的 APK 文件，构建工具就需要根据不同情况编译打包不同的 APK。总之，构建工具需要完成从工程资源管理到最终编译、测试、打包、发布的几乎所有工作。而 Android Studio 选择了使用 Gradle，一个高级、灵活、强大的自动构建工具构建 Android 应用，利用 Gradle 和 Android Gradle 插件可以非常灵活高效地构建和测试 Android 应用了:<br><img src="https://user-gold-cdn.xitu.io/2018/2/28/161dc41b3031e26e?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="The build process of a typical Android app module"><br>Gradle和其Android插件可以帮助你自定义以下几方面的构建配置:  </p>
+<p><strong>Build Types</strong><br>: Build types（构建类型）定义了一些构建、打包应用时 Gradle 要用到的属性，主要用于不同开发阶段的配置，如 debug 构建类型要启用 debug options 并用 debug key 签名，release 构建类型要删除无效资源、混淆源码以及用 release key 签名  </p>
+<p><strong>Product Flavors</strong><br>: Product flavors（产品风味）定义了你要发布给用户的不同版本，比如免费版和付费版。你可以在共享重用通用版本功能的时候自定义 product flavors 使用不同的代码和资源，Product flavors 是可选的所以你必须手动创建</p>
+<p><strong>Build Variants</strong><br>: build variant（构建变体）是 build type 和 product flavor 的交叉输出(如free-debug、free-release、paid-debug、paid-release)，Gradle 构建应用要用到这个配置。也就是说添加 build types 或 product flavors 会相应的添加 build variants</p>
+<p><strong>Manifest Entries</strong><br>: 你可以在 build variant 配置中指定 manifest 文件中的某个属性值（如应用名、最小 SDK 版本、target SDK 版本），这个值会覆盖 manifest 文件中原来的属性值</p>
+<p><strong>Dependencies</strong><br>: 构建系统会管理工程用要用到的本地文件系统和远程仓库的依赖。</p>
+<p><strong>Signing</strong><br>: 构建系统会让你指定签名设置以便在构建时自动给你的 APK 签名，构建工具默认会使用自动生成的 debug key 给 debug 版本签名，你也可以生成自己的 debug key 或 release key 使用。</p>
+<p><strong>ProGuard</strong><br>: 构建系统让你可以为每个构建变体指定不同的混淆规则文件</p>
+<p><strong>Multiple APK Support</strong><br>: 构建系统让你可以为不同屏幕密度或 Application Binary Interface （ABI）的设备生成包含其所需要的资源的 APK 文件，如为 x86 CPU 架构的设备生成只包含该 x86 架构 so 库的 APK 文件。</p>
+<p>而这些构建配置要体现在不同的构建配置文件中，典型的Android应用结构为:<br><img src="https://user-gold-cdn.xitu.io/2018/2/28/161dc4232cfd789a?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="The default project structure for an Android app module"></p>
+<h2 id="Gradle-Settings-文件"><a href="#Gradle-Settings-文件" class="headerlink" title="Gradle Settings 文件"></a>Gradle Settings 文件</h2><p>位于工程根目录的 <code>settings.gradle</code> 文件用于告诉Gradle构建应用时需要包含哪些 module，如 :<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">include &apos;:app&apos;, &apos;:lib&apos;</span><br></pre></td></tr></table></figure></p>
+<h2 id="顶层-Build-文件"><a href="#顶层-Build-文件" class="headerlink" title="顶层 Build 文件"></a>顶层 Build 文件</h2><p>位于工程根目录的 <code>build.gradle</code> 文件用于定义工程所有 module 的构建配置，一般顶层 build 文件使用 <code>buildscript</code> 代码块定义 Gradle 的 repositories 和 dependencies，如自动生成的顶层 build 文件:<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * buildscript代码块用来配置Gradle自己的repositories和dependencies，所以不能包含modules使用的dependencies</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">buildscript</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * repositories 代码块用来配置 Gradle 用来搜索和下载依赖的仓库</span></span><br><span class="line"><span class="comment">     * Gradle 默认是支持像 JCenter，Maven Central，和 Ivy 远程仓库的，你也可以使用本地仓库或定义你自己的远程仓库</span></span><br><span class="line"><span class="comment">     * 下面的代码定义了 Gradle 用于搜索下载依赖的 JCenter 仓库和 Google 的 Maven 仓库</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">repositories</span> &#123;</span><br><span class="line">        google()</span><br><span class="line">        jcenter()</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * dependencies 代码块用来配置 Gradle 用来构建工程的依赖，下面的代码表示添加一个</span></span><br><span class="line"><span class="comment">     * Gradle 的 Android 插件作为 classpath 依赖</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">dependencies</span> &#123;</span><br><span class="line">        <span class="keyword">classpath</span> <span class="string">'com.android.tools.build:gradle:3.0.1'</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * allprojects 代码块用来配置工程中所有 modules 都要使用的仓库和依赖</span></span><br><span class="line"><span class="comment"> * 但是你应该在每个 module 级的 build 文件中配置 module 独有的依赖。</span></span><br><span class="line"><span class="comment"> * 对于一个新工程，Android Studio 默认会让所有 modules 使用 JCenter 仓库和 Google 的 Maven 仓库</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">allprojects</span> &#123;</span><br><span class="line">   <span class="keyword">repositories</span> &#123;</span><br><span class="line">       google()</span><br><span class="line">       jcenter()</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>除了这些，你还可以使用 <code>ext</code> 代码块在这个顶层 build 文件中定义工程级（工程中所有 modules 共享）的属性:<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">buildscript</span> &#123;...&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">allprojects</span> &#123;...&#125;</span><br><span class="line"></span><br><span class="line">ext &#123;</span><br><span class="line">    <span class="comment">// 如让所有 modules 都使用相同的版本以避免冲突</span></span><br><span class="line">    compileSdkVersion = <span class="number">26</span></span><br><span class="line">    supportLibVersion = <span class="string">"27.0.2"</span></span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
+<p>每个 module 的 build 文件使用 <code>rootProject.ext.property_name</code> 语法使用这些属性即可:<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">android &#123;</span><br><span class="line">  compileSdkVersion rootProject.ext.compileSdkVersion</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br><span class="line">...</span><br><span class="line"><span class="keyword">dependencies</span> &#123;</span><br><span class="line">    <span class="keyword">compile</span> <span class="string">"com.android.support:appcompat-v7:$&#123;rootProject.ext.supportLibVersion&#125;"</span></span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="Module-级-Build-文件"><a href="#Module-级-Build-文件" class="headerlink" title="Module 级 Build 文件"></a>Module 级 Build 文件</h2><p>位于每个 <code>project/module/</code> 目录的 <code>build.gradle</code> 文件用于定义该 module 自己的构建配置，同时你也可以重写顶层 build 文件或 main app manifest 的配置:<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 为这个构建应用 Gradle 的 Android 插件，以便 android 代码块中 Android 特定的构建配置可用</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line">apply plugin: <span class="string">'com.android.application'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * android 代码块用来配置 Android 特定的构建配置</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line">android &#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * compileSdkVersion 用来指定 Gradle 用来编译应用的 Android API level，也就是说</span></span><br><span class="line"><span class="comment">   * 你的应用可以使用这个 API level 及更低 API level 的 API 特性</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line"></span><br><span class="line">  compileSdkVersion <span class="number">26</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * buildToolsVersion 用来指定 SDK 所有构建工具、命令行工具、以及 Gradle 用来构建应用的编译器版本</span></span><br><span class="line"><span class="comment">   * 你需要使用 SDK Manager 下载好该版本的构建工具</span></span><br><span class="line"><span class="comment">   * 在 3.0.0 或更高版本的插件中。该属性是可选的，插件会使用推荐的版本</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line"></span><br><span class="line">  buildToolsVersion <span class="string">"27.0.3"</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * defaultConfig 代码块包含所有构建变体（build variants）默认使用的配置，也可以重写 main/AndroidManifest.xml 中的属性</span></span><br><span class="line"><span class="comment">   * 当然，你也可以在 product flavors（产品风味）中重写其中一些属性</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line"></span><br><span class="line">  defaultConfig &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * applicationId 是发布时的唯一指定包名，尽管如此，你还是需要在 main/AndroidManifest.xml 文件中</span></span><br><span class="line"><span class="comment">     * 定义值是该包名的 package 属性</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"></span><br><span class="line">    applicationId <span class="string">'com.example.myapp'</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 定义可以运行该应用的最小 API level</span></span><br><span class="line">    minSdkVersion <span class="number">15</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 指定测试该应用的 API level</span></span><br><span class="line">    targetSdkVersion <span class="number">26</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 定义应用的版本号</span></span><br><span class="line">    versionCode <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 定义用户友好型的版本号描述</span></span><br><span class="line">    versionName <span class="string">"1.0"</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * buildTypes 代码块用来配置多个构建类型，构建系统默认定义了两个构建类型: debug 和 release</span></span><br><span class="line"><span class="comment">   * debug 构建类型默认不显式声明，但它包含调试工具并使用 debug key 签名</span></span><br><span class="line"><span class="comment">   * release 构建类型默认应用了混淆配置</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line"></span><br><span class="line">  buildTypes &#123;</span><br><span class="line">    release &#123;</span><br><span class="line">        minifyEnabled <span class="keyword">true</span></span><br><span class="line">        proguardFiles getDefaultProguardFile(<span class="string">'proguard-android.txt'</span>), <span class="string">'proguard-rules.pro'</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 由于 product flavors 必须属于一个已命名的 flavor dimension，所以你至少需要定义一个 flavor dimension</span></span><br><span class="line"><span class="comment">   * 如定义一个等级和最小 api 的 flavor dimension</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line"></span><br><span class="line">  flavorDimensions <span class="string">"tier"</span>, <span class="string">"minApi"</span></span><br><span class="line"></span><br><span class="line">  productFlavors &#123;</span><br><span class="line">       free &#123;</span><br><span class="line">        <span class="comment">// 这个 product flavor 属于 "tier" flavor dimension</span></span><br><span class="line">        <span class="comment">// 如果只有一个 dimension 那么这个属性就是可选的</span></span><br><span class="line">        dimension <span class="string">"tier"</span></span><br><span class="line">        ...</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      paid &#123;</span><br><span class="line">        dimension <span class="string">"tier"</span></span><br><span class="line">        ...</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      minApi23 &#123;</span><br><span class="line">          dimension <span class="string">"minApi"</span></span><br><span class="line">          ...</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      minApi18 &#123;</span><br><span class="line">          dimension <span class="string">"minApi"</span></span><br><span class="line">          ...</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 你可以使用 splits 代码块配置为不同屏幕分辨率或 ABI 的设备生成仅包含其支持的代码和资源的 APK</span></span><br><span class="line"><span class="comment">   * 同时你需要配置 build 文件以便每个 APK 使用不同的 versionCode</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line"></span><br><span class="line">  splits &#123;</span><br><span class="line">    density &#123;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 启用或禁用构建多个 APK</span></span><br><span class="line">      enable <span class="keyword">false</span></span><br><span class="line"></span><br><span class="line">      <span class="comment">// 构建多个 APK 时排除这些分辨率</span></span><br><span class="line">      <span class="keyword">exclude</span> <span class="string">"ldpi"</span>, <span class="string">"tvdpi"</span>, <span class="string">"xxxhdpi"</span>, <span class="string">"400dpi"</span>, <span class="string">"560dpi"</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 该 module 级 build 文件的 dependencies 代码块仅用来指定该 module 自己的依赖</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">dependencies</span> &#123;</span><br><span class="line">    implementation <span class="keyword">project</span>(<span class="string">":lib"</span>)</span><br><span class="line">    implementation <span class="keyword">fileTree</span>(dir: <span class="string">'libs'</span>, <span class="keyword">include</span>: [<span class="string">'*.jar'</span>])</span><br><span class="line">    implementation <span class="string">'com.android.support:appcompat-v7:27.0.2'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="Gradle-属性文件"><a href="#Gradle-属性文件" class="headerlink" title="Gradle 属性文件"></a>Gradle 属性文件</h2><p>位于工程根目录的 <code>gradle.properties</code> 文件和 <code>local.properties</code> 用来指定 Gradle 构建工具自己的设置。<br><code>gradle.properties</code> 文件可以用来配置工程的 Gradle 设置，如 Gradle 守护进程的最大堆栈大小<br><code>local.properties</code> 文件用来配置构建系统的本地环境属性，如 SDK 安装路径，由于该文件内容是 Android Studio 自动生成的且与本地开发环境有关，所以你不要更改更不要上传到版本控制系统中。</p>
+<h1 id="Gradle-概述"><a href="#Gradle-概述" class="headerlink" title="Gradle 概述"></a>Gradle 概述</h1><p>Gradle 是专注于灵活性和性能的开源自动构建工具。Gradle 的构建脚本使用 <a href="http://groovy-lang.org/" target="_blank" rel="noopener">Groovy</a> 或 <a href="https://kotlinlang.org/" target="_blank" rel="noopener">Kotlin</a> 语言。Gradle 构建工具的优势在于:</p>
+<ul>
+<li><strong>高度可定制</strong> - Gradle 是以最基本的可定制和可扩展的方式模块化的</li>
+<li><strong>更快</strong> - Gradle 通过重用之前执行的输出、只处理更改的输入以及并行执行 task 的方式加快构建速度</li>
+<li><strong>更强大</strong> - Gradle 支持跨多语言和平台，是 Android 官方构建工具，支持很多主流 IDE，包括 Android Studio、Eclipse、IntelliJ IDEA、Visual Studio 2017 以及 XCode，将来会支持更多语言和平台</li>
+</ul>
+<p>学习 Gradle 的途径有很多：</p>
+<ul>
+<li>每个月都有由 Gradle 核心工程师主持的 <a href="https://gradle.org/training" target="_blank" rel="noopener">免费在线培训</a>，你需要提前注册预约</li>
+<li>Gradle 的 <a href="https://gradle.org/guides" target="_blank" rel="noopener">guides</a> 和 <a href="https://docs.gradle.org/current/userguide/userguide.html" target="_blank" rel="noopener">reference documentation</a> 也是很好的阅读材料</li>
+<li>通过 <a href="https://newsletter.gradle.com/" target="_blank" rel="noopener">Gradle Newsletter</a> 阅读Gradle最新期刊</li>
+<li>通过 <a href="https://discuss.gradle.org/" target="_blank" rel="noopener">Gradle Forum</a> 论坛获取帮助，其他成员或核心开发者会回答你的问题</li>
+<li>还可以通过 <a href="https://git.io/gradle-completion" target="_blank" rel="noopener">Command-line completion</a> 学习 bash 和 zsh 命令行</li>
+</ul>
+<h1 id="Gradle-的依赖管理"><a href="#Gradle-的依赖管理" class="headerlink" title="Gradle 的依赖管理"></a>Gradle 的依赖管理</h1><p>依赖管理（Dependency management）是每个构建系统的关键特征，Gradle 提供了一个既容易理解又其他依赖方法兼容的一流依赖管理系统，如果你熟悉 Maven 或 Ivy 用法，那么你肯定乐于学习 Gradle，因为 Gradle 的依赖管理和两者差不多但比两者更加灵活。Gradle 依赖管理的优势包括:</p>
+<ul>
+<li>传递依赖管理 - Gradle 让你可以完全控制工程的依赖树</li>
+<li>支持非托管依赖 - 如果你只依赖版本控制系统或共享磁盘中的单个文件，Gradle 提供了强大的功能支持这种依赖</li>
+<li>支持个性化依赖定义 - Gradle 的 Module Dependencies 让你可以在构建脚本中描述依赖层级</li>
+<li>为依赖解析提供完全可定制的方法 - Gradle 让你可以自定义依赖解析规则以便让依赖可以方便地替换</li>
+<li>完全兼容Maven和Ivy - 如果你已经定义了 Maven POM 或 Ivy 文件，Gradle 可以通过相应的构建工具无缝集成</li>
+<li>可以与已存在的依赖管理系统集成 - Gradle 完全兼容 Maven 和 Ivy 仓库，所以如果你使用 Archiva、Nexus 或 Artifactory，Gradle 可以100%兼容所有的仓库格式</li>
+</ul>
+<h2 id="常用的依赖配置"><a href="#常用的依赖配置" class="headerlink" title="常用的依赖配置"></a>常用的依赖配置</h2><p><a href="https://docs.gradle.org/current/userguide/java_library_plugin.html" target="_blank" rel="noopener">Java Library插件</a> 继承自 <a href="https://docs.gradle.org/current/userguide/java_plugin.html" target="_blank" rel="noopener">Java插件</a>，但 Java Library 插件与 Java 插件最主要的不同是 Java Library 插件引入了将 API 暴露给消费者(使用者)的概念，一个 library 就是一个用来供其他组件（component）消费的 Java 组件。<br>Java Library 插件暴露了两个用于声明依赖的 <a href="https://docs.gradle.org/current/userguide/artifact_dependencies_tutorial.html#configurations" target="_blank" rel="noopener">Configuration</a>（依赖配置）: <code>api</code> 和 <code>implementation</code>。出现在 <code>api</code>  依赖配置中的依赖将会传递性地暴露给该 library 的消费者，并会出现在其消费者的编译 classpath 中。而出现在 <code>implementation</code> 依赖配置中的依赖将不会暴露给消费者，也就不会泄漏到消费者的编译 classpath 中。因此，<code>api</code> 依赖配置应该用来声明library API 使用的依赖，而 <code>implementation</code> 依赖配置应该用来声明组件内部的依赖。<code>implementation</code> 依赖配置有几个明显的优势:</p>
+<ul>
+<li>依赖不会泄漏到消费者的编译 classpath 中，所以你也就不会无意中依赖一个传递依赖了</li>
+<li>由于 classpath 大小的减少编译也会更快</li>
+<li>当 <code>implementation</code> 的依赖改变时，消费者不需要重新编译，要重新编译的很少</li>
+<li>更清洁地发布，当结合新的 maven-publish 插件使用时，Java librariy 会生成一个 POM 文件来精确地区分编译这个 librariy 需要的东西和运行这个 librariy 需要的东西</li>
+</ul>
+<p>那到底什么时候使用 API 依赖什么时候使用 Implementation 依赖呢？这里有几个简单的规则:<br>一个 API 是 library binary 接口暴露的类型，通常被称为 ABI （Application Binary Interface），这包括但不限于：</p>
+<ul>
+<li>父类或接口用的类型</li>
+<li>公共方法中参数用到的类型，包括泛型类型（公共指的是对编译器可见的 public，protected 和 package private）</li>
+<li>public 字段用到的类型</li>
+<li>public 注解类型</li>
+</ul>
+<p>相反，下面列表重要到的所有类型都与 ABI 无关，因此应该使用 implementation 依赖:</p>
+<ul>
+<li>只用在方法体内的类型</li>
+<li>只出现在 private 成员的类型</li>
+<li>只出现在内部类中的类型</li>
+</ul>
+<p>例如<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// The following types can appear anywhere in the code</span></span><br><span class="line"><span class="comment">// but say nothing about API or implementation usage</span></span><br><span class="line"><span class="keyword">import</span> org.apache.commons.httpclient.*;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.httpclient.methods.*;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.lang3.exception.ExceptionUtils;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.io.UnsupportedEncodingException;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HttpClientWrapper</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> HttpClient client; <span class="comment">// private member: implementation details</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// HttpClient is used as a parameter of a public method</span></span><br><span class="line">    <span class="comment">// so "leaks" into the public API of this component</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">HttpClientWrapper</span><span class="params">(HttpClient client)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.client = client;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// public methods belongs to your API</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">byte</span>[] doRawGet(String url) &#123;</span><br><span class="line">        GetMethod method = <span class="keyword">new</span> GetMethod(url);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">int</span> statusCode = doGet(method);</span><br><span class="line">            <span class="keyword">return</span> method.getResponseBody();</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            ExceptionUtils.rethrow(e); <span class="comment">// this dependency is internal only</span></span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            method.releaseConnection();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// GetMethod is used in a private method, so doesn't belong to the API</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">doGet</span><span class="params">(GetMethod method)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> statusCode = client.executeMethod(method);</span><br><span class="line">        <span class="keyword">if</span> (statusCode != HttpStatus.SC_OK) &#123;</span><br><span class="line">            System.err.println(<span class="string">"Method failed: "</span> + method.getStatusLine());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> statusCode;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>其中，public 构造器 <code>HttpClientWrapper</code> 使用了 <code>HttpClient</code> 参数暴露给了使用者，所以属于 API 依赖。而 ExceptionUtils 只在方法体中出现了，所以属于 implementation 依赖。所以 build 文件这样写:<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">dependencies</span> &#123;</span><br><span class="line">    api <span class="string">'commons-httpclient:commons-httpclient:3.1'</span></span><br><span class="line">    implementation <span class="string">'org.apache.commons:commons-lang3:3.5'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>因此，应该优先选择使用 implementation 依赖：缺少一些类型将会直接导致消费者的编译错误，可以通过移除这些类型或改成 API 依赖解决。<br><code>compileOnly</code> 依赖配置会告诉 Gradle 将依赖只添加到编译 classpath 中（不会添加到构建输出中），在你创建一个 Android library module 且在编译时需要这个依赖时使用 <code>compileOnly</code> 是个很好的选择。但这并不能保证运行时良好，也就是说，如果你使用这个配置，那么你的 library module 必须包含一个运行时条件去检查依赖是否可用，在不可用的时候仍然可以优雅地改变他的行为来正常工作，这有助于减少最终 APK 的大小(通过不添加不重要的transient依赖)。<br><code>runtimeOnly</code> 依赖配置告诉 Gradle 将依赖只添加到构建输出中，只在运行时使用，也就是说这个依赖不添加到编译 classpath 中。<br>此外，<code>debugImplementation</code> 会使依赖仅在 module 的 debug 变体中可用，而如 <code>testImplementation</code>、<code>androidTestImplementation</code> 等依赖配置可以更好地处理测试相关依赖。</p>
+<h2 id="声明依赖"><a href="#声明依赖" class="headerlink" title="声明依赖"></a>声明依赖</h2><h3 id="声明-binary-依赖"><a href="#声明-binary-依赖" class="headerlink" title="声明 binary 依赖"></a>声明 binary 依赖</h3><p>现在的软件工程很少单独地构建代码，因为现在的工程通常为了重用<strong>已存在且久经考验的功能</strong>而引入外部库，因此被称为 <strong>binary dependencies</strong>。Gradle 会解析 binary 依赖然后从专门的远程仓库中下载并存到 cache 中以避免不必要的网络请求:<br><img src="https://user-gold-cdn.xitu.io/2018/2/28/161dc400b173cb05?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="Resolving binary dependencies from remote repositories"><br>每个 artifact 在仓库中的 coordinate 都会包含 <strong>groupId</strong> 、 <strong>artifactId</strong> 和 <strong>version</strong> 三个元素，如在一个使用 Spring 框架的 Java 工程中添加一个编译时依赖:<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">apply plugin: <span class="string">'java-library'</span></span><br><span class="line"><span class="keyword">repositories</span> &#123;</span><br><span class="line">    mavenCentral()</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">dependencies</span> &#123;</span><br><span class="line">    implementation <span class="string">'org.springframework:spring-web:5.0.2.RELEASE'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Gradle 会从 <a href="https://search.maven.org/" target="_blank" rel="noopener">Maven中央仓库</a> 解析并下载这个依赖（包括它的传递依赖），然后使用它去编译 Java 源码，其中的 <strong>version</strong> 属性是指定了具体版本，表明总是使用这个具体的依赖不再更改。<br>当然，如果你总是想使用最新版本的 binary 依赖，你可以使用动态的 <strong>version</strong>，Gradle 默认会缓存 24 小时:<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">implementation <span class="string">'org.springframework:spring-web:5.+'</span></span><br></pre></td></tr></table></figure></p>
+<p>有些情况开发团队在完全完成新版本的开发之前为了让使用者能体验最新的功能特色，会提供一个 changing version，在 Maven 仓库中 changing version 通常被称作 snapshot version，而 snapshot version会包含<code>-SNAPSHOT</code>后缀，如:<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">implementation <span class="string">'org.springframework:spring-web:5.0.3.BUILD-SNAPSHOT'</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="声明文件依赖"><a href="#声明文件依赖" class="headerlink" title="声明文件依赖"></a>声明文件依赖</h3><p>工程有时候不会依赖 binary 仓库中的库，而是把依赖放在共享磁盘或者版本控制系统的工程源码中（JFrog Artifactory 或 Sonatype Nexus 可以存储解析这种外部依赖），这种依赖被称为 <strong>file dependencies</strong> ，因为它们是以不涉及任何 metadata（如传递依赖、作者）的文件形式存在的。如我们添加来自 <code>ant</code>、<code>libs</code> 和 <code>tools</code> 目录的文件依赖：<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">configurations</span> &#123;</span><br><span class="line">    antContrib</span><br><span class="line">    externalLibs</span><br><span class="line">    deploymentTools</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">dependencies</span> &#123;</span><br><span class="line">    antContrib files(<span class="string">'ant/antcontrib.jar'</span>)</span><br><span class="line">    externalLibs files(<span class="string">'libs/commons-lang.jar'</span>, <span class="string">'libs/log4j.jar'</span>)</span><br><span class="line">    deploymentTools <span class="keyword">fileTree</span>(dir: <span class="string">'tools'</span>, <span class="keyword">include</span>: <span class="string">'*.exe'</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="声明工程依赖"><a href="#声明工程依赖" class="headerlink" title="声明工程依赖"></a>声明工程依赖</h3><p>现在的工程通常把组件独立成 module 以提高可维护性及防止强耦合，这些 module 可以定义相互依赖以重用代码，而 Gradle 可以管理这些 module 间的依赖。由于每个 module 都表现成一个 Gradle project，这种依赖被称为 <strong>project dependencies</strong> 。在运行时，Gradle 构建会自动确保工程的依赖以正确的顺序构建并添加到 classpath 中编译。<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">project</span>(<span class="string">':web-service'</span>) &#123;</span><br><span class="line">    <span class="keyword">dependencies</span> &#123;</span><br><span class="line">        implementation <span class="keyword">project</span>(<span class="string">':utils'</span>)</span><br><span class="line">        implementation <span class="keyword">project</span>(<span class="string">':api'</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="Gradle-常用配置"><a href="#Gradle-常用配置" class="headerlink" title="Gradle 常用配置"></a>Gradle 常用配置</h1><p>强制所有的 android support libraries 使用相同的版本:<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">configurations</span>.all &#123;</span><br><span class="line">    resolutionStrategy &#123;</span><br><span class="line">        eachDependency &#123; details -&gt;</span><br><span class="line">            <span class="comment">// Force all of the primary support libraries to use the same version.</span></span><br><span class="line">            <span class="keyword">if</span> (details.requested.<span class="keyword">group</span> == <span class="string">'com.android.support'</span> &amp;&amp;</span><br><span class="line">                    details.requested.name != <span class="string">'multidex'</span> &amp;&amp;</span><br><span class="line">                    details.requested.name != <span class="string">'multidex-instrumentation'</span>) &#123;</span><br><span class="line">                details.useVersion supportLibVersion</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>更改生成的 APK 文件名:<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">android.applicationVariants.all &#123; variant -&gt;</span><br><span class="line">    variant.outputs.all &#123;</span><br><span class="line">        outputFileName = <span class="string">"$&#123;variant.name&#125;-$&#123;variant.versionName&#125;.apk"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>如果开启了 <a href="https://developer.android.com/studio/build/multidex.html" target="_blank" rel="noopener">Multidex</a> 后在 Android 5.0 以下设备上出现了 <code>java.lang.NoClassDefFoundError</code> 异常，可能是由于构建工具没能把某些依赖库代码放进主 dex 文件中，这时就需要手动指定还有哪些要放入主 dex 文件中的类。在构建类型中指定 <code>multiDexKeepFile</code> 或 <code>multiDexKeepProguard</code> 属性即可:<br>在 build 文件同级目录新建 <code>multidex-config.txt</code> 文件，文件的每一行为类的全限定名，如:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">com/example/MyClass.class</span><br><span class="line">com/example/MyOtherClass.class</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">android &#123;</span><br><span class="line">    buildTypes &#123;</span><br><span class="line">        release &#123;</span><br><span class="line">            multiDexKeepFile <span class="keyword">file</span>(<span class="string">'multidex-config.txt'</span>)</span><br><span class="line">            ...</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>或者新建 <code>multidex-config.pro</code> 文件，使用 Proguard 语法指定放入主 dex 文件中的类，如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-keep class com.example.** &#123; *; &#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">android &#123;</span><br><span class="line">    buildTypes &#123;</span><br><span class="line">        release &#123;</span><br><span class="line">            multiDexKeepProguard <span class="keyword">file</span>(<span class="string">'multidex-config.pro'</span>)</span><br><span class="line">            ...</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
+<li><a href="https://developer.android.com/studio/build/index.html#build-process" target="_blank" rel="noopener">Configure Your Build</a></li>
+<li><a href="https://gradle.org/guides" target="_blank" rel="noopener">Gradle User guides</a></li>
+<li><a href="https://docs.gradle.org/current/userguide/userguide.html" target="_blank" rel="noopener">Gradle reference documentation</a></li>
+</ul>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2018/02/28/annotation-in-android/" data-toggle="tooltip" data-placement="top" title="Android 中优雅地使用注解">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                </ul>
+
+                
+
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#Gradle" title="Gradle">Gradle</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="https://joyrun.github.io/" target="_blank">悦跑圈技术团队</a></li>
+                    
+                        <li><a href="http://tech.meituan.com/" target="_blank">美团点评技术团队</a></li>
+                    
+                </ul>
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/FrankShang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/frankshang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/frankshang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/frankshangx">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/shangmingchao">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://www.linkedin.com/in/FrankShang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Frank&#39;s Blog 2018 
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a href="http://blog.kaijun.rocks">Kaijun</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://franksblog.top/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="https://franksblog.top/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

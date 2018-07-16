@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="null">
+    <meta name="keyword"  content="undefined">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          Android 中优雅地使用注解 - 商明超的博客  | Frank&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="https://franksblog.top/2018/02/28/annotation-in-android/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Frank&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archives/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="https://franksblog.top/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#Annotation" title="Annotation">Annotation</a>
+                        
+                    </div>
+                    <h1>Android 中优雅地使用注解</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by Frank on
+                        2018-02-28
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>注解（Annotation），是源码中特殊的语法元数据，类、方法、变量、参数都可以被注解。利用注解可以标记源码以便编译器为源码生成文档和检查代码，也可以让编译器和注解处理器在编译时根据注解自动生成代码，甚至可以保留到运行时以便改变运行时的行为。<br>Java 内置了一些注解，如 <code>@Override</code> 注解用来表明该方法是重写父类方法，编译器会负责检查该方法与父类方法的声明是否一致。<code>@Deprecated</code> 注解用来表明该元素已经被废弃不建议使用了。<code>@SuppressWarnings</code> 注解用来表示编译器可以忽略特定警告。<br>注解类型的声明和接口的声明类似，不过需要使用 <code>@interface</code> 和元注解（用来定义注解的注解）描述，每个方法声明定义了注解类型的一个元素，且方法声明不能包含任何参数或 <code>throws</code>，方法的返回类型必须是原语类型、<code>String</code>、<code>Class</code>、枚举、注解和这些类型的数组，方法可以有默认值，如:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> RequestForEnhancement &#123;</span><br><span class="line">    <span class="function"><span class="keyword">int</span>    <span class="title">id</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function">String <span class="title">synopsis</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function">String <span class="title">engineer</span><span class="params">()</span> <span class="keyword">default</span> "[unassigned]"</span>; </span><br><span class="line">    <span class="function">String <span class="title">date</span><span class="params">()</span></span>;    <span class="keyword">default</span> <span class="string">"[unimplemented]"</span>; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>定义完注解类型后，就可以用它去注解一些声明了。注解是一种特殊的修饰符，可以像 <code>public</code>、<code>static</code> 或 <code>final</code> 修饰符一样使用，不过通常注解要写在这些修饰符之前。使用时为 <code>@</code> 符号加注解类型加元素值对列表并用括号括起来，如:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestForEnhancement</span>(</span><br><span class="line">    id       = <span class="number">2868724</span>,</span><br><span class="line">    synopsis = <span class="string">"Enable time-travel"</span>,</span><br><span class="line">    engineer = <span class="string">"Mr. Peabody"</span>,</span><br><span class="line">    date     = <span class="string">"4/1/3007"</span></span><br><span class="line">)</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">travelThroughTime</span><span class="params">(Date destination)</span> </span>&#123; ... &#125;</span><br></pre></td></tr></table></figure></p>
+<p>注解类型也可以没有方法/元素，被称为标记注解类型，如:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Preliminary &#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Preliminary</span> <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TimeTravel</span> </span>&#123; ... &#125;</span><br></pre></td></tr></table></figure></p>
+<p>如果注解类型只有一个元素，那么元素应该命名为 <code>value</code>，使用时也就可以忽略元素名和等号了，如:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Copyright &#123;</span><br><span class="line">    <span class="function">String <span class="title">value</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Copyright</span>(<span class="string">"2002 Yoyodyne Propulsion Systems"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OscillationOverthruster</span> </span>&#123; ... &#125;</span><br></pre></td></tr></table></figure></p>
+<p>除了这些，很多注解还需要元注解去描述，如:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Target</span>(ElementType.METHOD)</span><br><span class="line"><span class="meta">@Inherited</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> MethodInfo &#123;</span><br><span class="line">    <span class="function">String <span class="title">author</span><span class="params">()</span> <span class="keyword">default</span> "Peabody"</span>;</span><br><span class="line">    <span class="function">String <span class="title">date</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">version</span><span class="params">()</span> <span class="keyword">default</span> 1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>@Documented</code> 表明该注解类型可以被 javadoc 等工具文档化<br><code>@Retention</code> 表明该注解类型可以保留多长时间，值为枚举值 <code>RetentionPolicy</code>:  </p>
+<ul>
+<li><code>RetentionPolicy.SOURCE</code>(只保留在源码中，会被编译器丢弃)</li>
+<li><code>RetentionPolicy.CLASS</code>(注解会被编译器记录在class文件中，但不需要被VM保留到运行时，这也是默认的行为)</li>
+<li><code>RetentionPolicy.RUNTIME</code>(注解会被编译器记录在class文件中并被VM保留到运行时，所以可以通过反射获取)  </li>
+</ul>
+<p><code>@Target</code> 表明该注解类型可以注解哪些程序元素，如果注解类型不使用 <code>@Target</code> 描述那么表明可以注解所有程序元素，值是枚举数组<code>ElementType[]</code>:  </p>
+<ul>
+<li><code>ElementType.TYPE</code>(类、接口(包括注解类型)、枚举的声明)</li>
+<li><code>ElementType.FIELD</code>(字段(包括枚举常量)的声明)</li>
+<li><code>ElementType.METHOD</code>(方法的声明)</li>
+<li><code>ElementType.PARAMETER</code>(形参的声明)</li>
+<li><code>ElementType.CONSTRUCTOR</code>(构造器的声明)</li>
+<li><code>ElementType.LOCAL_VARIABLE</code>(本地变量的声明)</li>
+<li><code>ElementType.ANNOTATION_TYPE</code>(注解类型的声明)</li>
+<li><code>ElementType.PACKAGE</code>(包的声明)</li>
+<li><code>ElementType.TYPE_PARAMETER</code>(泛型参数的声明)</li>
+<li><code>ElementType.TYPE_USE</code>(泛型的使用)</li>
+</ul>
+<p><code>@Inherited</code> 表明该注解类型将被自动继承。也就是说，如果注解类型被 <code>@Inherited</code> 注解，此时用户查询一个类声明的注解，而类声明没被该注解类型注解，那么将自动查询该类父类的注解类型，以此类推直到找到该注解类型或达到顶层 Object 对象。</p>
+<h2 id="Android-Support-Library-中的注解"><a href="#Android-Support-Library-中的注解" class="headerlink" title="Android Support Library 中的注解"></a>Android Support Library 中的注解</h2><p>Android Support Library 提供了很多实用注解，如可以使用 <code>@NonNull</code> 注解进行空检查，使用 <code>@UiThread</code>、<code>@WorkerThread</code> 注解进行线程检查，使用 <code>@IdRes</code> 表明这个整数代表资源引用，还可以通过 <code>@IntDef</code>、<code>@StringDef</code> 注解自定义注解来代替枚举，如描述应用中使用的字体文件:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">TypefaceManager</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> FONT_TYPE_ICONIC = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> FONT_TYPE_IMPACT = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> FONT_TYPE_HELVETICA = <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> FONT_TYPE_DIN = <span class="number">3</span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Retention</span>(RetentionPolicy.SOURCE)</span><br><span class="line">    <span class="meta">@IntDef</span>(&#123;FONT_TYPE_ICONIC, FONT_TYPE_IMPACT, FONT_TYPE_HELVETICA, FONT_TYPE_DIN&#125;)</span><br><span class="line">    <span class="meta">@interface</span> FontType &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Context mContext;</span><br><span class="line">    <span class="keyword">private</span> SparseArray&lt;Typeface&gt; mTypefaceSparseArray;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TypefaceManager</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.mContext = context;</span><br><span class="line">        <span class="keyword">this</span>.mTypefaceSparseArray = <span class="keyword">new</span> SparseArray&lt;&gt;();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">setTypeface</span><span class="params">(TextView textView, @FontType <span class="keyword">int</span> fontType)</span> </span>&#123;</span><br><span class="line">        Typeface localTypeface = MyApplication.getInstance().getTypefaceManager().getTypeface(fontType);</span><br><span class="line">        <span class="keyword">if</span> (localTypeface != <span class="keyword">null</span> &amp;&amp; localTypeface != textView.getTypeface()) &#123;</span><br><span class="line">            textView.setTypeface(localTypeface);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">setTypeface</span><span class="params">(Paint paint, @FontType <span class="keyword">int</span> fontType)</span> </span>&#123;</span><br><span class="line">        Typeface localTypeface = MyApplication.getInstance().getTypefaceManager().getTypeface(fontType);</span><br><span class="line">        <span class="keyword">if</span> (localTypeface != <span class="keyword">null</span> &amp;&amp; localTypeface != paint.getTypeface()) &#123;</span><br><span class="line">            paint.setTypeface(localTypeface);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Typeface <span class="title">getTypeface</span><span class="params">(@FontType <span class="keyword">int</span> fontType)</span> </span>&#123;</span><br><span class="line">        Typeface typeface = mTypefaceSparseArray.get(fontType);</span><br><span class="line">        <span class="keyword">if</span> (typeface == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                String path = <span class="keyword">null</span>;</span><br><span class="line">                <span class="keyword">if</span> (fontType == FONT_TYPE_ICONIC) &#123;</span><br><span class="line">                    path = <span class="string">"fonts/fontawesome-webfont.ttf"</span>;</span><br><span class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span> (fontType == FONT_TYPE_IMPACT) &#123;</span><br><span class="line">                    path = <span class="string">"fonts/impact.ttf"</span>;</span><br><span class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span> (fontType == FONT_TYPE_HELVETICA) &#123;</span><br><span class="line">                    path = <span class="string">"fonts/Helvetica.ttf"</span>;</span><br><span class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span> (fontType == FONT_TYPE_DIN) &#123;</span><br><span class="line">                    path = <span class="string">"fonts/ptdin.ttf"</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                typeface = Typeface.createFromAsset(mContext.getAssets(), path);</span><br><span class="line">                <span class="keyword">this</span>.mTypefaceSparseArray.put(fontType, typeface);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> typeface;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="注解的使用与解析"><a href="#注解的使用与解析" class="headerlink" title="注解的使用与解析"></a>注解的使用与解析</h2><p>对于 <code>@Retention(RetentionPolicy.RUNTIME)</code> 的注解，注解会被编译器记录在 class 文件中并被 VM 保留到运行时，所以可以通过反射获取，如:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Target</span>(ElementType.METHOD)</span><br><span class="line"><span class="meta">@Inherited</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> MethodInfo &#123;</span><br><span class="line">    <span class="function">String <span class="title">author</span><span class="params">()</span> <span class="keyword">default</span> "Peabody"</span>;</span><br><span class="line">    <span class="function">String <span class="title">date</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">version</span><span class="params">()</span> <span class="keyword">default</span> 1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>使用<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">App</span> </span>&#123;</span><br><span class="line">    <span class="meta">@MethodInfo</span>(</span><br><span class="line">        author = “frank”,</span><br><span class="line">        date = <span class="string">"2018/02/27"</span>,</span><br><span class="line">        version = <span class="number">2</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getDescription</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"no description"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以写个工具在运行时利用反射获取注解:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        Class cls = Class.forName(<span class="string">"com.frank.App"</span>);</span><br><span class="line">        <span class="keyword">for</span> (Method method : cls.getMethods()) &#123;</span><br><span class="line">            MethodInfo methodInfo = method.getAnnotation(</span><br><span class="line">MethodInfo.class);</span><br><span class="line">            <span class="keyword">if</span> (methodInfo != <span class="keyword">null</span>) &#123;</span><br><span class="line">                System.out.println(<span class="string">"method author:"</span> + methodInfo.author());</span><br><span class="line">                System.out.println(<span class="string">"method version:"</span> + methodInfo.version());</span><br><span class="line">                System.out.println(<span class="string">"method date:"</span> + methodInfo.date());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>对于 <code>@Retention(RetentionPolicy.CLASS)</code> 的注解，注解会被编译器记录在 class 文件中，但不需要被 VM 保留到运行时，如:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.CLASS)</span><br><span class="line"><span class="meta">@Target</span>(ElementType.FIELD)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> BindView &#123;</span><br><span class="line">    <span class="meta">@IdRes</span> <span class="function"><span class="keyword">int</span> <span class="title">value</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>也就是说，这种编译时注解适合用来在编译时自动生成代码，这就需要 apt(Annotation Processing Tool)工具查找并执行注解处理器(Annotation Processor)以生成源码和文件，最终 javac 会编译这些原始源文件和自动生成的文件。Android Gradle 插件的 2.2 版本开始支持注解处理器，你只需要使用 <code>annotationProcessor</code> 依赖注解处理器或者使用 <a href="https://google.github.io/android-gradle-dsl/current/com.android.build.gradle.internal.dsl.AnnotationProcessorOptions.html" target="_blank" rel="noopener"><code>javaCompileOptions.annotationProcessorOptions {}</code></a> DSL指定注解处理器即可。定义注解处理器最简单的方式就是继承 <code>AbstractProcessor</code>，在其 <code>process</code> 实现方法中实现注解元素的分析和源码文件的生成。</p>
+<h2 id="自定义注解和注解处理器"><a href="#自定义注解和注解处理器" class="headerlink" title="自定义注解和注解处理器"></a>自定义注解和注解处理器</h2><p>以简化一系列 <code>findViewById</code> 为例：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.frank.simplebutterknife;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> android.os.Bundle;</span><br><span class="line"><span class="keyword">import</span> android.support.v7.app.AppCompatActivity;</span><br><span class="line"><span class="keyword">import</span> android.widget.TextView;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    TextView mTitleTextView;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line">        mTitleTextView = (TextView) findViewById(R.id.titleTextView);</span><br><span class="line">        mTitleTextView.setText(<span class="string">"Hello World!"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>我们希望利用自定义注解和注解处理器后可以这样写:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.frank.simplebutterknife;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> android.os.Bundle;</span><br><span class="line"><span class="keyword">import</span> android.support.v7.app.AppCompatActivity;</span><br><span class="line"><span class="keyword">import</span> android.widget.TextView;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> simplebutterknife.BindView;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@BindView</span>(R.id.titleTextView)</span><br><span class="line">    TextView mTitleTextView;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line">        SimpleButterKnife.bind(<span class="keyword">this</span>);</span><br><span class="line">        mTitleTextView.setText(<span class="string">"Hello World!"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>也就是说 <code>SimpleButterKnife.bind(this);</code> 一行代码就完成了所有被 <code>@BindView</code> 注解的 View 的 <code>findViewById</code> 操作。而实现方式就是利用注解和注解编译器在编译时自动生成一个这样的文件:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.frank.simplebutterknife;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> android.view.View;</span><br><span class="line"><span class="keyword">import</span> android.widget.TextView;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity_ViewBinding</span> </span>&#123;</span><br><span class="line">  <span class="keyword">public</span> MainActivity target;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">MainActivity_ViewBinding</span><span class="params">(MainActivity target)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>(target, target.getWindow().getDecorView());</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">MainActivity_ViewBinding</span><span class="params">(MainActivity target, View source)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.target = target;</span><br><span class="line"></span><br><span class="line">    target.mTitleTextView = (TextView) source.findViewById(<span class="number">2131165300</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在 <code>SimpleButterKnife.bind(this);</code> 的实现中加载这个类并执行构造器就可以了。<br>实现起来也很简单，先新建一个 <code>java-library</code> 的module：<code>simplebutterknife-annotations</code>，用来声明注解：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.CLASS)</span><br><span class="line"><span class="meta">@Target</span>(ElementType.FIELD)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> BindView &#123;</span><br><span class="line">    <span class="meta">@IdRes</span> <span class="function"><span class="keyword">int</span> <span class="title">value</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>RetentionPolicy.CLASS</code> 表明这个注解只会在编译时使用，<code>ElementType.FIELD</code> 表明这个注解只用于注解字段，<code>@IdRes</code> 是 android support library 中的编译时检查注解，表明注解的值必须是资源 ID，所以该 module 的依赖为:<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">dependencies</span> &#123;</span><br><span class="line">    compileOnly <span class="string">'com.google.android:android:4.1.1.4'</span></span><br><span class="line">    api <span class="string">'com.android.support:support-annotations:27.0.2'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>声明完注解后，再新建一个注解处理器 <code>java-library</code> 的module：<code>simplebutterknife-compiler</code>，用来对注解的元素进行分析和生成源码文件:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@AutoService</span>(Processor.class)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleButterKnifeProcessor</span> <span class="keyword">extends</span> <span class="title">AbstractProcessor</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> SourceVersion <span class="title">getSupportedSourceVersion</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> SourceVersion.latestSupported();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Set&lt;String&gt; <span class="title">getSupportedAnnotationTypes</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Set&lt;String&gt; types = <span class="keyword">new</span> LinkedHashSet&lt;&gt;();</span><br><span class="line">        types.add(BindView.class.getCanonicalName());</span><br><span class="line">        <span class="keyword">return</span> types;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">process</span><span class="params">(Set&lt;? extends TypeElement&gt; set, RoundEnvironment roundEnvironment)</span> </span>&#123;</span><br><span class="line">        ...</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">BindingSet</span> </span>&#123;</span><br><span class="line">        TypeName targetTypeName;</span><br><span class="line">        ClassName bindingClassName;</span><br><span class="line">        List&lt;ViewBinding&gt; viewBindings;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">ViewBinding</span> </span>&#123;</span><br><span class="line">        TypeName type;</span><br><span class="line">        <span class="keyword">int</span> id;</span><br><span class="line">        String name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>@AutoService(Processor.class)</code> 注解是利用了 Google 的 <a href="https://github.com/google/auto/tree/master/service#autoservice" target="_blank" rel="noopener">AutoService</a> 为注解处理器自动生成 metadata 文件并将注解处理器jar文件加入构建路径，这样也就不需要再手动创建并更新 <code>META-INF/services/javax.annotation.processing.Processor</code> 文件了。<br>覆写 <code>getSupportedSourceVersion()</code> 方法指定可以支持最新的 Java 版本，覆写 <code>getSupportedAnnotationTypes()</code> 方法指定该注解处理器用于处理哪些注解（我们这里只处理 <code>@BindView</code> 注解）。而检索注解元素并生成代码的是 <code>process</code> 方法的实现:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;TypeElement, BindingSet&gt; bindingMap = <span class="keyword">new</span> LinkedHashMap&lt;&gt;();</span><br></pre></td></tr></table></figure></p>
+<p>需要为每个包含注解的 Activity 都生成一个对应的 _ViewBinding 文件，所以使用 <code>Map</code> 来存储。<code>BindingSet</code> 存储 Activity 信息和它的 View 绑定信息，View 绑定信息（<code>ViewBinding</code>）包括绑定 View 的类型、View 的 ID 以及 View 的变量名。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (Element element : roundEnvironment.getElementsAnnotatedWith(BindView.class))</span><br></pre></td></tr></table></figure></p>
+<p>查找所有被 <code>@BindView</code> 注解的程序元素(Element)，为了简化，这里只认为被注解的元素是 View 字段且它的外层元素(EnclosingElement)为 Activity 类:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 注解元素的外侧元素，即 View 的所在 Activity 类</span></span><br><span class="line">TypeElement enclosingElement = (TypeElement) element.getEnclosingElement();</span><br><span class="line"><span class="comment">// 注解的 value 值，即 View 的 id</span></span><br><span class="line"><span class="keyword">int</span> id = element.getAnnotation(BindView.class).value();</span><br><span class="line"><span class="comment">// 注解元素的名字，即 View 变量名</span></span><br><span class="line">Name simpleName = element.getSimpleName();</span><br><span class="line">String name = simpleName.toString();</span><br><span class="line"><span class="comment">// 注解元素的类型，即 View 的类型</span></span><br><span class="line">TypeMirror elementType = element.asType();</span><br><span class="line">TypeName type = TypeName.get(elementType);</span><br></pre></td></tr></table></figure></p>
+<p>然后把这些信息存到 Activity 对应的 View 绑定中:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">BindingSet bindingSet = bindingMap.get(enclosingElement);</span><br><span class="line"><span class="keyword">if</span> (bindingSet == <span class="keyword">null</span>) &#123;</span><br><span class="line">    bindingSet = <span class="keyword">new</span> BindingSet();</span><br><span class="line">    TypeMirror typeMirror = enclosingElement.asType();</span><br><span class="line">    TypeName targetType = TypeName.get(typeMirror);</span><br><span class="line">    String packageName = MoreElements.getPackage(enclosingElement).getQualifiedName().toString();</span><br><span class="line">    String className = enclosingElement.getQualifiedName().toString().substring(</span><br><span class="line">            packageName.length() + <span class="number">1</span>).replace(<span class="string">'.'</span>, <span class="string">'$'</span>);</span><br><span class="line">    ClassName bindingClassName = ClassName.get(packageName, className + <span class="string">"_ViewBinding"</span>);</span><br><span class="line">    bindingSet.targetTypeName = targetType;</span><br><span class="line">    bindingSet.bindingClassName = bindingClassName;</span><br><span class="line">    bindingMap.put(enclosingElement, bindingSet);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> (bindingSet.viewBindings == <span class="keyword">null</span>) &#123;</span><br><span class="line">    bindingSet.viewBindings = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">&#125;</span><br><span class="line">ViewBinding viewBinding = <span class="keyword">new</span> ViewBinding();</span><br><span class="line">viewBinding.type = type;</span><br><span class="line">viewBinding.id = id;</span><br><span class="line">viewBinding.name = name;</span><br><span class="line">bindingSet.viewBindings.add(viewBinding);</span><br></pre></td></tr></table></figure></p>
+<p>确定完 Activity 信息和它对应的 View 绑定信息后，为每个 Activity 生成对应的 <code>XXX_ViewBinding.java</code> 文件，文件内容就是前面所说类似这样的绑定类:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.frank.simplebutterknife;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> android.view.View;</span><br><span class="line"><span class="keyword">import</span> android.widget.TextView;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity_ViewBinding</span> </span>&#123;</span><br><span class="line">  <span class="keyword">public</span> MainActivity target;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">MainActivity_ViewBinding</span><span class="params">(MainActivity target)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>(target, target.getWindow().getDecorView());</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">MainActivity_ViewBinding</span><span class="params">(MainActivity target, View source)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.target = target;</span><br><span class="line"></span><br><span class="line">    target.mTitleTextView = (TextView) source.findViewById(<span class="number">2131165300</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>虽然通过字符串拼接可以拼出这样的文件内容，但我们还得考虑 import，还得考虑大括号和换行，甚至还得考虑注释和代码美观，所以利用 <a href="https://github.com/square/javapoet" target="_blank" rel="noopener">JavaPoet</a> 来生成 <code>.java</code> 文件是个不错的选择:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (Map.Entry&lt;TypeElement, BindingSet&gt; entry : bindingMap.entrySet()) &#123;</span><br><span class="line">            TypeElement typeElement = entry.getKey();</span><br><span class="line">            BindingSet binding = entry.getValue();</span><br><span class="line"></span><br><span class="line">            TypeName targetTypeName = binding.targetTypeName;</span><br><span class="line">            ClassName bindingClassName = binding.bindingClassName;</span><br><span class="line">            List&lt;ViewBinding&gt; viewBindings = binding.viewBindings;</span><br><span class="line">            <span class="comment">// binding 类</span></span><br><span class="line">            TypeSpec.Builder viewBindingBuilder = TypeSpec.classBuilder(bindingClassName.simpleName())</span><br><span class="line">                    .addModifiers(Modifier.PUBLIC);</span><br><span class="line">            <span class="comment">// public的target字段用来保存 Activity 引用</span></span><br><span class="line">            viewBindingBuilder.addField(targetTypeName, <span class="string">"target"</span>, Modifier.PUBLIC);</span><br><span class="line">            <span class="comment">// 构造器</span></span><br><span class="line">            MethodSpec.Builder activityViewBuilder = MethodSpec.constructorBuilder()</span><br><span class="line">                    .addModifiers(Modifier.PUBLIC)</span><br><span class="line">                    .addParameter(targetTypeName, <span class="string">"target"</span>);</span><br><span class="line">            activityViewBuilder.addStatement(<span class="string">"this(target, target.getWindow().getDecorView())"</span>);</span><br><span class="line">            viewBindingBuilder.addMethod(activityViewBuilder.build());</span><br><span class="line">            <span class="comment">// 第二个构造器</span></span><br><span class="line">            MethodSpec.Builder viewBuilder = MethodSpec.constructorBuilder()</span><br><span class="line">                    .addModifiers(Modifier.PUBLIC)</span><br><span class="line">                    .addParameter(targetTypeName, <span class="string">"target"</span>)</span><br><span class="line">                    .addParameter(ClassName.get(<span class="string">"android.view"</span>, <span class="string">"View"</span>), <span class="string">"source"</span>);</span><br><span class="line">            viewBuilder.addStatement(<span class="string">"this.target = target"</span>);</span><br><span class="line">            viewBuilder.addCode(<span class="string">"\n"</span>);</span><br><span class="line">            <span class="keyword">for</span> (ViewBinding viewBinding : viewBindings) &#123;</span><br><span class="line">                CodeBlock.Builder builder = CodeBlock.builder()</span><br><span class="line">                        .add(<span class="string">"target.$L = "</span>, viewBinding.name);</span><br><span class="line">                builder.add(<span class="string">"($T) "</span>, viewBinding.type);</span><br><span class="line">                builder.add(<span class="string">"source.findViewById($L)"</span>, CodeBlock.of(<span class="string">"$L"</span>, viewBinding.id));</span><br><span class="line">                viewBuilder.addStatement(<span class="string">"$L"</span>, builder.build());</span><br><span class="line">            &#125;</span><br><span class="line">            viewBindingBuilder.addMethod(viewBuilder.build());</span><br><span class="line">            <span class="comment">// 输出 Java 文件</span></span><br><span class="line">            JavaFile javaFile = JavaFile.builder(bindingClassName.packageName(), viewBindingBuilder.build())</span><br><span class="line">                    .build();</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                javaFile.writeTo(processingEnv.getFiler());</span><br><span class="line">            &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, e.getMessage());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure></p>
+<p>好了，注解处理器已经写完了，再调整一下注解处理器 module 的依赖:<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">dependencies</span> &#123;</span><br><span class="line">    implementation <span class="keyword">project</span>(<span class="string">':simplebutterknife-annotations'</span>)</span><br><span class="line">    implementation <span class="string">'com.google.auto:auto-common:0.10'</span></span><br><span class="line">    api <span class="string">'com.squareup:javapoet:1.9.0'</span></span><br><span class="line">    compileOnly <span class="string">'com.google.auto.service:auto-service:1.0-rc4'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在 app module 中需要依赖注解 module 并注册注解处理器 module：<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">dependencies</span> &#123;</span><br><span class="line">    ...</span><br><span class="line">    api <span class="keyword">project</span>(<span class="string">':simplebutterknife-annotations'</span>)</span><br><span class="line">    annotationProcessor <span class="keyword">project</span>(<span class="string">':simplebutterknife-compiler'</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>app module 中的工具类 <code>SimpleButterKnife</code> 的 <code>bind</code> 方法只需要加载这个自动生成的类并执行它的构造器就行了:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleButterKnife</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">bind</span><span class="params">(Activity target)</span> </span>&#123;</span><br><span class="line">        View sourceView = target.getWindow().getDecorView();</span><br><span class="line">        Class&lt;?&gt; targetClass = target.getClass();</span><br><span class="line">        String targetClassName = targetClass.getName();</span><br><span class="line">        Constructor constructor;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Class&lt;?&gt; bindingClass = targetClass.getClassLoader().loadClass(targetClassName + <span class="string">"_ViewBinding"</span>);</span><br><span class="line">            constructor = bindingClass.getConstructor(targetClass, View.class);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;</span><br><span class="line">            <span class="comment">// TODO Not found. should try search its superclass</span></span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Not found. should try search its superclass of "</span> + targetClassName, e);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (NoSuchMethodException e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Unable to find binding constructor for "</span> + targetClassName, e);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            constructor.newInstance(target, sourceView);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IllegalAccessException e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Unable to invoke "</span> + constructor, e);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InstantiationException e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Unable to invoke "</span> + constructor, e);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InvocationTargetException e) &#123;</span><br><span class="line">            Throwable cause = e.getCause();</span><br><span class="line">            <span class="keyword">if</span> (cause <span class="keyword">instanceof</span> RuntimeException) &#123;</span><br><span class="line">                <span class="keyword">throw</span> (RuntimeException) cause;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (cause <span class="keyword">instanceof</span> Error) &#123;</span><br><span class="line">                <span class="keyword">throw</span> (Error) cause;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Unable to create binding instance."</span>, cause);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>重新构建下工程，就可以在 <code>build\generated\source\apt\debug</code> 目录中查看自动生成的文件了:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.frank.simplebutterknife;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> android.view.View;</span><br><span class="line"><span class="keyword">import</span> android.widget.TextView;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity_ViewBinding</span> </span>&#123;</span><br><span class="line">  <span class="keyword">public</span> MainActivity target;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">MainActivity_ViewBinding</span><span class="params">(MainActivity target)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>(target, target.getWindow().getDecorView());</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">MainActivity_ViewBinding</span><span class="params">(MainActivity target, View source)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.target = target;</span><br><span class="line"></span><br><span class="line">    target.mTitleTextView = (TextView) source.findViewById(<span class="number">2131165300</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>此时，看一下 <a href="https://github.com/JakeWharton/butterknife" target="_blank" rel="noopener">Butter Knife</a> 的源码，其实就是在<a href="https://github.com/shangmingchao/simplebutterknife" target="_blank" rel="noopener">此</a>基础上的补充完善。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>编译时的注解和注解处理器可以生成一些模板代码，由于不涉及到反射所以也不会影响性能，注解的使用也会让代码得到简化，更加直观优雅，所以很多项目都在使用，包括 Butter Knife、Dagger2、EventBus、Glide 等开源库，所以有必要了解并使用注解，尤其是编译时注解。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://docs.oracle.com/javase/1.5.0/docs/guide/language/annotations.html" target="_blank" rel="noopener">JDK 5.0 Developer’s Guide: Annotations</a></li>
+<li><a href="https://github.com/JakeWharton/butterknife" target="_blank" rel="noopener">JakeWharton/butterknife</a></li>
+</ul>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2018/04/18/room/" data-toggle="tooltip" data-placement="top" title="Android Architecture Components 之 Room 篇">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2018/02/28/gradle-tips/" data-toggle="tooltip" data-placement="top" title="Android 构建那些事">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#Annotation" title="Annotation">Annotation</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="https://joyrun.github.io/" target="_blank">悦跑圈技术团队</a></li>
+                    
+                        <li><a href="http://tech.meituan.com/" target="_blank">美团点评技术团队</a></li>
+                    
+                </ul>
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/FrankShang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/frankshang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/frankshang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/frankshangx">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/shangmingchao">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://www.linkedin.com/in/FrankShang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Frank&#39;s Blog 2018 
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a href="http://blog.kaijun.rocks">Kaijun</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://franksblog.top/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="https://franksblog.top/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
