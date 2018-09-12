@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="null">
+    <meta name="keyword"  content="undefined">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          Kotlin 语言学习笔记 - 商明超的博客  | Frank&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="https://franksblog.top/2018/09/12/kotlin-note/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Frank&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archives/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="https://franksblog.top/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#Android" title="Android">Android</a>
+                        
+                          <a class="tag" href="/tags/#Kotlin" title="Kotlin">Kotlin</a>
+                        
+                    </div>
+                    <h1>Kotlin 语言学习笔记</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by Frank on
+                        2018-09-12
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h1 id="关于现代开发语言的思考"><a href="#关于现代开发语言的思考" class="headerlink" title="关于现代开发语言的思考"></a>关于现代开发语言的思考</h1><p>像 Java, Objective-C 这些上个世纪的开发语言越来越没法满足现代移动开发的需要，所以要有一些更现代化的语言和编译器，它能够够更像人类的语言，更符合人类的表达习惯，更加简洁，更加富有语义性，能够根据上下文环境判断我们想表达东西并理解我们的简述，能够察觉或者纠正我们的语法错误，能够有一些语法之内或之外的一些约定俗成的表达习惯，能够很好地支持面向对象编程、函数式编程以及响应式编程，最重要的还是在简洁高效的同时依然能保证很高的可读性。这些要求其实对于高级语言来说大多只是针对编译器的，而编译器作为桥梁也是高级语言的一部分，所以我们迫切地需要更现代化的高级语言和更现代化的编译器。<br>JetBrains 2011 年开发了更现代化的语言 <a href="http://kotlinlang.org/" target="_blank" rel="noopener">Kotlin</a> 用来弥补 Java 的不足。<br>Apple 2014 年开发了更现代化的语言 <a href="https://swift.org/" target="_blank" rel="noopener">Swift</a>，用来弥补 Objective-C 的不足。<br>Google 2011 年开发了更现代化的语言 <a href="https://www.dartlang.org/" target="_blank" rel="noopener">Dart</a>，一种可以构建Web, 服务器和移动应用的通用开发语言。<br>这些语言都很大程度上满足了上面所说的一些要求，但 Kotlin 要与 Java 互操作，所以有很多限制，Swift 也同样会受 Objective-C 相关的限制，而 Dart 可以更自由地成长，语法风格也是我比较喜欢的风格。Kotlin 虽然目前的使用率很低，但是毕竟相对于 Java 来说还是有特别多的优点的，所以即使现在不使用或者之后也不想使用，那至少能读懂 Kotlin 代码也是很有用处的。  </p>
+<h1 id="Kotlin-语法"><a href="#Kotlin-语法" class="headerlink" title="Kotlin 语法"></a>Kotlin 语法</h1><h2 id="Elvis-运算符"><a href="#Elvis-运算符" class="headerlink" title="Elvis 运算符"></a>Elvis 运算符</h2><p>在 Java 中，三目运算符 <code>a &gt; b ? a : b</code> 可以简化这样的 if 语句:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (a &gt; b) &#123;</span><br><span class="line">    <span class="keyword">return</span> a;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> b;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>但是如果用来判断并设置默认值就显得乏力了，如:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">person.getAvater() != <span class="keyword">null</span> ? person.getAvatar() : DEFAULT_AVATAR;</span><br></pre></td></tr></table></figure></p>
+<p>如果你不想函数执行两次或者执行两次后会有副作用那就无法使用这个运算符了，只能通过判断语句实现，但是这种缺省赋值的情况还是有很多的，我们为什么不能通过一个运算符就指定为空时的缺省值呢？类似这样:<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">person.getAvater() ?: DEFAULT_AVATAR;</span><br></pre></td></tr></table></figure></p>
+<p>这种 <code>?:</code> 二目运算符也被称为 Elvis operator，因为和 <a href="https://i.stack.imgur.com/hQlrps.png" target="_blank" rel="noopener">Elvis Presley 的表情符号</a> 一样。在 Kotlin 中利用 <code>?:</code> 可以简化大部分情况下的缺省赋值或者条件控制语句，而且 <code>?:</code> 右边也可以选择直接抛出异常。而三目运算符可以使用 <code>if else</code> 表达式替代。  </p>
+<h2 id="空类型检查"><a href="#空类型检查" class="headerlink" title="空类型检查"></a>空类型检查</h2><p>在 Java 中，规定某个参数是否可以为空只能通过额外的注解标注，而在 Kotlin 中只需要用一个 <code>?</code> 修饰可以为空的程序元素即可，如 <code>val s: String? = null</code>，Kotlin 的类型系统会检测程序中可以为空或不可以为空的值以在编译时消除 <code>NullPointerException</code>，也就是说如果不显式地使用 <code>?</code> 标记那么常见类型默认就是不能为空的。<br>安全调用运算符 <code>?.</code>可以将空检查和方法调用合并成一个操作，如 <code>s?.toUpperCase()</code> 等同于 <code>if(s != null) s.toUpperCase() else null</code>，而这个表达式的结果是 <code>String?</code> 类型的。这个操作符还可以用来访问属性。<br><code>!!</code> 可以对值进行非空断言 <code>val sNotNull: String = s!!</code> 如果 s 为空会显式地在这一行抛出异常。<br>安全调用 <code>let</code> 只在表达式不为空时执行 lambda <code>email?.let { sendEmailTo(it) }</code><br>可以定义一些扩展函数简化一些空类型检查，如 <code>fun String?.isNullOrBlank(): Boolean = this == null || this.isBlank()</code> 可以这样被使用 <code>input.isNullOrBlank()</code>，而 <code>input</code> 是 <code>String?</code> 类型的。</p>
+<h2 id="类型转化"><a href="#类型转化" class="headerlink" title="类型转化"></a>类型转化</h2><p>在 Java 中，对象转化时不要求先判断对象类型再强制转化，所以很难避免 <code>ClassCastException</code>，而 Kotlin 将检查和转化合并成一次操作，这样一旦检查通过就不需要额外的转化操作，也就不会出现未经检查的类型转换了:<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (value <span class="keyword">is</span> String)</span><br><span class="line">    println(value.toUpperCase())</span><br></pre></td></tr></table></figure></p>
+<p><code>as?</code> 运算符也可以尝试把值转换成指定的类型，不合适的话就返回 <code>null</code>，可以结合 Elvis 运算符一起使用 <code>val otherPerson = o as? Person ?: return false</code>。</p>
+<h2 id="表达式体"><a href="#表达式体" class="headerlink" title="表达式体"></a>表达式体</h2><p>在 Java 中，所有控制结构都是语句，赋值操作是表达式，而在 Kotlin 中，除了 <code>for</code>、<code>while</code> 循环外的大多数控制结构都是表达式，也就是说即便是 <code>if</code> 结构也是表达式，而赋值操作则是语句。表达式是有值的，可以作为另一个表达式的一部分使用，所以区分 expression 和 statement 依旧很重要。<br>如果函数体写在花括号中，我们说这个函数有 <strong>代码块体</strong>(block body)，如果函数直接返回了一个表达式，那么我们说这个函数有 <strong>表达式体</strong>(expression body)，而在 Kotlin 中表达式体函数可以简化，省略花括号和 <code>return</code>，改为赋值语句:<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">max</span><span class="params">(a: <span class="type">Int</span>, b: <span class="type">Int</span>)</span></span>: <span class="built_in">Int</span> = <span class="keyword">if</span> (a &gt; b) a <span class="keyword">else</span> b</span><br></pre></td></tr></table></figure></p>
+<h2 id="类型推导"><a href="#类型推导" class="headerlink" title="类型推导"></a>类型推导</h2><p>在 Java 中，每个变量必须显式并精确地指定类型，而 Kotlin 使用了类型推导机制，很多情况下你不需要显式或精确地指定类型。比如表达式体函数的返回类型可以忽略，因为编译器会分析表达式体并把它的类型作为函数的返回类型:<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">max</span><span class="params">(a: <span class="type">Int</span>, b: <span class="type">Int</span>)</span></span> = <span class="keyword">if</span> (a &gt; b) a <span class="keyword">else</span> b</span><br></pre></td></tr></table></figure></p>
+<p>也正是因为省略，声明变量时必须以 <code>val</code> 或 <code>var</code> 关键字开始，<code>val</code> 是 value 的缩写，用来声明不可变引用，也就是说 <code>val</code> 声明的变量不能在初始化后再次赋值，即只读/只能赋值一次。<code>var</code> 是 variable 的缩写，用来声明可变引用。应该尽可能使用 <code>val</code>，这样有利于函数式编程。<code>val</code> 引用自身是不可变的，但它指向的对象可能是可变的。即使 <code>var</code> 允许变量改变自己的值，但是类型却是改变不了的。如果变量没有在声明时初始化，就必须在声明时显式地指定类型:<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> answer: <span class="built_in">Int</span></span><br><span class="line">answer = <span class="number">42</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="属性"><a href="#属性" class="headerlink" title="属性"></a>属性</h2><p>在 Java 中，private 字段和对应的 <code>getter/setter</code> 方法（也叫访问器）的组合通常被称为<strong>属性</strong>，而 Kotlin 简化了属性的声明，只需要使用 <code>val</code> 或 <code>var</code> 关键字像声明普通变量一样即可:<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">    <span class="keyword">val</span> name: String,</span><br><span class="line">    <span class="keyword">var</span> isMarried: <span class="built_in">Boolean</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在 Java 中使用的话可以使用 <code>person.getName()</code>，<code>person.isMarried()</code>，<code>person.setMarried()</code> 方法，而在 Kotlin 中使用的话就可以简化为 <code>person.name</code>，<code>person.isMarried</code>，虽然本质还是调用 <code>getter/setter</code> 方法。</p>
+<h2 id="when"><a href="#when" class="headerlink" title="when"></a>when</h2><p>在 Java 中，使用 <code>switch</code> 结构进行条件判断处理有很多限制，在 Java 7 之前只支持 <code>byte</code>、<code>short</code>、<code>char</code>、<code>int</code>、<code>enum</code> 类型，之后才支持 <code>String</code>，而且 <code>case</code> 子句只能是常量，<code>default</code> 子句虽然可省但一般为了安全必须要写。而在 Kotlin 中 <code>when</code> 表达式比 <code>switch</code> 结构更强大。<code>when</code> 表达式中多个值合并到一个分支时用逗号隔开，<code>when</code> 可以没有参数，分支条件就是任意布尔表达式。使用 <code>when</code> 加 <code>is</code> 进行类型判断转换，<code>when</code> 加 <code>in</code> 进行区间检查更加方便。</p>
+<h2 id="命名参数和参数默认值"><a href="#命名参数和参数默认值" class="headerlink" title="命名参数和参数默认值"></a>命名参数和参数默认值</h2><p>常规调用函数时必须根据参数顺序赋值，可以省略的只有排在末尾的有默认值的参数，但命名参数调用时就可以随便省略了。</p>
+<h2 id="顶层函数与顶层属性，扩展函数与扩展属性"><a href="#顶层函数与顶层属性，扩展函数与扩展属性" class="headerlink" title="顶层函数与顶层属性，扩展函数与扩展属性"></a>顶层函数与顶层属性，扩展函数与扩展属性</h2><p>在 Kotlin 中，函数和属性可以在类外面定义，也就不需要去写只包含静态方法的 util 工具类了。<code>join.kt</code> 文件对应于 Java 中的 <code>JoinKt</code> 类和其静态方法，可以使用注解改变这个默认类名: <code>@file:JvmName(&quot;StringFunctions&quot;)</code>。顶层属性使用 <code>const</code> 修饰等同于 Java 中的 <code>public static final</code>。<br>扩展函数可以在类外扩展某个类的功能，是一种特殊的顶层函数，只需要在函数名前加上 <code>接收者类型.</code> 即可，如 <code>fun String.lastChar(): Char = this.get(this.length - 1)</code>，<code>String</code> 就是接收者类型，可以随便使用它的可访问的属性和方法，<code>this</code> 就是接收者对象，可以省略不写。使用 <code>import</code> 导入扩展函数，使用 <code>as</code> 重命名导入后的类名或函数名。如果扩展函数和成员函数签名一样，成员函数会被优先使用，而且扩展函数是不能被继承的，也就不能被重写。扩展属性必须定义 <code>getter</code> 函数，因为没有字段支持。</p>
+<h2 id="可变参数"><a href="#可变参数" class="headerlink" title="可变参数"></a>可变参数</h2><p>在 Java 中，不确定数量的参数声明用 <code>...</code> 表示，而在 Kotlin 中要使用 <code>vararg</code> 关键字，而且赋值时要使用展开运算符 <code>*</code> 主动将数组展开，如 <code>listOf(&quot;args: &quot;, *args)</code>。</p>
+<h2 id="中缀调用"><a href="#中缀调用" class="headerlink" title="中缀调用"></a>中缀调用</h2><p>使用 <code>infix</code> 关键字修饰的函数可以使用中缀符号进行函数调用，也就是说可以省略 <code>.</code> 和括号，函数名称直接放在目标对象和参数之间，如 <code>val (number, name) = 1 to &quot;one&quot;</code>。这就要求可以进行中缀调用的函数必须只能有一个参数且不能是 <code>vararg</code> 可变参数，必须是成员函数或扩展函数。</p>
+<h2 id="类与继承"><a href="#类与继承" class="headerlink" title="类与继承"></a>类与继承</h2><h3 id="接口和抽象类"><a href="#接口和抽象类" class="headerlink" title="接口和抽象类"></a>接口和抽象类</h3><p>Kotlin 中的继承采用的是单继承的方式，一个类只能继承一个类，但可以同时实现多个接口，接口不但可以包含抽象方法，还可以包含非抽象方法的默认实现，接口和抽象类的区别在于接口不能存储状态，接口的属性必须是抽象的或者提供访问器的实现。实现接口和继承父类只需要冒号 <code>:</code> 即可，多个接口使用逗号 <code>,</code> 分隔。<br>如果一个类同时实现了带默认实现的相同方法的多个接口，那么它就必须显示地实现这个方法，并可以通过类似 <code>super&lt;Clickable&gt;.showOff()</code> 的形式调用某个父类的实现。<br>对于接口中声明的属性，要么是抽象的 <code>val email: String</code>，要么虽然提供了自定义 <code>getter/setter</code> 方法但是没有引用支持字段，在自定义访问器中可以使用 <code>field</code> 来访问支持字段的值，如果你显式地引用或使用默认的访问器实现，编译器会为属性生成支持字段。访问器的可见性和属性一样，不过可以在 <code>get</code> 或 <code>set</code> 关键字前加可见性修饰符修改。  </p>
+<h3 id="继承限制和可见性限制"><a href="#继承限制和可见性限制" class="headerlink" title="继承限制和可见性限制"></a>继承限制和可见性限制</h3><p>Kotlin 中的类和方法默认是 <code>final</code> 的，也就是说禁止被继承，可以通过 <code>open</code> 修饰符修改。<br>抽象类的成员默认是 <code>open</code> 的，因为抽象类肯定是希望被继承重写的，所以不需要显式地写 <code>open</code> 修饰符。在接口中不能使用 <code>final</code>、<code>open</code> 或者 <code>abstract</code>。<br>Kotlin 可见性默认是 <code>public</code> 的，<code>protected</code> 成员只在类和它的子类中可见，类的扩展函数不能访问它的 <code>private</code> 和 <code>protected</code> 成员。  </p>
+<h3 id="内部类，嵌套类，密封类"><a href="#内部类，嵌套类，密封类" class="headerlink" title="内部类，嵌套类，密封类"></a>内部类，嵌套类，密封类</h3><p>对于类内部定义的类，在 Java 中 非静态的内部类是会隐式持有外部类的引用的，可以直接访问外部类的任何成员方法和变量，而静态内部类就不会持有外部类的引用，也无法直接访问外部类的成员。在 Kotlin 中将非静态的内部类叫做内部类（Inner classes），并必须使用 <code>inner</code> 修饰符修饰，否则的话默认就是不持有外部类引用的静态的内部类，也叫嵌套类（Nested classes）。内部类由于持有外部类的引用，会有内存泄漏的风险，而且内部类序列化也是个问题。内部类访问外部类需要使用 <code>this@Outer</code>。<br>不管还是 Java 中的 <code>switch</code> 还是 Kotlin 中的 <code>when</code>，我们通常都会提供一个默认的分支，以便能够处理任何其它分支都不匹配的情况，但是如果逻辑发生了更改，比如新增了一个分支，编译器无法察觉，我们自己也可能忘了处理，那么程序就会走到默认的分支，产生无法预料的 Bug，尤其是当 <code>when</code> 表达式是检测类的子类型的时候，而在 Kotlin 中可以通过 <code>sealed</code> 关键字修饰一个类以限制类的继承。这种类也被叫做密封类，其实也是枚举类的拓展，密封类的所有子类必须在同个文件中声明，由于密封类肯定是希望被继承的，所以 <code>open</code> 是不需要的。</p>
+<h3 id="构造器"><a href="#构造器" class="headerlink" title="构造器"></a>构造器</h3><p>如果主构造器没有注解或可见性修饰，那么 <code>constructor</code> 关键词可以省略。如果子类没有提供任何构造器，那么必须显式调用父类构造器。  </p>
+<h3 id="让编译器自动生成模板代码"><a href="#让编译器自动生成模板代码" class="headerlink" title="让编译器自动生成模板代码"></a>让编译器自动生成模板代码</h3><p>对于只用来存储数据的数据类，在 Kotlin 中成为数据类（Data Classes），可以使用 <code>data</code> 修饰，<code>data class User(val name: String, val age: Int)</code>，然后 IDE/编译器 就会帮你自动生成 <code>equals()/hashCode()</code> 函数比较主构造器中的值并生成唯一的 hashCode，自动生成 <code>toString()</code> 函数格式类似于 <code>&quot;User(name=John, age=42)&quot;</code>，自动生成 <code>componentN()</code> 函数用于解构声明，自动生成 <code>copy()</code> 函数用于创建副本。<br>对于 <code>final</code> 类，通常使用装饰者模式进行扩展，而这些模板代码也可以让 IDE/编译器 自动生成，只需要通过 <code>by</code> 关键字委托对象即可。  </p>
+<h3 id="单例"><a href="#单例" class="headerlink" title="单例"></a>单例</h3><p>创建类和该类的唯一实例可以放在一起声明，使用 <code>object</code> 关键字，和声明普通类不同的是不能声明构造器。也可以在类里面声明一个单例对象。虽然这种单例类的声明方式更简洁，但是却无法控制构造的参数和过程，所以依赖注入还是最好的选择。  </p>
+<h3 id="伴生对象"><a href="#伴生对象" class="headerlink" title="伴生对象"></a>伴生对象</h3><p>在 Kotlin 中没有 <code>static</code> 关键字也没有静态成员的概念，虽然 Kotlin 的包级别函数和顶层函数可以满足大部分需求，但是它们还是无法访问 <code>private</code> 成员，所以需要一个工厂方法，也就是使用 <code>companion</code> 关键字在类中定义对象，这样使用的时候就不需要显式地指定对象的名字，而是直接通过类名加方法名就可以调用了，与此同时，这个对象完全可以访问类中的 <code>private</code> 成员，包括 <code>private</code> 构造器。伴生对象可以不指定名字，默认名字是 <code>Companion</code>，伴生对象可以实现一个接口，可以有扩展函数和属性，也就是说，声明一个空的伴生对象并在其他地方声明这个伴生对象的扩展函数有时候是个不错的选择。  </p>
+<h3 id="对象表达式"><a href="#对象表达式" class="headerlink" title="对象表达式"></a>对象表达式</h3><p>可以利用 <code>object</code> 关键字声明匿名对象，匿名对象可以不实现接口也可以实现多个接口，匿名对象不是单例的，每次使用对象表达式都会创建新的对象，可以把表达式的值赋值给一个变量，那么匿名对象也就有名字了。</p>
+<h2 id="Lambda-表达式"><a href="#Lambda-表达式" class="headerlink" title="Lambda 表达式"></a>Lambda 表达式</h2><blockquote>
+<p><a href="https://en.wikipedia.org/wiki/Lambda_calculus" target="_blank" rel="noopener">λ演算</a> 是一个数学逻辑中的形式系统，以变量绑定和替换的规则，来研究函数如何抽象化定义，函数如何被应用及递归。它是一种通用的计算模型，可用于模拟任何图灵机。Lambda 表达式是函数式编程中非常重要的一个概念，通常是指使用特殊的语法所书写的匿名函数，函数可以像普通参数一样赋值给其它变量，也可以作为其它函数的返回值。</p>
+</blockquote>
+<p>Kotlin 中声明 Lambda 表达式的语法类似于 <code>{ x: Int, y: Int -&gt; x+y }</code>，用花括号包裹，用箭头把实参列表和 Lambda 函数体隔开。像函数内声明的匿名内部类一样，函数内使用的 lambda 表达式也可以访问函数的参数以及在 lambda 之前定义的局部变量，而且可以是非 <code>final</code> 的变量，非 <code>final</code> 的变量的值是被封装在一个特殊的包装器中的，这个包装器的引用会和 lambda 代码一起存储，也就是说，如果 lambda 被用作事件处理或者其他异步执行的情况，对局部变量的修改只会在 lambda 中的代码真正执行时发生，这个时候不使用局部变量而是使用类成员变量是个不错的选择。  </p>
+<h3 id="成员引用"><a href="#成员引用" class="headerlink" title="成员引用"></a>成员引用</h3><p>把一个已经定义好的函数作为值传递，只需要使用 <code>::</code> 运算符来转换 <code>val getAge = Person::age</code>，这种表达式成为成员引用，双冒号把类名和成员（方法或属性）名隔开。可以引用顶层函数，也就可以不写类名。可以引用扩展函数就像实例成员一样。可以引用构造器，只需要在双冒号后指定类名 <code>val createPerson = ::Person</code>。</p>
+<h3 id="函数式接口"><a href="#函数式接口" class="headerlink" title="函数式接口"></a>函数式接口</h3><p>只有一个抽象方法的接口被称为函数式接口，或 SAM（Single Abstract Method）接口，像 <code>OnClickListener</code>、<code>Runnable</code> 和 <code>Callable</code> 等这些都是函数式接口，函数式接口作为参数的方法在调用时可以使用 lambda 简化，而且如果 lambda 表达式没有访问任何来自定义它的函数的变量时，相应的匿名类实例可以在多次调用时重用:<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">button.setOnClickListener &#123; view -&gt; doSomething(view) &#125;</span><br></pre></td></tr></table></figure></p>
+<p>编译器可以帮助生成 lambda 转换成函数式接口所需的 SAM 构造方法，这个方法只需要一个参数，就是一个被用作函数式接口中唯一的方法的方法体:<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">createAllDoneRunnable</span><span class="params">()</span></span>: Runnable &#123;</span><br><span class="line">    <span class="keyword">return</span> Runnable &#123; println(<span class="string">"All done!"</span>) &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="“with”-和-“apply”-函数"><a href="#“with”-和-“apply”-函数" class="headerlink" title="“with” 和 “apply” 函数"></a>“with” 和 “apply” 函数</h3><p>库函数 <code>with</code> 会把第一个参数转换成作为第二个参数传给它的 lambda 的接受者，返回值是执行 lambda 代码的结果，而 <code>apply</code> 函数始终会返回作为实参传给它的对象。  </p>
+<h2 id="注解"><a href="#注解" class="headerlink" title="注解"></a>注解</h2><p>声明注解需要额外的关键字 <code>annotation</code> 来修饰类 <code>annotation class Fancy</code>，元注解包括:<br><code>@Target</code> 表明该注解类型可以注解哪些程序元素，如果注解类型不使用 <code>@Target</code> 描述那么表明可以注解所有程序元素，值是 <code>Array&lt;out AnnotationTarget&gt;</code> 类型:  </p>
+<ul>
+<li><code>AnnotationTarget.CLASS</code>(类、接口、对象，包括注解类)</li>
+<li><code>AnnotationTarget.PROPERTY</code>(属性)</li>
+<li><code>AnnotationTarget.FIELD</code>(字段，包括属性的支持字段)</li>
+<li><code>AnnotationTarget.LOCAL_VARIABLE</code>(本地变量)</li>
+<li><code>AnnotationTarget.VALUE_PARAMETER</code>(函数的实参或构造器)</li>
+<li><code>AnnotationTarget.CONSTRUCTOR</code>(主构造器或从构造器)</li>
+<li><code>AnnotationTarget.FUNCTION</code>(函数，不包括构造函数)</li>
+<li><code>AnnotationTarget.PROPERTY_GETTER</code>(属性的 getter)</li>
+<li><code>AnnotationTarget.PROPERTY_SETTER</code>(属性的 setter)</li>
+</ul>
+<p><code>@Retention</code> 表明该注解是否保留到编译完的 class 文件中，是否可以在运行时通过反射访问，默认都是可以的，也就是说 <code>AnnotationRetention.RUNTIME</code>:  </p>
+<ul>
+<li><code>AnnotationRetention.SOURCE</code>(注解不会保留二进制输出文件中，即 class 文件中)</li>
+<li><code>AnnotationRetention.BINARY</code>(注解会保留到二进制输出文件中，但对反射不可见)</li>
+<li><code>AnnotationRetention.RUNTIME</code>(注解会保留到二进制输出文件中，并对反射可见，默认是这个策略)</li>
+</ul>
+<p><code>@Repeatable</code> 表明该注解是否能同时注解同一个元素多次。<br><code>@MustBeDocumented</code> 表明这个注解是公共 API 的一部分，应该包含在自动生成的 API 文档中类或方法签名的地方。<br>注解可以有构造器和参数，只能拥有以下类型的参数: 基本数据类型、字符串、枚举、类引用、其他的注解类，以及前面这些类型的数组。<br>如果要把一个类指定为注解的实参，类名后要加 <code>::class</code>，如 <code>@MyAnnotataion(MyClass::class)</code>。<br>如果把另一个注解指定为注解的实参，那么需要去掉 <code>@</code>。<br>如果把一个数组指定为注解的实参，那需要使用数组字面值或者 <code>arrayOf</code> 函数。<br>如果把属性指定为注解的实参，那么这个属性必须是编译时常量，也就是说用 <code>const</code> 修饰。<br>由于 Kotlin 中一个简单的程序元素可能会自动生成多个程序元素和其字节码，比如构造器声明中的变量声明可能还隐式包含了属性声明和相应的 <code>getter/setter</code> 方法，所以为了精确地表示你想注解的程序元素，可以使用将目标放在 <code>@</code> 和注解名之间，并用 <code>:</code> 将目标和注解名隔开，如 <code>@get:Ann val bar</code> 表明注解 <code>bar</code> 的 <code>getter</code> 方法。<br>如果多个注解同时作用于一个元素，可以使用方括号包裹:<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Example</span> </span>&#123;</span><br><span class="line">     <span class="meta">@set:</span>[Inject VisibleForTesting]</span><br><span class="line">     <span class="keyword">var</span> collaborator: Collaborator</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>注解也可以用在 lambda 表达式中，它们将被应用于自动生成 lambda 体的 <code>invoke()</code> 方法。  </p>
+<h2 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h2><p>Kotlin 反射主要依靠 <code>KClass</code>、<code>KCallable</code>、<code>KFunction</code> 和 <code>KProperty</code>。<br>使用 <code>val kClass = person.javaClass.kotlin</code> 可以返回一个 <code>KClass&lt;Person&gt;</code> 的实例，然后就可以通过这个实例获取 <code>kClass.memberProperties</code> 所有属性等信息。<br>通过 <code>::</code> 语法可以获取 <code>KFunction</code> 或 <code>KProperty</code> 的实例。  </p>
+<h2 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h2><ul>
+<li>Kotlin 不需要方法去 throws 异常，<code>try</code> 像 <code>if</code> 一样也是表达式。  </li>
+<li>函数可以多层嵌套，也就是定义局部函数，以便符合 DRY 原则，减少重复代码。  </li>
+<li>冒号 <code>:</code> 后面一定要加空格。</li>
+<li>冒号 <code>:</code> 只有在用来分隔子类型和父类型、委托给父类构造器或同类其它构造器以及 <code>object</code> 关键词之后这三种情况时冒号前面才加空格。</li>
+<li>在 Kotlin 中 <code>==</code> 其实是调用 <code>equals</code> 方法，<code>===</code> 比较的才是引用。</li>
+<li><code>Any</code> 是 Java 中 <code>java.lang.Object</code> 的模拟，<code>is</code> 是 Java 中 <code>instanceOf</code> 的模拟。<code>Unit</code> 是 Java 中 <code>void</code> 的模拟。</li>
+<li>如果 lambda 表达式是函数调用的最后一个实参，它可以放在括号的外边。如果 lambda 表达式是函数唯一的实参，可以去掉调用代码中的空括号对。</li>
+<li>如果 lambda 参数的类型可以推导出来，就可以不用写参数类型，如果不显式地指定这个唯一的实参名字那么默认名就是 <code>it</code>。</li>
+</ul>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                    
+                        <li class="next">
+                            <a href="/2018/06/15/dart-note/" data-toggle="tooltip" data-placement="top" title="Dart 语言学习笔记">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#Android" title="Android">Android</a>
+                        
+                          <a class="tag" href="/tags/#Kotlin" title="Kotlin">Kotlin</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="https://juejin.im/user/5a96922b5188257a865da3f2/posts" target="_blank">我的掘金</a></li>
+                    
+                        <li><a href="https://www.jianshu.com/u/64ac160aaac8" target="_blank">我的简书</a></li>
+                    
+                        <li><a href="https://blog.csdn.net/shangmingchao" target="_blank">我的 CSDN</a></li>
+                    
+                        <li><a href="https://joyrun.github.io/" target="_blank">悦跑圈技术团队</a></li>
+                    
+                        <li><a href="http://tech.meituan.com/" target="_blank">美团点评技术团队</a></li>
+                    
+                </ul>
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/FrankShang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/frankshang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/frankshang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/frankshangx">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/shangmingchao">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://www.linkedin.com/in/FrankShang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Frank&#39;s Blog 2018 
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a href="http://blog.kaijun.rocks">Kaijun</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://franksblog.top/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="https://franksblog.top/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
