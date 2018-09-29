@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="null">
+    <meta name="keyword"  content="undefined">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          音视频技术基础 - 商明超的博客  | Frank&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="https://franksblog.top/2018/09/29/media-basics/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Frank&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archives/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="https://franksblog.top/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#Android" title="Android">Android</a>
+                        
+                          <a class="tag" href="/tags/#Media" title="Media">Media</a>
+                        
+                          <a class="tag" href="/tags/#FFMPEG" title="FFMPEG">FFMPEG</a>
+                        
+                    </div>
+                    <h1>音视频技术基础</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by Frank on
+                        2018-09-29
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h1 id="音视频技术基础"><a href="#音视频技术基础" class="headerlink" title="音视频技术基础"></a>音视频技术基础</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>保存视频的每一帧，每一个像素没要必要，而且也是不现实的，因为这个数据量太大了，以至于没办法存储和传输，比如说，一个视频大小是 1280×720 像素，一个像素占 12 个比特位，每秒 30 帧，那么一分钟这样的视频就要占 1280×720×12×30×60/8/1024/1024=2.3G 的空间，所以视频数据肯定要进行压缩存储和传输的。<br>而可以压缩的冗余数据有很多，从空间上来说，一帧图像中的像素之间并不是毫无关系的，相邻像素有很强的相关性，可以利用这些相关性抽象地存储。同样在时间上，相邻的视频帧之间内容相似，也可以压缩。每个像素值出现的概率不同，从编码上也可以压缩。人类视觉系统（HVS）对高频信息不敏感，所以可以丢弃高频信息，只编码低频信息。对高对比度更敏感，可以提高边缘信息的主观质量。对亮度信息比色度信息更敏感，可以降低色度的解析度。对运动的信息更敏感，可以对感兴趣区域（ROI）进行特殊处理。<br>视频数据压缩和传输的实现与最终将这些数据还原成视频播放出来的实现是紧密相关的，也就是说视频信息的压缩和解压缩需要一个统一标准，即音视频编码标准。  </p>
+<h2 id="视频编码"><a href="#视频编码" class="headerlink" title="视频编码"></a>视频编码</h2><p>制定音视频编码标准的有两个组织机构，一个是国际电联下属的机构 ITU-T（ITU Telecommunication Standardization Sector），一个是国际标准化组织 ISO 和国际电工委员会 IEC 下属的 MPEG（Moving Picture Experts Group） 专家组。<br>1988 年，ITU-T 制定了第一个实用的视频编码标准 <a href="https://en.wikipedia.org/wiki/H.261" target="_blank" rel="noopener">H.261</a>，这也是第一个 H.26x 家族的视频编码标准，之后的一些视频编码标准大多都是以此为基础的。它的的基本处理单元称为宏块，H.261 是宏块概念出现的第一个标准。每个宏块由 16×16 阵列的亮度样本和两个对应的 8×8 色度样本阵列组成，使用 4:2:0 采样和 YCbCr 色彩空间。编码算法使用运动补偿的图片间预测和空间变换编码的混合，涉及标量量化，Z字形扫描和熵编码。<br>1993 年，ISO/IEC 制定了有损压缩标准 <a href="https://en.wikipedia.org/wiki/MPEG-1" target="_blank" rel="noopener">MPEG-1</a>，其中最著名的部分是它引入的 MP3 音频格式。<br>2003 年，ITU-T 和 MPEG 共同组成的 JVT（Joint Video Team）联合视频小组开发了优秀的广为流行的 <a href="https://en.wikipedia.org/wiki/H.264/MPEG-4_AVC" target="_blank" rel="noopener">H.264</a> 标准，该标准既是 ITU-T 的 H.264 标准，也是 MPEG-4 的第十部分（第十部分也叫 AVC（Advanced Video Coding）），所以 H.264/AVC, AVC/H.264, H.264/MPEG-4 AVC, MPEG-4/H.264 AVC 都是指 H.264。而之后的 <a href="https://en.wikipedia.org/wiki/High_Efficiency_Video_Coding" target="_blank" rel="noopener">HEVC</a>（High Efficiency Video Coding）视频压缩标准既是指 H.265 也是指 MPEG-H 第二部分。<br>2003 年，微软基于 WMV9（Windows Media Video 9）格式开发了视频编码标准 <a href="https://en.wikipedia.org/wiki/VC-1" target="_blank" rel="noopener">VC-1</a>。<br>2008 年，Google 基于 VP7 开源了 <a href="https://en.wikipedia.org/wiki/VP8" target="_blank" rel="noopener">VP8</a> 视频压缩格式。 VP8 可以与 Vorbis 和 Opus 音频一起多路复用到基于 Matroska 的容器格式 WebM 中。图像格式 WebP 基于 VP8 的帧内编码。之后的 VP9 和 开放媒体联盟 Alliance for Open Media（AOMedia）开发的 AV1（AOMedia Video 1）都是基于 VP8 的。这个系列编码标准的最大优势是它是开放的，免版权税的。  </p>
+<h2 id="术语"><a href="#术语" class="headerlink" title="术语"></a>术语</h2><h3 id="多媒体容器格式（封装格式）"><a href="#多媒体容器格式（封装格式）" class="headerlink" title="多媒体容器格式（封装格式）"></a>多媒体容器格式（封装格式）</h3><p>一个多媒体文件或者多媒体流可能包含多个视频、音频、字幕、同步信息，章节信息以及元数据等数据。也就是说通常看到的 .mp4 、.avi、.rmvb 等文件中的 MP4、AVI 其实是一种容器格式（container formats），用来封装这些数据，而不是视频编码。  </p>
+<h3 id="muxer-和-demuxer"><a href="#muxer-和-demuxer" class="headerlink" title="muxer 和 demuxer"></a>muxer 和 demuxer</h3><p>muxer 就是用来封装多媒体容器格式的封装器，比如把一个 rmvb 视频文件，mp3 音频文件以及 srt 字幕文件，封装成为一个新的 mp4 文件。而 demuxer 就是解封装器，可以将容器格式分解成视频流、音频流、附加数据等信息。  </p>
+<h3 id="Codec"><a href="#Codec" class="headerlink" title="Codec"></a>Codec</h3><p>编解码器，是编码器（Encoder）和 解码器（Decoder）的统称。  </p>
+<h3 id="I-帧"><a href="#I-帧" class="headerlink" title="I 帧"></a>I 帧</h3><p>Intra-frame，也被称为 I-pictures 或 keyframes，也就是说俗称的关键帧，是指不依赖于其他任何帧进行渲染的视频帧，简单呈现一个固定图像。两个关键帧之间的视频帧是可以预测计算出来的，但两个 I 帧之间的帧数不可能特别大，因为解码的复杂度，解码器缓冲区大小，数据错误后的恢复时间，搜索能力以及在硬件解码器中最常见的低精度实现中 IDCT 错误的累积，限制了 I 帧之间的最大帧数。  </p>
+<h3 id="P-帧"><a href="#P-帧" class="headerlink" title="P 帧"></a>P 帧</h3><p>Predicted-frame，也被称为向前预测帧或帧间帧，仅存储与紧邻它的前一个帧（I 帧或 P 帧，这个参考帧也称为锚帧）的图像差异。使用帧的每个宏块上的运动矢量计算 P 帧与其锚帧之间的差异，这种运动矢量数据将嵌入 P 帧中以供解码器使用。除了任何前向预测的块之外，P 帧还可以包含任意数量的帧内编码块。如果视频从一帧到下一帧（例如剪辑）急剧变化，则将其编码为 I 帧会更有效。如果 P 帧丢失，视频画面可能会出现花屏或者马赛克的现象。  </p>
+<h3 id="B-帧"><a href="#B-帧" class="headerlink" title="B 帧"></a>B 帧</h3><p>Bidirectional-frame，代表双向帧，也被称为向后预测帧或 B-pictures。 B 帧与 P 帧非常相似，B 帧可以使用前一帧和后一帧（即两个锚帧）进行预测。因此，在可以解码和显示 B 帧之前，播放器必须首先在 B 帧之后顺序解码下一个 I 或 P 锚帧。这意味着解码 B 帧需要更大的数据缓冲器，并导致解码和编码期间的延迟增加。这还需要容器/系统流中的解码时间戳（DTS）特征。因此，B 帧长期以来一直备受争议，它们通常在视频中被避免，有时硬件解码器不能完全支持它们。不存在从 B 帧 预测的帧的，因此，可以在需要时插入非常低比特率的 B 帧，以帮助控制比特率。如果这是用 P 帧完成的，则可以从中预测未来的 P 帧，并且会降低整个序列的质量。除了向后预测或双向预测的块之外，B帧还可以包含任意数量的帧内编码块和前向预测块。  </p>
+<h3 id="NAL-和-VCL"><a href="#NAL-和-VCL" class="headerlink" title="NAL 和 VCL"></a>NAL 和 VCL</h3><p>网络抽象层 NAL（Network Abstraction Layer）和 视频编码层 VCL（Video Coding Layer）是 H.264/AVC 和 HEVC 标准的一部分，NAL 的主要目的是对访问“会话”（视频通话）和“非会话”（存储、传播、转成媒体流）应用的网络友好的视频表示一个规定。NAL 用来格式化 VCL 的视频表示，并以适当的方式为通过各种传输层和存储介质进行的传输提供头信息。也就是说 NAL 有助于将 VCL 数据映射到传输层。<br>NALU（NAL units）是已编码的视频数据用来存储和传输的基本单元，NAL 单元的前一个（H.264/AVC）或两个（HEVC）字节是 Header 字节，用来标明该 NAL 单元中数据的类型。其它字节是有效载荷。<br>NAL 单元分为 VCL 和非 VCL 的 NAL 单元。VCL NAL 单元包含表示视频图像中样本值的数据，非 VCL NAL 单元包含任何相关的附加信息，例如参数集 parameter sets（可应用于大量 VCL NAL 单元的重要 header 数据）和补充增强信息 SEI（Supplemental enhancement information）（定时信息和其他可以增强解码视频信号可用性的补充数据，但对于解码视频图像中的样本的值不是必需的）。<br>参数集分为两种类型:  SPS（sequence parameter sets）和 PPS（picture parameter sets）。SPS 应用于一系列连续的已编码的视频图像（即已编码视频序列），PPS 应用于已编码视频序列中一个或多个单独图像的解码。也就是说 SPS 和 PPS 将不频繁改变信息的传输和视频图像中样本值编码表示的传输分离开来。每个 VCL NAL 单元包含一个指向相关 PPS 内容的标识符，而每个 PPS 都包含一个指向相关 SPS 内容的标识符。因此仅仅通过少量数据（标识符）就可以引用大量的信息（参数集）而无需在每个 VCL NAL 单元中重复该信息了。SPS 和 PPS 可以在它们要应用的 VCL NAL 单元之前发送，并且可以重复以提供针对数据丢失的鲁棒性。<br>NAL Header 字节中的 nal_ref_idc 用于表示当前 NALU 的重要性，值越大，越重要，解码器在解码处理不过来的时候，可以丢掉重要性为 0 的 NALU。SPS/PPS 时，nal_ref_idc 不可为 0。当某个图像的片的 nal_ref_id 等于 0 时，该图像的所有片均应等 0。nal_unit_type 表示NALU 的类型，7 表示这个 NALU 是 SPS，8 表示这个 NALU 是 PPS。5 表示这个 NALU 是 IDR（instantaneous decoding refresh，即 I 帧） 的 slice，1 表示这个 NALU 所在的帧是 P 帧。</p>
+<h3 id="DTS-和-PTS"><a href="#DTS-和-PTS" class="headerlink" title="DTS 和 PTS"></a>DTS 和 PTS</h3><p>PS（Program Streams）指将多个打包的基本码流 PES （通常是一个音频 PES 和一个视频 PES）组合成的单个流，以确保同时传送并保持同步，PS 也被称为多路传输（multiplex）或容器格式（container format）。<br>PTS（Presentation time stamps）: PS 中的 PTS 用来校正音频和视频 SCR（system clock reference）值之间的不可避免的差异（时基校正），如 PS 头中的 90 kHz PTS 值告诉解码器哪些视频 SCR 值与哪些音频 SCR 值匹配。PTS 决定了何时显示 MPEG program 的一部分，并且解码器还使用它来确定何时可以从缓冲器中丢弃数据。解码器将延迟视频或音频中的一个，直到另一个的相应片段到达并且可以被解码。<br>DTS（Decoding Time Stamps）: 对于视频流中的 B 帧，必须对相邻帧进行无序编码和解码（重新排序的帧）。DTS 与 PTS 非常相似，但它不仅仅处理顺序帧，而是包含适当的时间戳，在它的锚帧（P 帧 或 I 帧）之前，告诉解码器何时解码并显示下一个 B 帧。如果视频中没有B帧，那么 PTS 和 DTS 值是相同的。  </p>
+<h1 id="FFMPEG"><a href="#FFMPEG" class="headerlink" title="FFMPEG"></a>FFMPEG</h1><h2 id="FFMPEG-概述"><a href="#FFMPEG-概述" class="headerlink" title="FFMPEG 概述"></a>FFMPEG 概述</h2><p>FFMPEG 项目是在 2000 年由法国的程序员 Fabrice Bellard 发起的，名字是受到 MPEG 专家组的启发，前面的“FF”是“fast forward”快进的意思。FFMPEG 是一个可以录制音视频，转码音视频的格式，将音视频转成媒体流的完整的、跨平台的解决方案。它是一个自由的软件项目，任何人都可以免费使用和修改，只要遵循 GPL 或者 LGPL 协议引用或公开源码就行。它中的编解码库也是 VLC 播放器所使用的核心编解码库，ijkplayer 、MPlayer 等播放器也都是基于 FFMPEG 开发的。  </p>
+<h2 id="FFMPEG-使用"><a href="#FFMPEG-使用" class="headerlink" title="FFMPEG 使用"></a>FFMPEG 使用</h2><h3 id="注册编解码器"><a href="#注册编解码器" class="headerlink" title="注册编解码器"></a>注册编解码器</h3><p><code>libavcodec/allcodecs.c</code> 文件中的 <code>avcodec_register_all()</code> 函数用来注册所有的编解码器（包括硬件加速、视频、音频、PCM、DPCM、ADPCM、字幕、文本、外部库、解析器）。<br><code>libavformat/allformats.c</code> 文件中的 <code>av_register_all()</code> 函数中调用了 <code>avcodec_register_all()</code> 注册所有的编解码器并注册了所有 muxer 和 demuxer。<br>因此使用 FFMPEG 一般都要先调用 <code>av_register_all()</code>。  </p>
+<h3 id="打开输入流"><a href="#打开输入流" class="headerlink" title="打开输入流"></a>打开输入流</h3><p>要读取一个媒体文件，可以使用 <code>libavformat/utils.c</code> 文件中的 <code>avformat_open_input()</code> 函数:<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">avformat_open_input</span><span class="params">(AVFormatContext **ps, <span class="keyword">const</span> <span class="keyword">char</span> *filename,</span></span></span><br><span class="line"><span class="function"><span class="params">                        AVInputFormat *fmt, AVDictionary **options)</span></span></span><br></pre></td></tr></table></figure></p>
+<p><code>ps</code> 包含了媒体相关的基本所有数据，随后函数中调用的 <code>libavformat/options.c</code> 文件中的 <code>avformat_alloc_context()</code> 函数会为它分配空间，而 <code>avformat_alloc_context()</code> 中会调用 <code>avformat_get_context_defaults()</code> 给 <code>s-&gt;io_open</code> 设置默认值 <code>io_open_default()</code> 函数。<br><code>filename</code> 是想要读取的媒体文件的路径表示，可以是本地或者网络的。<br><code>fmt</code> 是自定义的读取格式，可以为 <code>NULL</code> 也可以提前通过 <code>av_find_input_format()</code> 函数获取。<br><code>options</code> 是特殊操作参数，如设置 <code>timeout</code> 参数的值。<br><code>avformat_open_input()</code> 中会调用 <code>init_input()</code> 函数打开输入文件并尽可能地解析出文件格式:<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">init_input</span><span class="params">(AVFormatContext *s, <span class="keyword">const</span> <span class="keyword">char</span> *filename,</span></span></span><br><span class="line"><span class="function"><span class="params">                      AVDictionary **options)</span></span></span><br></pre></td></tr></table></figure></p>
+<p><code>init_input()</code> 中的关键代码是:<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ((ret = s-&gt;io_open(s, &amp;s-&gt;pb, filename, AVIO_FLAG_READ | s-&gt;avio_flags, options)) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br></pre></td></tr></table></figure></p>
+<p>而前面说的 <code>s-&gt;io_open</code> 默认指向的 <code>libavformat/option.c</code> 文件中的 <code>io_open_default()</code> 函数会调用 <code>libavformat/aviobuf.c</code> 文件中的 <code>ffio_open_whitelist()</code> 函数。<br><code>ffio_open_whitelist()</code> 函数会先调用 <code>libavformat/avio.c</code> 文件中的 <code>ffurl_open_whitelist()</code> 函数初始化 <code>URLContext</code>，再调用 <code>libavformat/aviobuf.c</code> 文件中的 <code>ffio_fdopen()</code> 函数根据 <code>URLContext</code> 的真正类型（如 <code>HTTPContext</code>）初始化 <code>AVIOContext</code>，这个 <code>AVIOContext</code> 就是常见的 <code>s-&gt;pb</code>，也就是说从这时开始 <code>pb</code> 已经被初始化了。<br><code>ffurl_open_whitelist()</code> 函数中会先调用 <code>ffurl_alloc()</code> 函数找到协议真正类型并根据类型为 <code>URLContext</code> 分配空间，再调用 <code>ffurl_connect()</code> 函数打开媒体文件。<br><code>ffurl_connect()</code> 函数中的主要调用是这样的:<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">err =</span><br><span class="line">        uc-&gt;prot-&gt;url_open2 ? uc-&gt;prot-&gt;url_open2(uc,</span><br><span class="line">                                                  uc-&gt;filename,</span><br><span class="line">                                                  uc-&gt;flags,</span><br><span class="line">                                                  options) :</span><br><span class="line">        uc-&gt;prot-&gt;url_open(uc, uc-&gt;filename, uc-&gt;flags);</span><br></pre></td></tr></table></figure></p>
+<p>而位于 <code>libavformat/http.c</code> 文件中的 HTTP 协议 <code>ff_http_protocol</code> 的 <code>url_open2</code> 指向了 <code>http_open()</code> 函数，<code>http_open()</code> 中通过 <code>HTTPContext</code> 中的 <code>AVApplicationContext</code> 可以跟上层进行通讯，比如告诉上层正在进行 HTTP 请求，但主要调用的 <code>http_open_cnx()</code> 函数调用了 <code>http_open_cnx_internal()</code>。<br><code>http_open_cnx_internal()</code> 中先是对视频 URL 进行分析，比如如果使用了代理那么还要重新组装 URL 以避免将一些信息暴露给代理服务器，如果是 HTTPS 那么底层协议就是 TLS 否则底层协议就是 TCP，然后调用 <code>ffurl_open_whitelist()</code> 进行底层协议的处理（如 DNS 解析，TCP 握手建立 Socket 连接）。然后调用 <code>http_connect()</code> 函数进行 HTTP 请求，当然请求前要给 Header 设置默认值并且添加用户自定义的 Header，然后调用 <code>libavformat/avio.c</code> 文件中的 <code>ffurl_write()</code> 函数发送请求数据，它调用底层协议的 <code>url_write</code>，而位于 <code>libavformat/tcp.c</code> 文件中的 TCP 协议 <code>ff_tcp_protocol</code> 的 <code>url_write</code> 指向了 <code>tcp_write()</code> 函数，<code>tcp_write()</code> 主要是调用系统函数 <code>send()</code> 发送数据（<code>tcp_read</code> 调用系统函数 <code>recv()</code>）。最后，在发送完数据后会调用 <code>http_read_header()</code> 函数读取响应报文的 Header，而 <code>http_read_header()</code> 中有个死循环，就是不停地 <code>http_get_line()</code> 和 <code>process_line()</code> 直到所有 Header 数据处理完毕，<code>http_get_line()</code> 内部其实也是调用了 <code>ffurl_read()</code>（跟 <code>ffurl_write()</code> 逻辑类似）。<br>至此，如果 <code>avformat_open_input()</code> 返回了大于等于零的数，就算是第一次拿到了媒体文件的数据，播放器就可以向上层发一个 <code>FFP_MSG_OPEN_INPUT</code> 的消息表示成功打开了输入流。  </p>
+<h3 id="分析输入流"><a href="#分析输入流" class="headerlink" title="分析输入流"></a>分析输入流</h3><p>打开输入流并一定能精确地知道媒体流实际的的详细信息，一般情况下还需要调用 <code>libavformat/utils.c</code> 文件中的 <code>avformat_find_stream_info()</code> 函数对输入流进行探测分析:<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">avformat_find_stream_info</span><span class="params">(AVFormatContext *ic, AVDictionary **options)</span></span></span><br></pre></td></tr></table></figure></p>
+<p>由于读取一部分媒体数据进行分析的过程还是非常耗时的，所以需要一个时间限制，这个时间限制不能太短以避免成功率太低。<code>max_analyze_duration</code> 如果不指定那么默认是 <code>5 * AV_TIME_BASE</code>（时间都是基于时基的，而时基 <code>AV_TIME_BASE</code> 是 <code>1000000</code>），对于 <code>mpeg</code> 或 <code>mpegts</code> 格式的视频流 <code>max_stream_analyze_duration = 90 * AV_TIME_BASE</code>。<br>对于媒体中的所有流（包括视频流、音频流、字幕流），先根据之前的 <code>codec_id</code> 调用 <code>find_probe_decoder()</code> 函数寻找合适的解码器，再调用 <code>libavcodec/utils.c</code> 文件中的 <code>avcodec_open2()</code> 函数打开解码器，再调用 <code>read_frame_internal()</code> 函数读取一个完整的 <code>AVPacket</code>，再调用 <code>try_decode_frame()</code> 函数尝试解码 packet。  </p>
+<h3 id="获取各个媒体类型的流的索引"><a href="#获取各个媒体类型的流的索引" class="headerlink" title="获取各个媒体类型的流的索引"></a>获取各个媒体类型的流的索引</h3><p>一般媒体流中都会包括 <code>AVMEDIA_TYPE_VIDEO</code>、<code>AVMEDIA_TYPE_AUDIO</code> 和 <code>AVMEDIA_TYPE_SUBTITLE</code> 等媒体类型的流，可以通过 <code>libavformat/utils.c</code> 文件中的 <code>av_find_best_stream()</code> 函数获取他们的索引。  </p>
+<h3 id="打开各个媒体流"><a href="#打开各个媒体流" class="headerlink" title="打开各个媒体流"></a>打开各个媒体流</h3><p>根据各个媒体流的索引就可以打开各个媒体流了，首先调用 <code>libavcodec/utils.c</code> 文件中的 <code>avcodec_find_decoder()</code> 函数找到该媒体流的解码器，然后调用 <code>libavcodec/options.c</code> 文件中的 <code>avcodec_alloc_context3()</code> 为解码器分配空间，然后调用 <code>libavcodec/utils.c</code> 文件中的 <code>avcodec_parameters_to_context()</code> 为解码器复制上下文参数，然后调用 <code>libavcodec/utils.c</code> 文件中的 <code>avcodec_open2()</code> 打开解码器，然后调用 <code>libavutil/frame.c</code> 文件中的 <code>av_frame_alloc()</code> 为 <code>AVFrame</code> 分配空间，然后调用 <code>libavutil/imgutils.c</code> 文件中的 <code>av_image_get_buffer_size()</code> 获取需要的缓冲区大小并为其分配空间，然后调用 <code>libavcodec/avpacket.c</code> 文件中的 <code>av_init_packet()</code> 对 <code>AVPacket</code> 进行初始化。  </p>
+<h3 id="循环读取每一帧"><a href="#循环读取每一帧" class="headerlink" title="循环读取每一帧"></a>循环读取每一帧</h3><p>通过 <code>libavformat/utils.c</code> 文件中的 <code>av_read_frame()</code> 函数就可以读取完整的一帧数据了:<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">do</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (!end_of_stream)</span><br><span class="line">        <span class="keyword">if</span> (av_read_frame(fmt_ctx, &amp;pkt) &lt; <span class="number">0</span>)</span><br><span class="line">            end_of_stream = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span> (end_of_stream) &#123;</span><br><span class="line">        pkt.data = <span class="literal">NULL</span>;</span><br><span class="line">        pkt.size = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (pkt.stream_index == video_stream || end_of_stream) &#123;</span><br><span class="line">        got_frame = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span> (pkt.pts == AV_NOPTS_VALUE)</span><br><span class="line">            pkt.pts = pkt.dts = i;</span><br><span class="line">        result = avcodec_decode_video2(ctx, fr, &amp;got_frame, &amp;pkt);</span><br><span class="line">        <span class="keyword">if</span> (result &lt; <span class="number">0</span>) &#123;</span><br><span class="line">            av_log(<span class="literal">NULL</span>, AV_LOG_ERROR, <span class="string">"Error decoding frame\n"</span>);</span><br><span class="line">            <span class="keyword">return</span> result;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (got_frame) &#123;</span><br><span class="line">            number_of_written_bytes = av_image_copy_to_buffer(byte_buffer, byte_buffer_size,</span><br><span class="line">                                    (<span class="keyword">const</span> <span class="keyword">uint8_t</span>* <span class="keyword">const</span> *)fr-&gt;data, (<span class="keyword">const</span> <span class="keyword">int</span>*) fr-&gt;linesize,</span><br><span class="line">                                    ctx-&gt;pix_fmt, ctx-&gt;width, ctx-&gt;height, <span class="number">1</span>);</span><br><span class="line">            <span class="keyword">if</span> (number_of_written_bytes &lt; <span class="number">0</span>) &#123;</span><br><span class="line">                av_log(<span class="literal">NULL</span>, AV_LOG_ERROR, <span class="string">"Can't copy image to buffer\n"</span>);</span><br><span class="line">                <span class="keyword">return</span> number_of_written_bytes;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">"%d, %10"</span>PRId64<span class="string">", %10"</span>PRId64<span class="string">", %8"</span>PRId64<span class="string">", %8d, 0x%08lx\n"</span>, video_stream,</span><br><span class="line">                    fr-&gt;pts, fr-&gt;pkt_dts, av_frame_get_pkt_duration(fr),</span><br><span class="line">                    number_of_written_bytes, av_adler32_update(<span class="number">0</span>, (<span class="keyword">const</span> <span class="keyword">uint8_t</span>*)byte_buffer, number_of_written_bytes));</span><br><span class="line">        &#125;</span><br><span class="line">        av_packet_unref(&amp;pkt);</span><br><span class="line">        av_init_packet(&amp;pkt);</span><br><span class="line">    &#125;</span><br><span class="line">    i++;</span><br><span class="line">&#125; <span class="keyword">while</span> (!end_of_stream || got_frame);</span><br></pre></td></tr></table></figure></p>
+<h1 id="编译-ijkplayer"><a href="#编译-ijkplayer" class="headerlink" title="编译 ijkplayer"></a>编译 ijkplayer</h1><p>ijkplayer k0.8.8 版本， 支持常见格式的 lite 版本，支持 HTTPS 协议的 .so 文件的编译命令如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/Bilibili/ijkplayer.git ijkplayer-android</span><br><span class="line">cd ijkplayer-android</span><br><span class="line">git checkout -B latest k0.8.8</span><br><span class="line">cd config</span><br><span class="line">rm module.sh</span><br><span class="line">ln -s module-lite.sh module.sh</span><br><span class="line">cd ..</span><br><span class="line">./init-android.sh</span><br><span class="line">./init-android-openssl.sh</span><br><span class="line">cd android/contrib</span><br><span class="line">./compile-openssl.sh clean</span><br><span class="line">./compile-openssl.sh all</span><br><span class="line">./compile-ffmpeg.sh clean</span><br><span class="line">./compile-ffmpeg.sh all</span><br><span class="line">cd ..</span><br><span class="line">./compile-ijk.sh clean</span><br><span class="line">./compile-ijk.sh all</span><br></pre></td></tr></table></figure></p>
+<p>也可以简化成一个命令:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd config &amp;&amp; rm module.sh &amp;&amp; ln -s module-lite.sh module.sh &amp;&amp; cd .. &amp;&amp; ./init-android.sh &amp;&amp; ./init-android-openssl.sh &amp;&amp; cd android/contrib &amp;&amp; ./compile-openssl.sh clean &amp;&amp; ./compile-openssl.sh all &amp;&amp; ./compile-ffmpeg.sh clean &amp;&amp; ./compile-ffmpeg.sh all &amp;&amp; cd .. &amp;&amp; ./compile-ijk.sh clean &amp;&amp; ./compile-ijk.sh all</span><br></pre></td></tr></table></figure></p>
+<p>生成的 <code>libijkffmpeg.so</code>，<code>libijkplayer.so</code>，<code>libijksdl.so</code> 文件目录位于如下目录:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ijkplayer-android/android/ijkplayer/ijkplayer-armv7a/src/main/libs/armeabi-v7a/libijkffmpeg.so</span><br></pre></td></tr></table></figure></p>
+<p>如果编译过程中出现 <code>linux-perf</code> 相关文件未找到的错误可以在编译脚本文件中添加下面这一行以禁用相关调试功能:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export COMMON_FF_CFG_FLAGS=&quot;$COMMON_FF_CFG_FLAGS --disable-linux-perf&quot;</span><br></pre></td></tr></table></figure></p>
+<p>如果想支持 webm 格式视频的播放需要修改编译脚本，添加 decoder，demuxer，parser 对相关格式的支持:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">export COMMON_FF_CFG_FLAGS=&quot;$COMMON_FF_CFG_FLAGS --enable-decoder=opus&quot;</span><br><span class="line">export COMMON_FF_CFG_FLAGS=&quot;$COMMON_FF_CFG_FLAGS --enable-decoder=vp6&quot;</span><br><span class="line">export COMMON_FF_CFG_FLAGS=&quot;$COMMON_FF_CFG_FLAGS --enable-decoder=vp6a&quot;</span><br><span class="line">export COMMON_FF_CFG_FLAGS=&quot;$COMMON_FF_CFG_FLAGS --enable-decoder=vp8_cuvid&quot;</span><br><span class="line">export COMMON_FF_CFG_FLAGS=&quot;$COMMON_FF_CFG_FLAGS --enable-decoder=vp8_mediacodec&quot;</span><br><span class="line">export COMMON_FF_CFG_FLAGS=&quot;$COMMON_FF_CFG_FLAGS --enable-decoder=vp8_qsv&quot;</span><br><span class="line">export COMMON_FF_CFG_FLAGS=&quot;$COMMON_FF_CFG_FLAGS --enable-decoder=vorbis&quot;</span><br><span class="line">export COMMON_FF_CFG_FLAGS=&quot;$COMMON_FF_CFG_FLAGS --enable-decoder=flac&quot;</span><br><span class="line">export COMMON_FF_CFG_FLAGS=&quot;$COMMON_FF_CFG_FLAGS --enable-decoder=theora&quot;</span><br><span class="line">export COMMON_FF_CFG_FLAGS=&quot;$COMMON_FF_CFG_FLAGS --enable-decoder=zlib&quot;</span><br><span class="line"></span><br><span class="line">export COMMON_FF_CFG_FLAGS=&quot;$COMMON_FF_CFG_FLAGS --enable-demuxer=matroska&quot;</span><br><span class="line">export COMMON_FF_CFG_FLAGS=&quot;$COMMON_FF_CFG_FLAGS --enable-demuxer=ogg&quot;</span><br><span class="line"></span><br><span class="line">export COMMON_FF_CFG_FLAGS=&quot;$COMMON_FF_CFG_FLAGS --enable-parser=vp8&quot;</span><br><span class="line">export COMMON_FF_CFG_FLAGS=&quot;$COMMON_FF_CFG_FLAGS --enable-parser=vp9&quot;</span><br><span class="line">export COMMON_FF_CFG_FLAGS=&quot;$COMMON_FF_CFG_FLAGS --enable-parser=vorbis&quot;</span><br><span class="line">export COMMON_FF_CFG_FLAGS=&quot;$COMMON_FF_CFG_FLAGS --enable-parser=opus&quot;</span><br></pre></td></tr></table></figure></p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
+<li><a href="https://en.wikipedia.org/wiki/MPEG-1" target="_blank" rel="noopener">MPEG-1 Wiki</a></li>
+<li><a href="https://en.wikipedia.org/wiki/H.261" target="_blank" rel="noopener">H.261 Wiki</a></li>
+<li><a href="https://en.wikipedia.org/wiki/FFmpeg" target="_blank" rel="noopener">FFmpeg Wiki</a></li>
+<li><a href="http://ffmpeg.org/" target="_blank" rel="noopener">FFmpeg</a></li>
+<li><a href="https://github.com/Bilibili/ijkplayer" target="_blank" rel="noopener">ijkplayer</a></li>
+</ul>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                    
+                        <li class="next">
+                            <a href="/2018/09/12/kotlin-note/" data-toggle="tooltip" data-placement="top" title="Kotlin 语言学习笔记">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#Android" title="Android">Android</a>
+                        
+                          <a class="tag" href="/tags/#Media" title="Media">Media</a>
+                        
+                          <a class="tag" href="/tags/#FFMPEG" title="FFMPEG">FFMPEG</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="https://juejin.im/user/5a96922b5188257a865da3f2/posts" target="_blank">我的掘金</a></li>
+                    
+                        <li><a href="https://www.jianshu.com/u/64ac160aaac8" target="_blank">我的简书</a></li>
+                    
+                        <li><a href="https://blog.csdn.net/shangmingchao" target="_blank">我的 CSDN</a></li>
+                    
+                        <li><a href="https://joyrun.github.io/" target="_blank">悦跑圈技术团队</a></li>
+                    
+                        <li><a href="http://tech.meituan.com/" target="_blank">美团点评技术团队</a></li>
+                    
+                </ul>
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/FrankShang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/frankshang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/frankshang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/frankshangx">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/shangmingchao">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://www.linkedin.com/in/FrankShang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Frank&#39;s Blog 2018 
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a href="http://blog.kaijun.rocks">Kaijun</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://franksblog.top/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="https://franksblog.top/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
