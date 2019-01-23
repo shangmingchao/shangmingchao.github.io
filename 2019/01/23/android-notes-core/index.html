@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="null">
+    <meta name="keyword"  content="undefined">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          Android 学习笔记核心篇 - 商明超的博客  | Frank&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="https://franksblog.top/2019/01/23/android-notes-core/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Frank&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archives/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="https://franksblog.top/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#Android" title="Android">Android</a>
+                        
+                          <a class="tag" href="/tags/#笔记" title="笔记">笔记</a>
+                        
+                    </div>
+                    <h1>Android 学习笔记核心篇</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by Frank on
+                        2019-01-23
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h1 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h1><h2 id="底层原理"><a href="#底层原理" class="headerlink" title="底层原理"></a>底层原理</h2><ul>
+<li>Android 操作系统是一个多用户 Linux 操作系统，每个应用都是一个用户</li>
+<li>操作系统一般会给每个应用分配一个唯一的 Linux 用户 ID，这个 ID 对应用是不可见的。但有些情况下两个应用可以共享同一个 Linux 用户 ID，此时他们可以访问彼此的文件，甚至还可以运行在同一个 Linux 进程中，共享同一个虚拟机。但两个应用的签名必须是一样的</li>
+<li>每个进程都有自己的虚拟机，一般每个应用都运行在自己的 Linux 进程中<h2 id="应用组件"><a href="#应用组件" class="headerlink" title="应用组件"></a>应用组件</h2></li>
+<li>应用没有唯一的入口，没有 <code>main()</code> 函数，因为应用是由多个组件拼凑在一起的，每个组件都是系统或者用户进入应用的入口，组件之间既可以是相互独立的，也可以是相互依赖的。系统和其它应用在被允许的情况下可以启动/激活一个应用的任意一个组件</li>
+<li>组件有四种类型: <code>Activity</code>，<code>Service</code>，<code>BroadcastReceiver</code> 和 <code>ContentProvider</code><h3 id="Activity"><a href="#Activity" class="headerlink" title="Activity"></a>Activity</h3></li>
+<li><code>Activity</code> 表示一个新的用户界面，只能由系统进行创建和销毁，应用只能监听到一些生命周期回调，这些回调通常也被叫作生命周期方法</li>
+<li><code>Activity</code> 的名字一旦确定好就不要再更改了，否则可能会引发一系列问题<h3 id="Service"><a href="#Service" class="headerlink" title="Service"></a>Service</h3></li>
+<li><code>Service</code> 表示一个后台服务，<code>Service</code> 可以是独立的，可以在应用退出后继续运行。也可以绑定到其他进程 / <code>Activity</code>，表示其他进程想使用这个 <code>Service</code>，像输入法、动态壁纸、屏保等系统功能都是以 <code>Service</code> 的形式存在的，在需要运行的时候进行绑定</li>
+<li>大部分情况下，建议使用 <code>JobScheduler</code>，因为 <code>JobScheduler</code> 和 <code>Doze</code> API 配合下一般会比简单使用 <code>Service</code> 更省电<h3 id="BroadcastReceiver"><a href="#BroadcastReceiver" class="headerlink" title="BroadcastReceiver"></a>BroadcastReceiver</h3></li>
+<li><code>BroadcastReceiver</code> 是一个事件传递的组件，通过它应用可以响应系统范围的广播通知。系统的包管理器会在安装应用时将应用中的静态广播接收器注册好，所以即使应用没在运行，系统也能把事件传递到该组件。</li>
+<li>通过 <code>BroadcastReceiver</code> 可以实现进程间通信<h3 id="ContentProvider"><a href="#ContentProvider" class="headerlink" title="ContentProvider"></a>ContentProvider</h3></li>
+<li><code>ContentProvider</code> 是在多个应用间共享数据的组件，如果应用的一些数据想要被其它应用使用，必须通过 <code>ContentPrivider</code> 进行管理，不过应用的私有数据也可以通过 <code>ContentProvider</code> 进行管理，主要还是因为 <code>ContentProvider</code> 即提供了共享数据的抽象，使用者不需要知道数据究竟是以文件形式还是数据库等其他形式存储的，只需要通过 <code>ContentProvider</code> 提供的 <strong>统一的 API</strong> 进行数据的增删改查即可。同时 <code>ContentProvider</code> 还提供了 <strong>安全</strong> 环境，可以根据需要方便地控制数据的访问权限，不需要手动控制文件权限或数据库权限</li>
+<li>为了安全，也为了方便，一般需要通过 <code>ContentResolver</code> 操作 <code>ContentProvider</code></li>
+<li>通过 <code>ContentProvider</code> 可以实现进程间通信<h2 id="激活组件"><a href="#激活组件" class="headerlink" title="激活组件"></a>激活组件</h2></li>
+<li>应用不能也不应该直接激活其它应用的任意一个组件，但是系统可以，所以要想激活一个组件，需要给系统发一个消息详细说明你的意图（ Intent ），之后系统就会为你激活这个组件</li>
+<li><code>Activity</code>，<code>Service</code>，<code>BroadcastReceiver</code> 都需要通过被称为 <code>Intent</code> 的异步消息激活</li>
+<li>被激活组件返回的结果也是 <code>Intent</code> 形式的</li>
+<li><code>ContentProvider</code> 只有在收到 <code>ContentResolver</code> 的请求时才会被激活</li>
+<li>只有 <code>BroadcastReceiver</code> 可以不在 manifest 文件中注册，因为有些 <code>BroadcastReceiver</code> 需要在程序运行时动态地注册和注销。而其它组件必须在 manifest 文件中注册，否则无法被系统记录，也就无法被激活</li>
+<li>如果 <code>Intent</code> 通过组件类名显式指明了唯一的目标组件，那么这个 <code>Intent</code> 就是显式地，否则就是隐式的。隐式 <code>Intent</code> 一般只描述要执行动作的类型，必要时可以携带数据，系统会根据这个隐式 <code>Intent</code> 的描述决定激活哪个组件，如果有多个组件符合激活条件，系统一般会弹出选择框让用户选择到底激活哪个组件</li>
+<li><code>Service</code> 必须使用显式 <code>Intent</code> 激活，不能声明 <code>IntentFilter</code></li>
+<li>启动指定的 <code>Activity</code> 使用显式 <code>Intent</code>，启动随便一个能完成指定工作的 <code>Activity</code> 使用隐式 <code>Intent</code>。能完成指定工作的那些想要被隐式 <code>Intent</code> 激活的 <code>Activity</code> 需要事先声明好 <code>IntentFilter</code> 表示自己有能力处理什么工作，<code>IntentFilter</code> 一般通过 能完成的动作 、意图类型 和 额外数据 来描述</li>
+<li>要想被隐式 <code>Intent</code> 激活，意图类型至少要包含 <code>android.intent.category.DEFAULT</code> 的意图类型</li>
+<li>在使用隐式 <code>Intent</code> 激活 <code>Activity</code> 之前一定要检查一下有没有 <code>Activity</code> 能处理这个 <code>Intent</code> :<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (sendIntent.resolveActivity(getPackageManager()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">    startActivity(sendIntent);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>或者<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">PackageManager packageManager = getPackageManager();</span><br><span class="line">List&lt;ResolveInfo&gt; activities = packageManager.queryIntentActivities(intent,</span><br><span class="line">        PackageManager.MATCH_DEFAULT_ONLY);</span><br><span class="line"><span class="keyword">boolean</span> isIntentSafe = activities.size() &gt; <span class="number">0</span>;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><p>使用隐式 <code>Intent</code> 时每次都强制用户选择一个组件激活:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Intent intent = <span class="keyword">new</span> Intent(Intent.ACTION_SEND);</span><br><span class="line">String title = getResources().getString(R.string.chooser_title);</span><br><span class="line">Intent chooser = Intent.createChooser(intent, title);</span><br><span class="line"><span class="keyword">if</span> (intent.resolveActivity(getPackageManager()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">    startActivity(chooser);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果想要你的 <code>Activity</code> 能被隐式 <code>Intent</code> 激活，如果想要某个 <strong>链接</strong> 能直接跳转到你的 <code>Activity</code>，必须配置好 <code>IntentFilter</code>。这种链接分为两种: <strong>Deep links</strong> 和 <strong>Android App Links</strong></p>
+</li>
+<li><p><strong>Deep links</strong> 对链接的 scheme 没有要求，对系统版本也没有要求，也不会验证链接的安全性，不过需要一个 <code>android.intent.action.VIEW</code> 的 action 以便 Google Search 能直接打开，需要 <code>android.intent.category.DEFAULT</code> 的 category 才能响应隐式 Intent，需要 <code>android.intent.category.BROWSABLE</code> 的 category 浏览器打开链接时才能跳转到应用，所以经典用例如下。一个 intent filter 最好只声明一个 data 描述，否则你得考虑和测试所有变体的情况。系统处理这个链接的流程为: 如果用户之前指定了打开这个链接的默认应用就直接打开这个应用 → 如果只有一个应用可以处理这个链接就直接打开这个应用 → 弹窗让用户选择用哪个应用打开</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">activity</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:name</span>=<span class="string">"com.example.android.GizmosActivity"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:label</span>=<span class="string">"@string/title_gizmos"</span> &gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">intent-filter</span> <span class="attr">android:label</span>=<span class="string">"@string/filter_view_http_gizmos"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">action</span> <span class="attr">android:name</span>=<span class="string">"android.intent.action.VIEW"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">category</span> <span class="attr">android:name</span>=<span class="string">"android.intent.category.DEFAULT"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">category</span> <span class="attr">android:name</span>=<span class="string">"android.intent.category.BROWSABLE"</span> /&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- Accepts URIs that begin with "http://www.example.com/gizmos” --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">data</span> <span class="attr">android:scheme</span>=<span class="string">"http"</span></span></span><br><span class="line"><span class="tag">              <span class="attr">android:host</span>=<span class="string">"www.example.com"</span></span></span><br><span class="line"><span class="tag">              <span class="attr">android:pathPrefix</span>=<span class="string">"/gizmos"</span> /&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- note that the leading "/" is required for pathPrefix--&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">intent-filter</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">intent-filter</span> <span class="attr">android:label</span>=<span class="string">"@string/filter_view_example_gizmos"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">action</span> <span class="attr">android:name</span>=<span class="string">"android.intent.action.VIEW"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">category</span> <span class="attr">android:name</span>=<span class="string">"android.intent.category.DEFAULT"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">category</span> <span class="attr">android:name</span>=<span class="string">"android.intent.category.BROWSABLE"</span> /&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- Accepts URIs that begin with "example://gizmos” --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">data</span> <span class="attr">android:scheme</span>=<span class="string">"example"</span></span></span><br><span class="line"><span class="tag">              <span class="attr">android:host</span>=<span class="string">"gizmos"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">intent-filter</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">activity</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>Android App Links</strong> 是一种特殊的 Deep links，要求链接必须是你自己网站的 HTTP URL 链接，系统版本至少是 Android 6.0 (API level 23)，优点是安全且具体，其他应用不能使用你的链接，不过你得先 <strong>验证你的链接</strong>，由于链接和网站链接一致所以可以无缝地在应用和网站间切换，可以支持 Instant App，可以通过浏览器、谷歌搜索 APP、系统屏幕搜索、甚至 Google Assistant 的链接直接跳转到应用。验证链接的流程为: 将 <code>&lt;intent-filter&gt;</code> 标签的 <code>android:autoVerify</code> 设置为 <code>true</code> 以告诉系统自动验证你的应用属于这个 HTTP URL 域名 → 填写好网站域名和应用 ID 并使用签名文件生成 Digital Asset Links JSON 文件 → 将文件上传到服务器，访问路径为 <code>https://domain.name/.well-known/assetlinks.json</code> ，响应格式为 <code>application/json</code>，子域名也需要存在对应的文件，一个域名可以关联多个应用，一个应用也可以关联多个域名，且可以使用相同的签名 → 利用编辑器插件完成关联并验证</p>
+<h2 id="应用资源"><a href="#应用资源" class="headerlink" title="应用资源"></a>应用资源</h2></li>
+<li>添加资源限定符的顺序为: SIM 卡所属的国家代码和移动网代码 → <strong>语言区域代码</strong> → 布局方向 → 最小宽度 → 可用宽度 → 可用高度 → 屏幕大不大 → 屏幕长不长 → 屏幕圆不圆 → 屏幕色域宽不宽 → 屏幕支持的动态范围高不高 → <strong>屏幕方向</strong> → 设备的 UI 模式 → 夜间模式 → <strong>屏幕像素密度</strong> → 触摸屏类型 → 键盘类型 → 主要的文字输入方式  → 导航键是否可用 → 主要的非触摸导航方式 → <strong>支持的 API level</strong></li>
+<li>一个资源目录的每种资源限定符最多只能出现一次</li>
+<li>必须提供缺省的资源文件</li>
+<li>资源目录名是大小写不敏感的</li>
+<li><p>drawable 资源取别名:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="php"><span class="meta">&lt;?</span>xml version=<span class="string">"1.0"</span> encoding=<span class="string">"utf-8"</span><span class="meta">?&gt;</span></span></span><br><span class="line"><span class="tag">&lt;<span class="name">resources</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">drawable</span> <span class="attr">name</span>=<span class="string">"icon"</span>&gt;</span>@drawable/icon_ca<span class="tag">&lt;/<span class="name">drawable</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">resources</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>布局文件取别名:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="php"><span class="meta">&lt;?</span>xml version=<span class="string">"1.0"</span> encoding=<span class="string">"utf-8"</span><span class="meta">?&gt;</span></span></span><br><span class="line"><span class="tag">&lt;<span class="name">merge</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">include</span> <span class="attr">layout</span>=<span class="string">"@layout/main_ltr"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">merge</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>只有动画、菜单、raw 资源 以及 xml/ 目录中的资源不能使用别名</p>
+</li>
+<li>寻找使用最优资源的流程:<br><img src="https://user-gold-cdn.xitu.io/2019/1/22/1687369b3ae04ea7?w=361&amp;h=461&amp;f=png&amp;s=107658" alt="image.png"></li>
+<li>在应用程序运行时，设备的配置可能会发生变化（如屏幕方向变化、切换到多窗口模式，切换了系统语言），默认情况下系统会销毁重建正在运行的 <code>Activity</code> ，所以应用程序必须保证销毁重建的过程中用户的数据和页面状态完好无损地恢复。如果不想系统销毁重建你的 <code>Activity</code> 只需要在 manifest 文件的 <code>&lt;activity&gt;</code> 标签的 <code>android:configChanges</code> 属性中添加你想自己处理的配置更改，多个配置使用 “<code>|</code>“ 隔开，此时系统就不会在这些配置更改后销毁重建你的这个 <code>Activity</code> 而是直接调用它的 <code>onConfigurationChanged()</code> 回调方法，你需要在这个回调中自己处理配置更改后的行为。</li>
+<li><code>Activity</code> 的销毁重建不但发生在设备配置更改后，只要用户离开了某个 <code>Activity</code>，那么那个 <code>Activity</code> 就随时可能被系统销毁。所以销毁重建是无法避免的，也不应该逃避，而是应该想办法保存和恢复状态</li>
+<li>由于各种各样的硬件都能安装 Android 操作系统，Android 操作系统之间也可能千差万别，而应用程序的一些功能是与这些软硬件息息相关的，如拍照应用需要设备必须有摄像头才能正常工作。应用可以通过 <code>&lt;uses-feature&gt;</code> 标签声明只有满足这些软硬件要求的设备才能安装，通过它的 <code>android:required</code> 属性设置该要求是不是必须的，程序中可以通过 <code>PackageManager.hasSystemFeature()</code> 方法判断<h1 id="核心知识"><a href="#核心知识" class="headerlink" title="核心知识"></a>核心知识</h1><h2 id="Activity-相关"><a href="#Activity-相关" class="headerlink" title="Activity 相关"></a>Activity 相关</h2><h3 id="生命周期方法"><a href="#生命周期方法" class="headerlink" title="生命周期方法"></a>生命周期方法</h3></li>
+<li>当 <code>Activity</code> 变得对用户可见时，将会回调 <code>onStart()</code>, 当 <code>Activity</code> 变得可以和用户交互时，将会回调 <code>onResume()</code></li>
+<li><code>onPause()</code> 被调用时 <code>Activity</code> 可能依然对用户全部可见，如多窗口模式下没有获得焦点时，所以在 <code>onResume()</code> 中申请资源在 <code>onPause()</code> 中释放资源的想法并不总是合理的</li>
+<li><code>onStop()</code> 被调用时表示 <code>Activity</code> 已经完全不可见了，此时应该尽量停止包含动画在内的 UI 更新，尽量释放暂时不用的资源。对于 stopped 的 <code>Activity</code>，系统随时可能杀掉包含这个 <code>Activity</code> 的进程，如果没有合适的机会可以在 <code>onStop()</code> 中保存一些数据</li>
+<li>如果系统在未经用户允许的情况下销毁了 <code>Activity</code>（杀掉了该 <code>Activity</code> 实例所在的进程），那么系统肯定记得这个实例存在过，在用户重新回到这个 <code>Activity</code> 时会重新创建一个新的实例，并将之前保存好的实例状态传递给这个新的实例。这个系统之前保存好的用来恢复 <code>Activity</code> 状态的数据被称为<strong>实例状态</strong>（Instance state），实例状态是以键值对的形式存储在 Bundle 对象中的，默认系统只能自动存储和恢复有 ID 的 View 的简单状态（如输入框的文本，滚动控件的滚动位置），但由于在主线程中序列化或反序列化 <code>Bundle</code> 对象既消耗时间又消耗系统进程内存，所以最好只用它保存简单、轻量的数据</li>
+<li><code>onSaveInstanceState()</code> 被调用的时机: 对于 <code>Build.VERSION_CODES.P</code> 及之后的系统该方法会在 <code>onStop()</code> 之后随时可能被调用，对于之前的系统该方法会在 <code>onStop()</code> 之前随时被调用</li>
+<li><code>onRestoreInstanceState()</code> 被调用的时机: 如果有实例状态要恢复那么一定会在 <code>onStart()</code> 之后被调用</li>
+<li><code>onActivityResult()</code> 被调用时机: <code>onResume()</code> 之前。目标 <code>Activity</code> 没有显式返回任何结果或者崩溃那么 resultCode 就会是 <code>RESULT_CANCELED</code><h3 id="任务和返回栈"><a href="#任务和返回栈" class="headerlink" title="任务和返回栈"></a>任务和返回栈</h3></li>
+<li><code>Activity</code> 可以在 manifest 文件中定义自己应该如何与当前任务相关联，<code>Activity</code> 也可以在启动其它 <code>Activity</code> 时通过 <code>Intent</code> 的 flag 要求其它 <code>Activity</code> 应该如何与当前任务相关联，如果两者同时出现，那么 <code>Intent</code> 的 flag 要求获胜</li>
+<li><code>launchMode</code> 属性默认是 <code>standard</code>，每次启动这样的 <code>Activity</code> 都会新建一个新的实例放入启动它的任务中。<strong>一个新的 Intent 总会创建一个新的实例。一个任务可以有多个该 Activity 的实例，每个该 Activity 的实例可以属于不同的任务</strong></li>
+<li><code>launchMode</code> 属性是 <code>singleTop</code> 的 <code>Activity</code> : 如果当前任务顶部已经是这个 <code>Activity</code> 的实例那么就直接将 <code>Intent</code> 传递给这个实例的 <code>onNewIntent()</code> 方法。<strong>一个任务可以有多个该 Activity 的实例，每个该 Activity 的实例可以属于不同的任务</strong></li>
+<li><code>launchMode</code> 属性是 <code>singleTask</code> 的 <code>Activity</code> : 如果这个 <code>Activity</code> 的实例已经在某个任务中存在了那么就直接将 <code>Intent</code> 传递给这个实例的 <code>onNewIntent()</code> 方法，并将其所在的任务移到前台即当前任务顶部，否则会新建一个任务并实例化一个这个 <code>Activity</code> 的实例放在栈底</li>
+<li><code>launchMode</code> 属性是 <code>singleInstance</code> 的 <code>Activity</code> : 和 <code>singleTask</code> 类似，不过它会保证新的任务中有且仅有一个这个 <code>Activity</code> 的实例</li>
+<li><code>FLAG_ACTIVITY_NEW_TASK</code> : 行为和 <code>singleTask</code> 一样，不过在新建任务之前会先寻找是否已经存在和这个 <code>Activity</code> 有相同 affinity 的任务，如果已经存在就不新建任务了，而是直接在那个任务中启动</li>
+<li><code>FLAG_ACTIVITY_SINGLE_TOP</code> : 行为和 <code>singleTop</code> 一样</li>
+<li><code>FLAG_ACTIVITY_CLEAR_TOP</code> : 如果当前任务中已经有要启动的 <code>Activity</code> 的实例了，那么就销毁它上面所有的 <code>Activity</code>(<strong>甚至包括它自己</strong>)，由于 <code>launchMode</code> 属性是 <code>standard</code> 的 <code>Activity</code> 一个新的 Intent 总会创建一个新的实例，所以如果要启动的 <code>Activity</code> 的 <code>launchMode</code> 属性是 <code>standard</code> 的并且没有 <code>FLAG_ACTIVITY_SINGLE_TOP</code> 的 flag，那么这个 flag 会 <strong>销毁它自己</strong>然后创建一个<strong>新的实例</strong></li>
+<li><code>FLAG_ACTIVITY_CLEAR_TOP</code> 和 <code>FLAG_ACTIVITY_NEW_TASK</code> 结合使用可以直接定位指定的 <code>Activity</code> 到前台</li>
+<li>不管要启动的 <code>Activity</code> 是在当前任务中启动还是在新任务中启动，点击返回键都可以直接或间接回到之前的 <code>Activity</code>，间接的情况像 <code>singleTask</code> 是将整个任务而不是只有一个 <code>Activity</code> 移到前台，任务中的所有的 <code>Activity</code> 在点击返回键的时候都要依次弹出</li>
+<li>如果离开了任务，系统可能会清除任务中除了最底层 <code>Activity</code> 外的的所有 <code>Activity</code>。将最底层 <code>Activity</code> 的 <code>&lt;activity&gt;</code> 标签的 <code>alwaysRetainTaskState</code> 属性设置为 <code>true</code> 可以保留任务中所有的 <code>Activity</code>。将最底层 <code>Activity</code> 的 <code>&lt;activity&gt;</code> 标签的 <code>clearTaskOnLaunch</code> 属性设置为 <code>true</code> 可以在无论何时进入或离开这个任务都清除任务中除了最底层 <code>Activity</code> 外的的所有 <code>Activity</code>。包含最底层 <code>Activity</code> 在内的任何 <code>Activity</code> 只要 <code>finishOnTaskLaunch</code> 属性设置为 <code>true</code> 那么离开任务再回来都不会出现了</li>
+<li>将 <code>Activity</code> 作为新文档添加到最近任务中需要设置 <code>newDocumentIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);</code> 且 <code>launchMode</code> 必须是 <code>standard</code> 的，如果此时又设置了 <code>newDocumentIntent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK)</code> 那么系统每次都会创建新的任务并将目标 <code>Activity</code> 作为根 <code>Activity</code>，如果没有设置 <code>FLAG_ACTIVITY_MULTIPLE_TASK</code>，那么 <code>Activity</code> 实例会被重用到新的任务中（如果已经存在这样的任务就不会重建，而是直接将任务移到前台并调用 <code>onNewIntent()</code>）</li>
+<li><code>&lt;activity&gt;</code> 标签的 <code>android:documentLaunchMode</code> 属性默认是 <code>none</code> : 不会为新文档创建新的任务。<code>intoExisting</code> 与设置了 <code>FLAG_ACTIVITY_NEW_DOCUMENT</code> 但没设置 <code>FLAG_ACTIVITY_MULTIPLE_TASK</code> 一样。<code>always</code> 与设置了 <code>FLAG_ACTIVITY_NEW_DOCUMENT</code> 同时设置了 <code>FLAG_ACTIVITY_MULTIPLE_TASK</code> 一样。<code>never</code> 和 <code>none</code> 一样不过会覆盖 <code>FLAG_ACTIVITY_NEW_DOCUMENT</code> 和 <code>FLAG_ACTIVITY_MULTIPLE_TASK</code></li>
+<li>使用 <code>Intent.FLAG_ACTIVITY_NEW_DOCUMENT|android.content.Intent.FLAG_ACTIVITY_RETAIN_IN_RECENTS;</code> 同时 <code>&lt;activity&gt;</code> 标签的 <code>android:autoRemoveFromRecents</code> 属性设置为 <code>false</code> 可以让文档 <code>Activity</code> 即使结束了也可以保留在最近任务中</li>
+<li>使用 <code>finishAndRemoveTask()</code> 方法可以移除当前任务<h3 id="动态申请权限"><a href="#动态申请权限" class="headerlink" title="动态申请权限"></a>动态申请权限</h3></li>
+<li>Android 6.0 (API level 23) 开始 targetSdkVersion &gt;= 23 的应用必须在运行时动态申请权限</li>
+<li>权限请求对话框是操作系统进行管理的，应用无法也不应该干预。</li>
+<li>系统对话框描述的是权限组而不是某个具体权限。</li>
+<li>如果用户授予了权限组中的一个权限，那么再申请该权限组的其它权限时系统会自动授予，不需要用户再授权。但这并不意味着该权限组中的其它权限就不用申请了，因为权限处于哪个权限组将来有可能会发生变化。</li>
+<li>调用 <code>requestPermissions()</code> 并不意味着系统一定会弹出权限请求对话框，也就是说不能假设调用该方法后就发生了用户交互，因为如果用户之前勾选了 “禁止后不再询问” 或者系统策略禁止应用获取权限，那么系统会直接拒绝此次权限请求，没有任何交互。</li>
+<li>如果某个权限跟应用的主要功能无关，如应用中广告可能需要位置权限，用户可能很费解，此时在申请权限之前弹出对话框向用户解释为什么需要这个权限是个不错的选择。但不要在所有申请权限之前都弹出对话框解释，因为频繁地打断用户的操作或让用户进行选择容易让用户不耐烦。</li>
+<li><code>Fragment</code> 中的 <code>onRequestPermissionsResult()</code> 方法只有在使用 <code>Fragment#requestPermissions()</code> 方法申请权限时才可能接收到回调，建议将权限放在所属 <code>Activity</code> 中申请和处理。<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">showContactsWithPermissionsCheck</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (ContextCompat.checkSelfPermission(MainActivity.<span class="keyword">this</span>,</span><br><span class="line">            Manifest.permission.READ_CONTACTS)</span><br><span class="line">            != PackageManager.PERMISSION_GRANTED) &#123;</span><br><span class="line">        <span class="keyword">if</span> (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.<span class="keyword">this</span>,</span><br><span class="line">                Manifest.permission.READ_CONTACTS)) &#123;</span><br><span class="line">            <span class="comment">// <span class="doctag">TODO:</span> 弹框解释为什么需要这个权限. 【下一步】 -&gt; 再次请求权限</span></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            ActivityCompat.requestPermissions(MainActivity.<span class="keyword">this</span>,</span><br><span class="line">                    <span class="keyword">new</span> String[]&#123;Manifest.permission.READ_CONTACTS&#125;,</span><br><span class="line">                    RC_CONTACTS);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        showContacts();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">showContacts</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    startActivity(ContactsActivity.getIntent(MainActivity.<span class="keyword">this</span>));</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onRequestPermissionsResult</span><span class="params">(<span class="keyword">int</span> requestCode, @NonNull String[] permissions,</span></span></span><br><span class="line"><span class="function"><span class="params">                                       @NonNull <span class="keyword">int</span>[] grantResults)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.onRequestPermissionsResult(requestCode, permissions, grantResults);</span><br><span class="line">    <span class="keyword">switch</span> (requestCode) &#123;</span><br><span class="line">        <span class="keyword">case</span> RC_CONTACTS:</span><br><span class="line">            <span class="keyword">if</span> (grantResults.length &gt; <span class="number">0</span></span><br><span class="line">                    &amp;&amp; grantResults[<span class="number">0</span>] == PackageManager.PERMISSION_GRANTED) &#123;</span><br><span class="line">                showContacts();</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (!ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.<span class="keyword">this</span>,</span><br><span class="line">                        Manifest.permission.READ_CONTACTS)) &#123;</span><br><span class="line">                    <span class="comment">// <span class="doctag">TODO:</span> 弹框引导用户去设置页主动授予该权限. 【去设置】 -&gt; 应用信息页</span></span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="comment">// <span class="doctag">TODO:</span> 弹框解释为什么需要这个权限. 【下一步】 -&gt; 再次请求权限</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onActivityResult</span><span class="params">(<span class="keyword">int</span> requestCode, <span class="keyword">int</span> resultCode, @Nullable Intent data)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.onActivityResult(requestCode, resultCode, data);</span><br><span class="line">    <span class="keyword">if</span> (requestCode == RC_SETTINGS) &#123;</span><br><span class="line">        <span class="comment">// <span class="doctag">TODO:</span> 在用户主动授予权限后重新检查权限，但不要在这里进行事务提交等生命周期敏感操作</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="Shortcut"><a href="#Shortcut" class="headerlink" title="Shortcut"></a>Shortcut</h3><ul>
+<li>类似于 iOS 的 3D Touch，长按启动图标弹出几个快捷入口，入口最好不要超过 4 个，像搜索、扫描二维码、发帖等应用程序最常用功能的入口被称为静态 shortcut，不会随着用户不同或随着用户使用而改变。还有一种像从某个存档点继续游戏、任务进度等与用户相关的上下文敏感入口被称为动态 shortcut，会因用户不同或随着用户使用不断变化。还有一种在 Android 8.0 (API level 26) 及以上系统版本上像固定网页标签等用户主动固定到桌面的快捷方式被称为固定 shortcut</li>
+<li>静态 shortcut 系统可以自动备份和恢复，动态 shortcut 需要应用自己备份和恢复，固定 shortcut 的图标系统无法备份和恢复因此需要应用自己完成</li>
+<li><code>android:shortcutId</code> 和 <code>android:shortcutShortLabel</code> 属性是必须的，<code>android:shortcutShortLabel</code> 不能超过 10 个字符，<code>android:shortcutLongLabel</code> 不能超过 25 个字符，<code>android:icon</code> 不能包含 tint</li>
+<li>获取 <code>ShortcutManager</code> 的方式有两个: <code>getSystemService(ShortcutManager.class)</code> 和 <code>getSystemService(Context.SHORTCUT_SERVICE)</code></li>
+<li>创建固定 shortcut:<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">ShortcutManager mShortcutManager =</span><br><span class="line">        context.getSystemService(ShortcutManager.class);</span><br><span class="line"><span class="keyword">if</span> (mShortcutManager.isRequestPinShortcutSupported()) &#123;</span><br><span class="line">    ShortcutInfo pinShortcutInfo =</span><br><span class="line">            <span class="keyword">new</span> ShortcutInfo.Builder(context, <span class="string">"my-shortcut"</span>).build();</span><br><span class="line">    Intent pinnedShortcutCallbackIntent =</span><br><span class="line">            mShortcutManager.createShortcutResultIntent(pinShortcutInfo);</span><br><span class="line">    PendingIntent successCallback = PendingIntent.getBroadcast(context, <span class="number">0</span>,</span><br><span class="line">            pinnedShortcutCallbackIntent, <span class="number">0</span>);</span><br><span class="line">    mShortcutManager.requestPinShortcut(pinShortcutInfo,</span><br><span class="line">            successCallback.getIntentSender());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h3><ul>
+<li><code>Parcelable</code> 对象用来在进程间、<code>Activity</code> 间传递数据，保存实例状态也是用它，不过最好只存储和传递少量数据，最好别超过 50k，否则既可能影响性能又可能导致崩溃</li>
+<li>Android 9 (API level 28) 开始废弃了 <code>Loader</code> API，包括 <code>LoaderManager</code> 和 <code>CursorLoader</code> 等类的使用。推荐使用 <code>ViewModel</code> 和 <code>LiveData</code> 在 <code>Activity</code> 或 <code>Fragment</code> 生命周期中加载数据</li>
+<li><code>Activity</code> 可以通过 <code>getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)</code> 保持屏幕常亮，这是最推荐、最简单、最安全的保持屏幕常亮的方法，给 view 添加 <code>android:keepScreenOn=&quot;true&quot;</code> 也是一样的。这个只在这个 <code>Activity</code> 生命周期内有效，所以大可放心，如果想提前解除常亮，只需要清除这个 flag 即可</li>
+<li><code>WAKE_LOCK</code> 可以阻止系统睡眠，保持 CPU 一直运行，需要 <code>android.permission.WAKE_LOCK</code> 权限，通过 <code>powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, &quot;MyApp::MyWakelockTag&quot;)</code> 创建实例，通过 <code>wakeLock.acquire()</code> 方法请求锁，通过 <code>wakelock.release()</code> 释放锁</li>
+<li><code>WakefulBroadcastReceiver</code> 结合 <code>IntentService</code> 也可以阻止系统睡眠<h2 id="UI-相关"><a href="#UI-相关" class="headerlink" title="UI 相关"></a>UI 相关</h2><h3 id="系统栏适配"><a href="#系统栏适配" class="headerlink" title="系统栏适配"></a>系统栏适配</h3></li>
+<li>Android 4.1 (API level 16) 开始可以通过 <code>setSystemUiVisibility()</code> 方法在各个 view 层次中（一般是在 DecorView 中）配置 UI flag 实现系统栏（状态栏、导航栏统称）配置，最终汇总体现到 window 级</li>
+<li><code>View.SYSTEM_UI_FLAG_FULLSCREEN</code> 可以隐藏状态栏，<code>View.SYSTEM_UI_FLAG_HIDE_NAVIGATION</code> 可以隐藏导航栏。<strong>但是:</strong> 用户的任何交互包括触摸屏幕都会导致 flag 被清除导航栏<strong>保持可见</strong>，一旦离开当前 <code>Activity</code> flag 就会被清除，所以如果在 <code>onCreate()</code> 方法中设置了这个 flag 那么按 HOME 键再回来状态栏又保持可见了，非要这样设置的话一般要放在 <code>onResume()</code>  或 <code>onWindowFocusChanged()</code> 方法中，而且这样设置只有在目标 View 可见时才会生效，状态栏/导航栏的显示隐藏会导致显示内容的大小尺寸跟着变化。</li>
+<li><code>View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE</code> 可以让内容显示在状态栏后面，<code>View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE</code> 可以让内容显示在导航栏后面，这样无论系统栏显示还是隐藏内容都不会跟着变化，但不要让可交互的内容出现在系统栏区域内，通过将 <code>android:fitsSystemWindows</code> 属性设置为 <code>true</code> 可以让父容器调整 padding 以便为系统栏留出空间，如果想自定义这个 padding 可以通过覆写 <code>fitSystemWindows(Rect insets)</code> 方法完成</li>
+<li>lean back 全屏模式: <code>View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION</code>，隐藏状态栏和导航栏，任何交互都会清除 flag 使系统栏<strong>保持可见</strong></li>
+<li>Immersive 全屏模式: <code>View.SYSTEM_UI_FLAG_IMMERSIVE | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION</code>，隐藏状态栏和导航栏，从被隐藏的系统栏边缘向内滑动会使系统栏<strong>保持可见</strong>，应用无法响应这个手势</li>
+<li>sticky immersive 全屏模式: <code>View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION</code>，隐藏状态栏和导航栏，从被隐藏的系统栏边缘向内滑动会使系统栏<strong>暂时可见</strong>，flag 不会被清除，且系统栏的背景是半透明的，会覆盖应用的内容，应用也可以响应这个手势，在用户没有任何交互或者没有系统栏交互几秒钟后系统栏会<strong>自动隐藏</strong></li>
+<li>真正的沉浸式全屏体验需要 6 个 flag: <code>View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN</code></li>
+<li><p>监听系统栏可见性（sticky immersive 全屏模式无法监听）:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">decorView.setOnSystemUiVisibilityChangeListener(<span class="keyword">new</span> View.OnSystemUiVisibilityChangeListener() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onSystemUiVisibilityChange</span><span class="params">(<span class="keyword">int</span> visibility)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> ((visibility &amp; View.SYSTEM_UI_FLAG_FULLSCREEN) == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="comment">// <span class="doctag">TODO:</span> The system bars are visible. Make any desired</span></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// <span class="doctag">TODO:</span> The system bars are NOT visible. Make any desired</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>全面屏适配只需要指定支持的最大宽高比即可: <code>&lt;meta-data android:name=&quot;android.max_aspect&quot; android:value=&quot;2.4&quot;/&gt;</code></p>
+</li>
+<li>Android 9 (API level 28) 开始支持刘海屏 cutout 的配置，window 的属性 <code>layoutInDisplayCutoutMode</code> 默认是 <code>LAYOUT_IN_DISPLAY_CUTOUT_MODE_DEFAULT</code>，竖屏时可以渲染到刘海区，横屏时不允许渲染到刘海区。<code>LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES</code> 横竖屏都可以渲染到刘海区。<code>LAYOUT_IN_DISPLAY_CUTOUT_MODE_NEVER</code> 横竖屏都不允许渲染到刘海区，可以在 <code>values-v28/styles.xml</code> 文件中通过 <code>android:windowLayoutInDisplayCutoutMode</code> 指定默认的刘海区渲染模式</li>
+<li>华为手机通过 <code>&lt;meta-data android:name=&quot;android.notch_support&quot; android:value=&quot;true&quot; /&gt;</code> 属性声明应用是否已经适配了刘海屏，如果没适配，那么在横屏或者竖屏不显示状态栏时会禁止渲染到刘海区，开发者文档: <a href="https://developer.huawei.com/consumer/cn/devservice/doc/50114" target="_blank" rel="noopener">《华为刘海屏手机安卓O版本适配指导》</a></li>
+<li>小米手机通过 <code>&lt;meta-data android:name=&quot;notch.config&quot; android:value=&quot;portrait|landscape&quot; /&gt;</code> 设置默认的刘海区渲染模式，开发者文档: <a href="https://dev.mi.com/console/doc/detail?pId=1293" target="_blank" rel="noopener">《小米刘海屏 Android O 适配》</a>，<a href="https://dev.mi.com/console/doc/detail?pId=1341" target="_blank" rel="noopener">《小米刘海屏 Android P 适配》</a></li>
+<li>其他手机的开发者文档有: OPPO 手机的 <a href="https://open.oppomobile.com/wiki/doc#id=10159" target="_blank" rel="noopener">《OPPO凹形屏适配说明》</a>，VIVO 手机的 <a href="https://dev.vivo.com.cn/documentCenter/doc/103" target="_blank" rel="noopener">《异形屏应用适配指南》</a>，锤子手机的 <a href="https://resource.smartisan.com/resource/61263ed9599961d1191cc4381943b47a.pdf" target="_blank" rel="noopener">《Smartisan 开发者文档》</a></li>
+<li>Android 5.0 (API level 21) 开始支持通过 window 的 <code>setStatusBarColor()</code> 方法设置状态栏背景色，要求 window 必须添加 <code>WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS</code> 的 flag 并且清除 <code>WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS</code> 的 flag</li>
+<li>Android 6.0 (API level 23) 开始可以通过 <code>setSystemUiVisibility()</code> 方法设置 <code>View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR</code> flag 兼容亮色背景的状态栏，同样要求 window 必须添加 <code>WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS</code> 的 flag 并且清除 <code>WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS</code> 的 flag</li>
+<li>小米手机在 MIUI 开发版 7.7.13 之前需要通过反射兼容亮色背景的状态栏，开发者文档: <a href="https://dev.mi.com/console/doc/detail?pId=1159" target="_blank" rel="noopener">《MIUI 9 &amp; 10“状态栏黑色字符”实现方法变更通知》</a></li>
+<li>魅族手机同样需要通过反射兼容亮色背景的状态栏，开发者文档: <a href="http://open-wiki.flyme.cn/doc-wiki/index#id?79" target="_blank" rel="noopener">《状态栏变色》</a><br><h3 id="动画"><a href="#动画" class="headerlink" title="动画"></a>动画</h3></li>
+<li><strong>view 动画系统</strong>只能作用于 view 对象，只能改变 view 的部分样式，只是简单改变了 view 绘制，并没有改变 view 真正的位置和属性。核心类是 <code>android.view.animation.Animation</code> 和它的 <code>ScaleAnimation</code> 等子类，一般使用 <code>AnimationUtils.loadAnimation()</code> 方法加载。不建议使用，除非为了方便又能满足现在和将来的需求</li>
+<li><strong>属性动画系统</strong>是一个健壮的、优雅的动画系统，可以对任意对象的属性做动画。核心类是 <code>android.animation.Animator</code> 的子类 <code>ValueAnimator</code>、<code>ObjectAnimator</code>、<code>AnimatorSet</code></li>
+<li>通过调用 <code>ValueAnimator</code> 的 <code>ofInt()</code>、<code>ofFloat()</code> 等工厂方法获取 <code>ValueAnimator</code> 对象，通过它的 <code>addUpdateListener()</code> 方法可以监听动画值并在里面进行自定义操作</li>
+<li><code>ObjectAnimator</code> 作为 <code>ValueAnimator</code> 的子类可以自动地为目标对象的命名属性设置动画，但是对目标对象有严格的要求: 目标对象必须有对应属性的 setter 方法，如果在工厂方法中只提供了一个动画值那么它会作为终止值，起始值为目标对象的当前值，此时为了获取当前属性值目标对象必须有对应属性的 getter 方法。有些属性的更改不会导致 view 重新渲染，此时需要主动调用 <code>invalidate()</code> 方法强制触发重绘</li>
+<li><code>AnimatorListenerAdapter</code> 提供了 <code>Animator.AnimatorListener</code> 接口的空实现</li>
+<li>多数情况下可以直接使用系统提供的几个动画 duration，如 <code>getResources().getInteger(android.R.integer.config_shortAnimTime)</code></li>
+<li>可以调用任意 view 对象的 <code>animate()</code> 方法获取 <code>ViewPropertyAnimator</code> 对象，链式调用这个对象的 <code>scaleX()</code>、<code>alpha()</code> 等方法可以简单方便地同时对 view 的多个属性做动画</li>
+<li>为了更好地重用和管理属性动画，最好使用 XML 文件来描述动画并放到 <code>res/animator/</code> 目录下，<code>ValueAnimator</code> 对应 <code>&lt;animator&gt;</code> ，<code>ObjectAnimator</code> 对应 <code>&lt;objectAnimator&gt;</code>，<code>AnimatorSet</code> 对应 <code>&lt;set&gt;</code>，使用 <code>AnimatorInflater.loadAnimator()</code> 可以加载这些动画</li>
+<li>动态 Drawable 的实现有两种，最传统最简单的就是像电影关键帧一样依次指定关键帧和每一帧的停留时间，<code>AnimationDrawable</code> 对应于 XML 文件中的 <code>&lt;animation-list&gt;</code>，保存目录为 <code>res/drawable/</code>，<code>AnimationDrawable</code> 的 <code>start()</code> 方法可以在 <code>onStart()</code> 中调用。还有一种是 <code>AnimatedVectorDrawable</code>，需要 <code>res/drawable/</code> 中的 <code>&lt;animated-vector&gt;</code> 引用 <code>res/drawable/</code> 中的 <code>&lt;vector&gt;</code> 对其使用 <code>res/animator/</code> 中的 <code>&lt;objectAnimator&gt;</code> 动画</li>
+<li>突然更改显示的内容会让视觉感受非常突兀不和谐，而且可能意识不到哪些内容突然变了，所以很多场景下需要使用动画过渡一下，而不是突然更改显示的内容</li>
+<li>显示隐藏 view 的常用动画有三个: crossfade 动画，card flip 动画，circular reveal 动画</li>
+<li>crossfade 动画就是内容淡出另一个内容淡入交叉进行，也被称为<strong>溶入</strong>动画。实现方式为: 事先将淡入 view 的 visibility 设置为 <code>GONE</code> → 开始动画时将淡入 view 的 alpha 设置为 0，visibility 设置为 <code>VISIBLE</code> → 将淡入 view 的 alpha 动画到 1，将淡出 view 的 alpha 动画到 0 并在动画结束时将淡出 view 的 visibility 设置为 <code>GONE</code></li>
+<li>card flip 动画就是卡片翻转动画，需要四个动画描述: <code>card_flip_right_in</code>，<code>card_flip_right_out</code>，<code>card_flip_left_in</code>，<code>card_flip_left_out</code></li>
+<li>Android 5.0 (API level 21) 开始支持 circular reveal 圆形裁剪动画，实现方式为: 事先将 view 的 visibility 设置为 <code>INVISIBLE</code> → 利用 <code>ViewAnimationUtils.createCircularReveal()</code> 方法创建半径从 0 到 <code>Math.hypot(cx, cy)</code> 的圆形裁剪动画 → 将 view 的 visibility 设置为 <code>VISIBLE</code> 然后开启动画</li>
+<li><strong>直线</strong>动画移动 view 只需要借助 <code>ObjectAnimator.ofFloat()</code> 方法动画设置 view 的 <code>translationX</code> 或 <code>translationY</code> 属性即可</li>
+<li><strong>曲线</strong>动画移动 view 还需要借助 Android 5.0 (API level 21) 开始提供的 <code>PathInterpolator</code> 插值器（对应于 XML 文件中的 <code>&lt;pathInterpolator&gt;</code>），他需要个 <code>Path</code> 对象描述运动的贝塞尔曲线。可以使用 <code>ObjectAnimator.ofFloat(view, &quot;translationX&quot;, 100f)</code> 同时设置 <code>PathInterpolator</code> 也可以直接设置 view 动画路径 <code>ObjectAnimator.ofFloat(view, View.X, View.Y, path)</code>。系统提供的 <code>fast_out_linear_in.xml</code>、<code>fast_out_slow_in.xml</code>、<code>linear_out_slow_in.xml</code> 三个基础的曲线插值器可以直接使用</li>
+<li>基于物理的动画需要引用 <code>support-dynamic-animation</code> 支持库，最常见的就是 <code>FlingAnimation</code> 和 <code>SpringAnimation</code> 动画，物理动画主要是模拟现实生活中的物理世界，利用经典物理学的知识和原理实现动画过程，其中最关键的就是<strong>力</strong>的概念。<code>FlingAnimation</code> 就是用户通过手势给动画元素一个力，动画元素在这个力的作用下运动，之后由于摩擦力的存在慢慢减速直到结束，当然这个力也可以通过程序直接指定（指定固定的初始速度）。<code>SpringAnimation</code> 就是弹簧动画，动画元素的运动与弹簧有关</li>
+<li><code>FlingAnimation</code> 通过 <code>setStartVelocity()</code> 方法设置初始速度，通过 <code>setMinValue()</code> 和 <code>setMaxValue()</code> 约束动画值的范围，通过 <code>setFriction()</code> 设置摩擦力（如果不设置默认为 1）。如果动画的属性不是以像素为单位的，那么需要通过 <code>setMinimumVisibleChange()</code> 方法设置用户可察觉到动画值的最小更改，如对于 <code>TRANSLATION_X</code>，<code>TRANSLATION_Y</code>，<code>TRANSLATION_Z</code>，<code>SCROLL_X</code>，<code>SCROLL_Y</code> 1 像素的更改就对用户可见了，而对于 <code>ROTATION</code>，<code>ROTATION_X</code>，<code>ROTATION_Y</code> 最小可见更改是 <code>MIN_VISIBLE_CHANGE_ROTATION_DEGREES</code> 即 1/10 像素，对于 <code>ALPHA</code> 最小可见更改是 <code>MIN_VISIBLE_CHANGE_ALPHA</code> 即 1/256 像素，对于 <code>SCALE_X</code> 和 <code>SCALE_Y</code> 最小可见更改是 <code>MIN_VISIBLE_CHANGE_SCALE</code> 即 1/500 像素，计算公式为: 自定义属性值的范围 / 动画的变化像素范围。</li>
+<li><code>SpringAnimation</code> 需要先巩固一下弹簧的知识，弹簧有一个属性叫<strong>阻尼比 ζ</strong>（damping ratio），是实际的粘性阻尼系数 C 与临界阻尼系数 Cr 的比。ζ = 1 时为临界阻尼，这是最小的能阻止系统震荡的情况，系统可以最快回到平衡位置。0 &lt; ζ &lt; 1 时为欠阻尼，物体会作对数衰减振动。ζ &gt; 1 时为过阻尼，物体会没有振动地缓慢回到平衡位置。ζ = 0 表示不考虑阻尼，震动会一直持续下去不会停止。默认是 <code>SpringForce.DAMPING_RATIO_MEDIUM_BOUNCY</code> 即 0.5，可以通过 <code>getSpring().setDampingRatio()</code> 设置。弹簧另一个属性叫<strong>刚度</strong>（stiffness），指弹框的弹性，刚度越大形变产生的力就越大，默认是 <code>SpringForce.STIFFNESS_MEDIUM</code> 即 1500.0，可以通过 <code>getSpring().setStiffness()</code> 设置<br><img src="https://user-gold-cdn.xitu.io/2019/1/22/1687369b3b638274?w=732&amp;h=500&amp;f=png&amp;s=80051" alt="image.png"></li>
+<li><code>FlingAnimation</code> 和 <code>SpringAnimation</code> 动画通过 <code>setStartVelocity()</code> 设置固定的初始速度时最好用 dp/s 转成 px/s : <code>TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpPerSecond, getResources().getDisplayMetrics())</code>，用户手势的初始速度可以通过 <code>GestureDetector.OnGestureListener</code> 或 <code>VelocityTracker</code> 计算</li>
+<li><code>SpringAnimation</code> 动画使用 <code>start()</code> 方法开始动画时属性值不会马上变化，而是在每次动画脉冲即绘制之前更改。<code>animateToFinalPosition()</code> 方法会马上设置最终的属性值，如果动画没开始就开始动画，这在链式依赖的弹簧动画中非常有用。<code>cancel()</code> 方法可以结束动画在其当前位置，<code>skipToEnd()</code> 方法会跳转至终止值再结束动画，可以通过 <code>canSkipToEnd()</code> 方法判断是否是阻尼动画</li>
+<li>放大预览动画只需要同时动画更改目标 view 的 <code>X</code>，<code>Y</code>，<code>SCALE_X</code>，<code>SCALE_Y</code> 属性即可，不过要先计算好两个 view 最终的位置和初始缩放比</li>
+<li>Android 提供了预加载的布局改变动画，可以通过 <code>android:animateLayoutChanges=&quot;true&quot;</code> 属性告诉系统开启默认动画，或者通过 <code>LayoutTransition</code> API 设置</li>
+<li>Activity 内部的布局过渡动画: 过渡动画框架可以在开始 <code>Scene</code> 和结束 <code>Scene</code> 开始过渡动画，<code>Scene</code> 存储着 view hierarchy 状态，包括所有 view 和其属性值，开始 <code>Scene</code> 可以通过 <code>setExitAction()</code> 定义过渡动画开始前要执行的操作，结束 <code>Scene</code> 可以通过 <code>Scene.setEnterAction()</code> 定义过渡动画完成后要执行的操作。如果 view hierarchy 是静态不变的，可以通过布局文件描述和加载 <code>Scene.getSceneForLayout(mSceneRoot, R.layout.a_scene, this)</code>，否则可以手动创建 <code>new Scene(mSceneRoot, mViewHierarchy)</code>。<code>Transition</code> 的内置子类包括 <code>AutoTransition</code>、<code>Fade</code>、<code>ChangeBounds</code>，可以在 <code>res/transition/</code> 目录下定义内置的 <code>&lt;fade xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot; /&gt;</code>，多个组合包裹在 <code>&lt;transitionSet&gt;</code> 标签中，然后使用 <code>TransitionInflater.from(this).inflateTransition(R.transition.fade_transition)</code> 加载。还可以手动创建 <code>new Fade()</code>。开始过渡动画时只需要执行 <code>TransitionManager.go(mEndingScene, mFadeTransition)</code> 即可。默认是对 <code>Scene</code> 中所有的 view 作动画，可以通过 <code>addTarget()</code> 或 <code>removeTarget()</code> 在开始过渡动画前进行调整。如果不想在两个 view hierarchy 间进行过渡，而是在同一个 view hierarchy 状态更改后执行过渡动画，那就不需要使用 <code>Scene</code> 了，先利用 <code>TransitionManager.beginDelayedTransition(mRootView, mFade)</code> 让系统记录 view 的更改，然后增删 view 来更改 view hierarchy 的状态，系统会在重绘 UI 时执行延迟过渡动画。由于 <code>SurfaceView</code> 由非 UI 线程更新，所以它的过渡可能有问题，<code>TextureView</code> 在一些过渡类型上可能有问题，<code>AdapterView</code> 与过渡动画框架不兼容，<code>TextView</code> 的大小过渡动画可能有问题</li>
+<li>Activity 之间的过渡动画: 需要 Android 5.0 (API level 21) ，内置的进入退出过渡动画包括: explode 从中央进入或退出，slide 从一边进入或退出，fade 透明度渐变进入或退出。内置的共享元素过渡动画包括: changeBounds 动态更改目标 view 的边界，changeClipBounds 动态裁剪目标 view 的边界，changeTransform 动态更改目标 view 的缩放和旋转，changeImageTransform 动态更改目标 view 的缩放和尺寸。过渡动画需要两个 Activity 都要开启 window 的内容过渡，通过 <code>android:windowActivityTransitions</code> 属性设置为 <code>true</code> 或者手动 <code>getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS)</code>，通过 <code>setExitTransition()</code> 和 <code>setSharedElementExitTransition()</code> 方法可以为起始 Activity 设置退出过渡动画，通过 <code>setEnterTransition()</code> 和 <code>setSharedElementEnterTransition()</code> 方法可以为目标 Activity 设置进入过渡动画。激活目标 Activity 的时候需要携带 <code>ActivityOptions.makeSceneTransitionAnimation(this).toBundle()</code> 的 Bundle，返回的时候要使用 <code>Activity.finishAfterTransition()</code> 方法。共享元素需要使用 <code>android:transitionName</code> 属性或者 <code>View.setTransitionName()</code> 方法指定名字，多个共享元素使用 <code>Pair.create(view1, &quot;agreedName1&quot;)</code> 传递信息</li>
+<li>自定义过渡动画需要继承 <code>Transition</code>，实现 <code>captureStartValues()</code> 和 <code>captureEndValues()</code> 方法捕获过渡的 view 属性值并告诉过渡框架，具体实现为通过 <code>transitionValues.view</code> 检索当前 view，通过 <code>transitionValues.values.put(PROPNAME_BACKGROUND, view.getBackground())</code> 存储属性值，为了避免冲突 key 的格式必须为 <code>package_name:transition_name:property_name</code>。同时还要实现 <code>createAnimator(ViewGroup sceneRoot, TransitionValues startValues, TransitionValues endValues)</code> 方法，框架调用这个方法的次数取决于开始和结束 scene 需要更改的元素数</li>
+<li>动画可能会影响性能，必要时可以启用 Profile GPU Rendering 进行调试<h3 id="其它-1"><a href="#其它-1" class="headerlink" title="其它"></a>其它</h3></li>
+<li>Android 8.0 (API level 26) 开始支持自适应启动图标，自适应启动图标必须由前景和背景两部分组成，尺寸必须都是 108 x 108 dp，其中内部的 72 x 72 dp 用来显示图标，靠近四个边缘的 18 dp 是保留区域，用来进行视觉交互</li>
+<li>对于字体大小自适应的 <code>TextView</code> 宽和高都不能是 <code>wrap_content</code>，<code>autoSizeTextType</code> 默认是 <code>none</code>，设置为 <code>uniform</code> 开启自适应，默认最小 <code>12sp</code>，最大 <code>112sp</code>，粒度 <code>1px</code>。<code>autoSizePresetSizes</code> 属性可以设置预置的一些大小</li>
+<li>Android 8.0 (API level 26) 开始支持 XML 自定义字体，兼容库可以兼容到 Android 4.1 (API level 16)，字体文件路径为 <code>res/font/</code>，使用属性为 <code>fontFamily</code>，获取 <code>Typeface</code> 为 <code>getResources().getFont(R.font.myfont);</code>，兼容库使用 <code>ResourcesCompat.getFont(context, R.font.myfont)</code></li>
+<li>Android 9 (API level 28) 支持控件放大镜功能，<code>Magnifier</code> 的 <code>show()</code> 方法的参数是相对于被放大 View 的左上角的坐标</li>
+<li>工程中的 Drawable 资源只能有一个状态，你<strong>不应该手动更改它的任何属性</strong>，否则会影响到其它使用这个 Drawable 资源的地方</li>
+<li>Android 7.0 (API level 24) 开始支持在 XML 文件中使用自定义 Drawable，公共顶级类使用全限定名作为标签名即可 <code>&lt;com.myapp.MyDrawable&gt;</code>，公共静态内部类可以使用 class 属性 <code>class=&quot;com.myapp.MyTopLevelClass$MyDrawable&quot;</code></li>
+<li>Android 5.0 (API level 21) 开始支持为 Drawable 设置 tint</li>
+<li>Android 5.0 (API level 21) 开始支持矢量图，支持库可以支持到 Android 2.1 (API level 7+)，兼容低版本是需要 Gradle 插件版本大于 2.0+ 时添加 <code>vectorDrawables.useSupportLibrary = true</code> 并使用 <code>VectorDrawableCompat</code> 和 <code>AnimatedVectorDrawableCompat</code><h2 id="BroadcastReceiver-相关"><a href="#BroadcastReceiver-相关" class="headerlink" title="BroadcastReceiver 相关"></a>BroadcastReceiver 相关</h2></li>
+<li>Android 9 (API level 28) 开始 <code>NETWORK_STATE_CHANGED_ACTION</code> 广播不再包含 SSID，BSSID 等信息</li>
+<li>Android 8.0 (API level 26) 开始限制应用注册一些静态隐式 <code>BroadcastReceiver</code>，免除这项限制的广播包括 <code>ACTION_LOCKED_BOOT_COMPLETED</code> <a href="https://developer.android.com/guide/components/broadcast-exceptions" target="_blank" rel="noopener">等</a>不太可能影响用户体验的广播</li>
+<li>Android 7.0 (API level 24) 开始不能发送 <code>ACTION_NEW_PICTURE</code> 和 <code>ACTION_NEW_VIDEO</code> 系统广播，不能注册 <code>CONNECTIVITY_ACTION</code> 的静态广播</li>
+<li>应该尽量在代码中动态注册注销 <code>BroadcastReceiver</code></li>
+<li><code>onReceive()</code> 方法中不能进行复杂工作否则会导致 ANR，<code>onReceive()</code> 方法一旦执行完，系统可能就认为这个广播接收器已经没用了，随时会杀掉包含这个广播接收器的进程，包括这个进程启动的线程。使用 <code>goAsync()</code> 方法可以在 <code>PendingResult.finish()</code> 执行前为广播接收器的存活争取更多的时间，但最好还是使用 <code>JobScheduler</code> 等方式进行长时间处理工作</li>
+<li>使用 <code>sendBroadcast()</code> 方法发的广播属于常规广播，所有能接收这个广播的广播接收器接收到广播的顺序是不可控的</li>
+<li>使用 <code>sendOrderedBroadcast()</code> 方法发的广播属于有序广播，根据广播接收器的优先级一个接一个地传递这条广播，相同优先级的顺序不可控，广播接收器可以选择继续传递给下一个，也可以选择直接丢掉</li>
+<li>使用 <code>LocalBroadcastManager.getInstance(this).sendBroadcast()</code> 方法发的广播属于应用进程内的本地广播，这样的广播只有应用自己知道，比系统级的全局广播更有效率</li>
+<li>为了保证广播的 action 全局唯一，action 的名字最好使用应用的包名作为前缀，最好声明成静态字符串常量<h2 id="数据存储与共享"><a href="#数据存储与共享" class="headerlink" title="数据存储与共享"></a>数据存储与共享</h2><h3 id="存储方式"><a href="#存储方式" class="headerlink" title="存储方式"></a>存储方式</h3></li>
+<li>系统会在<strong>安装应用</strong>时在<strong>内部存储器</strong>的文件系统中为应用生成一个私有文件目录，一般是 <code>/data/data/your.application.package/</code> 或 <code>data/user/0/your.application.package/</code>。这个目录除了系统和应用自己谁都无法访问，除非拥有权限。可以通过 <code>getFilesDir()</code> 方法获取这个路径表示，可以通过 <code>openFileOutput(filename, Context.MODE_PRIVATE)</code> 写这个目录下的文件。当<strong>卸载应用</strong>时这个目录也会被删除。这个目录有个特殊子目录 <code>cache/</code> 目录，用来存储临时缓存文件，系统可能会在存储空间不足时清理这个目录，可以通过 <code>getCacheDir()</code> 方法获取这个路径表示，可以通过 <code>File.createTempFile(fileName, null, context.getCacheDir())</code> 在这个目录下创建一个临时文件。还有个特殊的子目录 <code>shared_prefs/</code> 目录，用来以 XML 文件的形式存储简单的键值对数据，需要使用 <code>SharedPreferences</code> API 进行管理</li>
+<li>读写外存（外存是指可以被移除的<strong>外部存储器</strong>）文件需要先动态申请 <code>READ_EXTERNAL_STORAGE</code> 或 <code>WRITE_EXTERNAL_STORAGE</code> 权限，然后检查外存是否可用，<code>Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())</code> 表示可写，<code>Environment.MEDIA_MOUNTED.equals(state) || Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)</code> 表示可读。使用 <code>new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), albumName)</code> 可以读写公有外存目录的文件，使用 <code>new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), albumName)</code> 可以读写私有外存目录的文件，私有外存目录也会在<strong>卸载应用</strong>时被删除。通过 <code>getExternalFilesDirs()</code> 方法可以列出所有的外存目录。</li>
+<li>使用 <code>myFile.delete()</code> 或 <code>myContext.deleteFile(fileName)</code> 删除文件</li>
+<li>直接使用 SQLite API 进行数据库操作既麻烦又容易出错，建议使用 Room 等其它 ORM 库进行数据库操作</li>
+<li>获取 <code>SharedPreferences</code> 的方式有三个: 通过 <code>PreferenceManager.getDefaultSharedPreferences()</code> 可以获取或创建名字为 <code>context.getPackageName() + &quot;_preferences&quot;</code> 模式为 <code>Context.MODE_PRIVATE</code> 的文件。通过 <code>MainActivity.this.getPreferences(Context.MODE_PRIVATE)</code> 可以获取或创建名字为当前 <code>Activity</code> 类名的文件。使用 <code>context.getSharedPreferences(&quot;file1&quot;, Context.MODE_PRIVATE)</code> 可以获取或创建名字是 file1 的文件。<code>MODE_WORLD_READABLE</code> 和 <code>MODE_WORLD_WRITEABLE</code> 从 Android 7.0 (API level 24) 开始被<strong>禁止使用</strong>了。<code>commit()</code> 方法会将数据同步写到磁盘所以可能会阻塞 UI，而 <code>apply()</code> 方法会异步写到磁盘。<h3 id="分享文件"><a href="#分享文件" class="headerlink" title="分享文件"></a>分享文件</h3></li>
+<li>为了安全地共享文件，分享的文件必须通过 content URI 表示，必须授予这个 content URI 临时访问权限。<code>FileProvider</code> 作为 <code>ContentProvider</code> 的特殊子类，它的 <code>getUriForFile()</code> 方法可以为文件生成 content URI。<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">provider</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:name</span>=<span class="string">"android.support.v4.content.FileProvider"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:authorities</span>=<span class="string">"com.example.myapp.fileprovider"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:grantUriPermissions</span>=<span class="string">"true"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:exported</span>=<span class="string">"false"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta-data</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:name</span>=<span class="string">"android.support.FILE_PROVIDER_PATHS"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:resource</span>=<span class="string">"@xml/filepaths"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">provider</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">paths</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">files-path</span> <span class="attr">path</span>=<span class="string">"images/"</span> <span class="attr">name</span>=<span class="string">"myimages"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">paths</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>android:authorities</code> 属性一般是以当前应用包名为前缀的字符串，用来标志数据的所有者，多个的话用分号隔开</li>
+<li><code>&lt;root-path/&gt;</code> 代表根目录</li>
+<li><code>&lt;files-path/&gt;</code> 代表 <code>getFilesDir()</code></li>
+<li><code>&lt;cache-path/&gt;</code> 代表 <code>getCacheDir()</code></li>
+<li><code>&lt;external-path/&gt;</code> 代表 <code>Environment.getExternalStorageDirectory()</code></li>
+<li><code>&lt;external-files-path&gt;</code> 代表 <code>getExternalFilesDir(null)</code></li>
+<li><code>&lt;external-cache-path&gt;</code> 代表 <code>getExternalCacheDir()</code></li>
+<li><p><code>&lt;external-media-path&gt;</code> 代表 <code>getExternalMediaDirs()</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">File imagePath = <span class="keyword">new</span> File(getFilesDir(), <span class="string">"images"</span>);</span><br><span class="line">File newFile = <span class="keyword">new</span> File(imagePath, <span class="string">"default_image.jpg"</span>);</span><br><span class="line">Uri contentUri = getUriForFile(getContext(), <span class="string">"com.example.myapp.fileprovider"</span>, newFile);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>给 Intent 添加 <code>FLAG_GRANT_READ_URI_PERMISSION</code> 或 <code>FLAG_GRANT_WRITE_URI_PERMISSION</code> 的 flag 授予对这个 content URI 的临时访问权限，该权限会被目标 <code>Activity</code> 所在应用的其它组件继承，会在所在的任务结束时自动撤销授权</p>
+</li>
+<li>调用 <code>Context.grantUriPermission(package, Uri, mode_flags)</code> 方法也可以授予 <code>FLAG_GRANT_READ_URI_PERMISSION</code> 或 <code>FLAG_GRANT_WRITE_URI_PERMISSION</code> 权限，但只有再调用 <code>revokeUriPermission()</code> 方法后或者重启系统后才会撤销授权<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mResultIntent.setDataAndType(</span><br><span class="line">        fileUri,</span><br><span class="line">        getContentResolver().getType(fileUri));</span><br><span class="line">MainActivity.<span class="keyword">this</span>.setResult(Activity.RESULT_OK,</span><br><span class="line">        mResultIntent);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Uri returnUri = returnIntent.getData();</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    mInputPFD = getContentResolver().openFileDescriptor(returnUri, <span class="string">"r"</span>);</span><br><span class="line">&#125; <span class="keyword">catch</span> (FileNotFoundException e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">    Log.e(<span class="string">"MainActivity"</span>, <span class="string">"File not found."</span>);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line">FileDescriptor fd = mInputPFD.getFileDescriptor();</span><br></pre></td></tr></table></figure>
+<h3 id="ContentProvider-1"><a href="#ContentProvider-1" class="headerlink" title="ContentProvider"></a>ContentProvider</h3><ul>
+<li><code>ContentProvider</code> 的数据形式和关系型数据库的表格数据类似，因此 API 也像数据库一样包含增删改查（CRUD）操作，但为了更好地组织管理一个或多个 <code>ContentProvider</code>，最好通过 <code>ContentResolver</code> 操作 <code>ContentProvider</code></li>
+<li>对于 <code>ContentProvider</code> 的增删改查操作，<strong>不能直接在 UI 线程上执行</strong></li>
+<li><code>Uri</code> 和 <code>ContentUris</code> 类的静态方法可以方便地构造 content URI<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> _ID, word, locale <span class="keyword">FROM</span> words <span class="keyword">WHERE</span> word = &lt;userinput&gt; <span class="keyword">ORDER</span> <span class="keyword">BY</span> word <span class="keyword">ASC</span>;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mCursor = getContentResolver().query(</span><br><span class="line">        UserDictionary.Words.CONTENT_URI,</span><br><span class="line">        mProjection,</span><br><span class="line">        mSelectionClause,</span><br><span class="line">        mSelectionArgs,</span><br><span class="line">        mSortOrder);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>为了防止 SQL 注入，禁止拼接 SQL 语句，如 mSelectionClause 不能直接包含 selectionArgs 参数值</li>
+<li><code>ContentProvider</code> 所在应用本身的组件则可以随便访问它</li>
+<li>如果 <code>ContentProvider</code> 的应用不指定任何权限，那么其它应用就无法访问这个 <code>ContentProvider</code> 的数据</li>
+<li>使用者需要事先通过 <code>&lt;uses-permission&gt;</code> 标签获取访问权限</li>
+<li>创建 <code>ContentProvider</code> 需要继承 <code>ContentProvider</code> 并实现增删改查等一系列方法: <code>onCreate()</code> 在系统创建 provider 后马上调用，可以在这里创建数据库，但不要在这里做耗时操作。<code>getType()</code> 返回 content URI 的 MIME 类型。<code>query()</code>、<code>insert()</code>、<code>update()</code>、<code>delete()</code> 进行增删改查。除了 <code>onCreate()</code> 方法其它方法必须要保证是线程安全的<h3 id="其它-2"><a href="#其它-2" class="headerlink" title="其它"></a>其它</h3></li>
+<li>Android 7.0 (API level 24) 开始禁止使用 file URI 进行文件共享</li>
+<li>Android 7.1.1 (API level 25) 开始安装 APK 时必须申请 <code>Manifest.permission.REQUEST_INSTALL_PACKAGES</code> 权限，数据必须通过 <code>FileProvider</code> 形式共享，数据类型是 <code>application/vnd.android.package-archive</code>，必须给 Intent 添加 <code>FLAG_GRANT_READ_URI_PERMISSION</code> 权限<h1 id="小技巧"><a href="#小技巧" class="headerlink" title="小技巧"></a>小技巧</h1></li>
+<li><p>测试 Deep links:</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">adb shell am start</span><br><span class="line">    -W -<span class="selector-tag">a</span> android<span class="selector-class">.intent</span><span class="selector-class">.action</span><span class="selector-class">.VIEW</span></span><br><span class="line">    -d <span class="string">"example://gizmos"</span> com<span class="selector-class">.example</span><span class="selector-class">.android</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>测试 Android App Links:</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">adb shell am start -<span class="selector-tag">a</span> android<span class="selector-class">.intent</span><span class="selector-class">.action</span><span class="selector-class">.VIEW</span> \</span><br><span class="line">    -c android<span class="selector-class">.intent</span><span class="selector-class">.category</span><span class="selector-class">.BROWSABLE</span> \</span><br><span class="line">    -d <span class="string">"http://domain.name:optional_port"</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>应用安装完 20s 后获取所有应用的链接处理策略:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb shell dumpsys package domain-preferred-apps</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>模拟系统杀掉应用进程:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb shell am kill com.some.package</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>.nomedia</code> 文件会导致其所在目录不被 Media Scanner 扫描到</p>
+<h1 id="模板代码"><a href="#模板代码" class="headerlink" title="模板代码"></a>模板代码</h1><h2 id="系统栏适配-1"><a href="#系统栏适配-1" class="headerlink" title="系统栏适配"></a>系统栏适配</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 华为手机刘海屏适配</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> frank</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@see</span> &lt;a href="https://developer.huawei.com/consumer/cn/devservice/doc/50114"&gt;《华为刘海屏手机安卓O版本适配指导》&lt;/a&gt;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HwNotchSizeUtil</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> FLAG_NOTCH_SUPPORT = <span class="number">0x00010000</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 是否是刘海屏手机</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> context Context</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> true：刘海屏 false：非刘海屏</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">hasNotchInScreen</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">boolean</span> ret = <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            ClassLoader cl = context.getClassLoader();</span><br><span class="line">            Class HwNotchSizeUtil = cl.loadClass(<span class="string">"com.huawei.android.util.HwNotchSizeUtil"</span>);</span><br><span class="line">            Method get = HwNotchSizeUtil.getMethod(<span class="string">"hasNotchInScreen"</span>);</span><br><span class="line">            ret = (<span class="keyword">boolean</span>) get.invoke(HwNotchSizeUtil);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取刘海尺寸</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> context Context</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> int[0]值为刘海宽度 int[1]值为刘海高度</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[] getNotchSize(Context context) &#123;</span><br><span class="line">        <span class="keyword">int</span>[] ret = <span class="keyword">new</span> <span class="keyword">int</span>[]&#123;<span class="number">0</span>, <span class="number">0</span>&#125;;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            ClassLoader cl = context.getClassLoader();</span><br><span class="line">            Class HwNotchSizeUtil = cl.loadClass(<span class="string">"com.huawei.android.util.HwNotchSizeUtil"</span>);</span><br><span class="line">            Method get = HwNotchSizeUtil.getMethod(<span class="string">"getNotchSize"</span>);</span><br><span class="line">            ret = (<span class="keyword">int</span>[]) get.invoke(HwNotchSizeUtil);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 设置应用窗口在华为刘海屏手机使用刘海区</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> window Window</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">setFullScreenWindowLayoutInDisplayCutout</span><span class="params">(Window window)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (window == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        WindowManager.LayoutParams layoutParams = window.getAttributes();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Class layoutParamsExCls = Class.forName(<span class="string">"com.huawei.android.view.LayoutParamsEx"</span>);</span><br><span class="line">            Constructor con = layoutParamsExCls.getConstructor(ViewGroup.LayoutParams.class);</span><br><span class="line">            Object layoutParamsExObj = con.newInstance(layoutParams);</span><br><span class="line">            Method method = layoutParamsExCls.getMethod(<span class="string">"addHwFlags"</span>, <span class="keyword">int</span>.class);</span><br><span class="line">            method.invoke(layoutParamsExObj, FLAG_NOTCH_SUPPORT);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 设置应用窗口在华为刘海屏手机不使用刘海区显示</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> window Window</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">setNotFullScreenWindowLayoutInDisplayCutout</span><span class="params">(Window window)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (window == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        WindowManager.LayoutParams layoutParams = window.getAttributes();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Class layoutParamsExCls = Class.forName(<span class="string">"com.huawei.android.view.LayoutParamsEx"</span>);</span><br><span class="line">            Constructor con = layoutParamsExCls.getConstructor(ViewGroup.LayoutParams.class);</span><br><span class="line">            Object layoutParamsExObj = con.newInstance(layoutParams);</span><br><span class="line">            Method method = layoutParamsExCls.getMethod(<span class="string">"clearHwFlags"</span>, <span class="keyword">int</span>.class);</span><br><span class="line">            method.invoke(layoutParamsExObj, FLAG_NOTCH_SUPPORT);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 小米手机刘海屏适配</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> frank</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@see</span> &lt;a href="https://dev.mi.com/console/doc/detail?pId=1293"&gt;《小米刘海屏 Android O 适配》&lt;/a&gt;</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@see</span> &lt;a href="https://dev.mi.com/console/doc/detail?pId=1341"&gt;《小米刘海屏 Android P 适配》&lt;/a&gt;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">XiaomiNotchSizeUtil</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> FLAG_NOTCH_OPEN = <span class="number">0x00000100</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> FLAG_NOTCH_PORTRAIT = <span class="number">0x00000200</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> FLAG_NOTCH_LANDSCAPE = <span class="number">0x00000400</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 是否是刘海屏手机</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> context Context</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> true：刘海屏 false：非刘海屏</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">hasNotchInScreen</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">boolean</span> ret = <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            ret = <span class="string">"1"</span>.equals(getSystemProperty(<span class="string">"ro.miui.notch"</span>));</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取刘海尺寸</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> context Context</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> int[0]值为刘海宽度 int[1]值为刘海高度</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[] getNotchSize(Context context) &#123;</span><br><span class="line">        <span class="keyword">int</span>[] ret = <span class="keyword">new</span> <span class="keyword">int</span>[]&#123;<span class="number">0</span>, <span class="number">0</span>&#125;;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">int</span> widthResId = context.getResources().getIdentifier(<span class="string">"notch_width"</span>, <span class="string">"dimen"</span>, <span class="string">"android"</span>);</span><br><span class="line">            <span class="keyword">if</span> (widthResId &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                ret[<span class="number">0</span>] = context.getResources().getDimensionPixelSize(widthResId);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">int</span> heightResId = context.getResources().getIdentifier(<span class="string">"notch_height"</span>, <span class="string">"dimen"</span>, <span class="string">"android"</span>);</span><br><span class="line">            <span class="keyword">if</span> (heightResId &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                ret[<span class="number">1</span>] = context.getResources().getDimensionPixelSize(heightResId);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 横竖屏都绘制到耳朵区</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> window Window</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">setFullScreenWindowLayoutInDisplayCutout</span><span class="params">(Window window)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (window == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Method method = Window.class.getMethod(<span class="string">"addExtraFlags"</span>,</span><br><span class="line">                    <span class="keyword">int</span>.class);</span><br><span class="line">            method.invoke(window, FLAG_NOTCH_OPEN | FLAG_NOTCH_PORTRAIT | FLAG_NOTCH_LANDSCAPE);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 横竖屏都不会绘制到耳朵区</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> window Window</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">setNotFullScreenWindowLayoutInDisplayCutout</span><span class="params">(Window window)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (window == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Method method = Window.class.getMethod(<span class="string">"clearExtraFlags"</span>,</span><br><span class="line">                    <span class="keyword">int</span>.class);</span><br><span class="line">            method.invoke(window, FLAG_NOTCH_OPEN | FLAG_NOTCH_PORTRAIT | FLAG_NOTCH_LANDSCAPE);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> String <span class="title">getSystemProperty</span><span class="params">(String key)</span> </span>&#123;</span><br><span class="line">        String ret = <span class="keyword">null</span>;</span><br><span class="line">        BufferedReader bufferedReader = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Process process = Runtime.getRuntime().exec(<span class="string">"getprop "</span> + key);</span><br><span class="line">            bufferedReader = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(process.getInputStream()));</span><br><span class="line">            String line;</span><br><span class="line">            StringBuilder stringBuilder = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">            <span class="keyword">while</span> ((line = bufferedReader.readLine()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">                stringBuilder.append(line);</span><br><span class="line">            &#125;</span><br><span class="line">            ret = stringBuilder.toString();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (bufferedReader != <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    bufferedReader.close();</span><br><span class="line">                &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * OPPO手机刘海屏适配</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> frank</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@see</span> &lt;a href="https://open.oppomobile.com/wiki/doc#id=10159"&gt;《OPPO凹形屏适配说明》&lt;/a&gt;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OppoNotchSizeUtil</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 是否是刘海屏手机</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> context Context</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> true：刘海屏 false：非刘海屏</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">hasNotchInScreen</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> context.getPackageManager().hasSystemFeature(<span class="string">"com.oppo.feature.screen.heteromorphism"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * VIVO手机刘海屏适配</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> frank</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@see</span> &lt;a href="https://dev.vivo.com.cn/documentCenter/doc/103"&gt;《异形屏应用适配指南》&lt;/a&gt;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">VivoNotchSizeUtil</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MASK_NOTCH_IN_SCREEN = <span class="number">0x00000020</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MASK_ROUNDED_IN_SCREEN = <span class="number">0x00000008</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 是否是刘海屏手机</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> context Context</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> true：刘海屏 false：非刘海屏</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">hasNotchInScreen</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">boolean</span> ret = <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            ClassLoader cl = context.getClassLoader();</span><br><span class="line">            Class FtFeature = cl.loadClass(<span class="string">"android.util.FtFeature"</span>);</span><br><span class="line">            Method get = FtFeature.getMethod(<span class="string">"isFeatureSupport"</span>, <span class="keyword">int</span>.class);</span><br><span class="line">            ret = (<span class="keyword">boolean</span>) get.invoke(FtFeature, MASK_NOTCH_IN_SCREEN);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 锤子手机刘海屏适配</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> frank</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@see</span> &lt;a href="https://resource.smartisan.com/resource/61263ed9599961d1191cc4381943b47a.pdf"&gt;《Smartisan 开发者文档》&lt;/a&gt;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SmartisanNotchSizeUtil</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MASK_NOTCH_IN_SCREEN = <span class="number">0x00000001</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 是否是刘海屏手机</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> context Context</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> true：异形屏 false：非异形屏</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">hasNotchInScreen</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">boolean</span> ret = <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            ClassLoader cl = context.getClassLoader();</span><br><span class="line">            Class DisplayUtilsSmt = cl.loadClass(<span class="string">"smartisanos.api.DisplayUtilsSmt"</span>);</span><br><span class="line">            Method get = DisplayUtilsSmt.getMethod(<span class="string">"isFeatureSupport"</span>, <span class="keyword">int</span>.class);</span><br><span class="line">            ret = (<span class="keyword">boolean</span>) get.invoke(DisplayUtilsSmt, MASK_NOTCH_IN_SCREEN);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="获取联系人列表"><a href="#获取联系人列表" class="headerlink" title="获取联系人列表"></a>获取联系人列表</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ContactsFragment</span> <span class="keyword">extends</span> <span class="title">Fragment</span> <span class="keyword">implements</span></span></span><br><span class="line"><span class="class">        <span class="title">LoaderManager</span>.<span class="title">LoaderCallbacks</span>&lt;<span class="title">Cursor</span>&gt;,</span></span><br><span class="line"><span class="class">        <span class="title">AdapterView</span>.<span class="title">OnItemClickListener</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> String[] FROM_COLUMNS = &#123;ContactsContract.Contacts.DISPLAY_NAME_PRIMARY&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span>[] TO_IDS = &#123;R.id.text1&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String[] PROJECTION =</span><br><span class="line">            &#123;</span><br><span class="line">                    ContactsContract.Contacts._ID,</span><br><span class="line">                    ContactsContract.Contacts.LOOKUP_KEY,</span><br><span class="line">                    ContactsContract.Contacts.DISPLAY_NAME_PRIMARY</span><br><span class="line"></span><br><span class="line">            &#125;;</span><br><span class="line">    <span class="keyword">private</span> ListView mContactsList;</span><br><span class="line">    <span class="keyword">private</span> SimpleCursorAdapter mCursorAdapter;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ContactsFragment</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ContactsFragment <span class="title">newInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        ContactsFragment fragment = <span class="keyword">new</span> ContactsFragment();</span><br><span class="line">        Bundle args = <span class="keyword">new</span> Bundle();</span><br><span class="line">        fragment.setArguments(args);</span><br><span class="line">        <span class="keyword">return</span> fragment;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Nullable</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> View <span class="title">onCreateView</span><span class="params">(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        View rootView = inflater.inflate(R.layout.fragment_contacts, container, <span class="keyword">false</span>);</span><br><span class="line">        mContactsList = rootView.findViewById(R.id.list);</span><br><span class="line">        mCursorAdapter = <span class="keyword">new</span> SimpleCursorAdapter(</span><br><span class="line">                getContext(),</span><br><span class="line">                R.layout.contact_list_item,</span><br><span class="line">                <span class="keyword">null</span>,</span><br><span class="line">                FROM_COLUMNS, TO_IDS,</span><br><span class="line">                <span class="number">0</span>);</span><br><span class="line">        mContactsList.setAdapter(mCursorAdapter);</span><br><span class="line">        mContactsList.setOnItemClickListener(<span class="keyword">this</span>);</span><br><span class="line">        <span class="keyword">return</span> rootView;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onActivityCreated</span><span class="params">(@Nullable Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onActivityCreated(savedInstanceState);</span><br><span class="line">        LoaderManager.getInstance(<span class="keyword">this</span>).initLoader(<span class="number">0</span>, <span class="keyword">null</span>, <span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@NonNull</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Loader&lt;Cursor&gt; <span class="title">onCreateLoader</span><span class="params">(<span class="keyword">int</span> i, @Nullable Bundle bundle)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> CursorLoader(getActivity(),</span><br><span class="line">                ContactsContract.Contacts.CONTENT_URI,</span><br><span class="line">                PROJECTION, <span class="keyword">null</span>, <span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onLoadFinished</span><span class="params">(@NonNull Loader&lt;Cursor&gt; loader, Cursor cursor)</span> </span>&#123;</span><br><span class="line">        mCursorAdapter.swapCursor(cursor);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onLoaderReset</span><span class="params">(@NonNull Loader&lt;Cursor&gt; loader)</span> </span>&#123;</span><br><span class="line">        mCursorAdapter.swapCursor(<span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onItemClick</span><span class="params">(AdapterView&lt;?&gt; parent, View view, <span class="keyword">int</span> position, <span class="keyword">long</span> id)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                    
+                        <li class="next">
+                            <a href="/2018/09/29/media-basics/" data-toggle="tooltip" data-placement="top" title="音视频技术基础">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#Android" title="Android">Android</a>
+                        
+                          <a class="tag" href="/tags/#笔记" title="笔记">笔记</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="https://juejin.im/user/5a96922b5188257a865da3f2/posts" target="_blank">我的掘金</a></li>
+                    
+                        <li><a href="https://www.jianshu.com/u/64ac160aaac8" target="_blank">我的简书</a></li>
+                    
+                        <li><a href="https://blog.csdn.net/shangmingchao" target="_blank">我的 CSDN</a></li>
+                    
+                        <li><a href="https://joyrun.github.io/" target="_blank">悦跑圈技术团队</a></li>
+                    
+                        <li><a href="http://tech.meituan.com/" target="_blank">美团点评技术团队</a></li>
+                    
+                </ul>
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/FrankShang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/frankshang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/frankshang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/frankshangx">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/shangmingchao">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://www.linkedin.com/in/FrankShang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Frank&#39;s Blog 2019 
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a href="http://blog.kaijun.rocks">Kaijun</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://franksblog.top/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="https://franksblog.top/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
