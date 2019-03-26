@@ -90,6 +90,13 @@
 
                         
                         <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
                             <a href="/archives/">Archives</a>
                         </li>
                         
@@ -98,13 +105,6 @@
                         
                         <li>
                             <a href="/tags/">Tags</a>
-                        </li>
-                        
-                    
-
-                        
-                        <li>
-                            <a href="/about/">About</a>
                         </li>
                         
                     
@@ -195,8 +195,9 @@
             架构原则关注点分离
 一个组件应该只关注一个简单的问题，只负责完成一项简单的任务，应该尽少依赖其它组件
 就算依赖另一个组件，也不能同时依赖它下下一级的组件，要像网络协议分层一样简单明确
-Activity 和 Fragment 作为操作系统和应用之间的粘合类，不应该将所有代码写在它们里面，它们甚至可以看成是有生命周期的普通 View，大部分情况下就是 被 用来简单 显示数据的  模型驱动视图
-为......
+Activity 和 Fragment 作为操作系统和应用之间的粘合类，不应该将所有代码写在它们里面，它们甚至可以看成是有生命周期的普通 View，大部分情况下就是 被 用来简单 显示数据的  
+
+模型驱动视图......
         </div>
     </a>
     <p class="post-meta">
@@ -319,15 +320,15 @@ Android 操作系统是一个多用户 Linux 操作系统，每个应用都是�
 
 <div class="post-preview">
 
-    <a href="/2018/02/28/gradle-tips/">
+    <a href="/2018/02/28/annotation-in-android/">
         <h2 class="post-title">
-            Android 构建那些事
+            Android 中优雅地使用注解
         </h2>
         <h3 class="post-subtitle">
             
         </h3>
         <div class="post-content-preview">
-            Android 构建系统概述构建 APK 的过程是个相当复杂的过程，Android 构建系统需要将应用的资源文件和源文件一同打包到最终的 APK 文件中。应用可能会依赖一些外部库，构建工具要灵活地管理这些依赖的下载、编译、打包(包括合并、解决冲突、资源优化)等过程。应用的源码可能包括 Java 、RenderScript、AIDL 以及 Native 代码，构建工具需要分别处理这些语言的编译......
+            概述注解（Annotation），是源码中特殊的语法元数据，类、方法、变量、参数都可以被注解。利用注解可以标记源码以便编译器为源码生成文档和检查代码，也可以让编译器和注解处理器在编译时根据注解自动生成代码，甚至可以保留到运行时以便改变运行时的行为。Java 内置了一些注解，如 @Override 注解用来表明该方法是重写父类方法，编译器会负责检查该方法与父类方法的声明是否一致。@Deprec......
         </div>
     </a>
     <p class="post-meta">
@@ -340,15 +341,15 @@ Android 操作系统是一个多用户 Linux 操作系统，每个应用都是�
 
 <div class="post-preview">
 
-    <a href="/2018/02/28/annotation-in-android/">
+    <a href="/2018/02/28/gradle-tips/">
         <h2 class="post-title">
-            Android 中优雅地使用注解
+            Android 构建那些事
         </h2>
         <h3 class="post-subtitle">
             
         </h3>
         <div class="post-content-preview">
-            概述注解（Annotation），是源码中特殊的语法元数据，类、方法、变量、参数都可以被注解。利用注解可以标记源码以便编译器为源码生成文档和检查代码，也可以让编译器和注解处理器在编译时根据注解自动生成代码，甚至可以保留到运行时以便改变运行时的行为。Java 内置了一些注解，如 @Override 注解用来表明该方法是重写父类方法，编译器会负责检查该方法与父类方法的声明是否一致。@Deprec......
+            Android 构建系统概述构建 APK 的过程是个相当复杂的过程，Android 构建系统需要将应用的资源文件和源文件一同打包到最终的 APK 文件中。应用可能会依赖一些外部库，构建工具要灵活地管理这些依赖的下载、编译、打包(包括合并、解决冲突、资源优化)等过程。应用的源码可能包括 Java 、RenderScript、AIDL 以及 Native 代码，构建工具需要分别处理这些语言的编译......
         </div>
     </a>
     <p class="post-meta">
@@ -394,19 +395,7 @@ Android 操作系统是一个多用户 Linux 操作系统，每个应用都是�
                             
                         
                             
-                            <a href="/tags/#Media" title="Media" rel="1">Media</a>
-                            
-                        
-                            
-                            <a href="/tags/#FFMPEG" title="FFMPEG" rel="1">FFMPEG</a>
-                            
-                        
-                            
                             <a href="/tags/#笔记" title="笔记" rel="2">笔记</a>
-                            
-                        
-                            
-                            <a href="/tags/#Gradle" title="Gradle" rel="1">Gradle</a>
                             
                         
                             
@@ -415,6 +404,18 @@ Android 操作系统是一个多用户 Linux 操作系统，每个应用都是�
                         
                             
                             <a href="/tags/#Dart" title="Dart" rel="1">Dart</a>
+                            
+                        
+                            
+                            <a href="/tags/#Gradle" title="Gradle" rel="1">Gradle</a>
+                            
+                        
+                            
+                            <a href="/tags/#Media" title="Media" rel="1">Media</a>
+                            
+                        
+                            
+                            <a href="/tags/#FFMPEG" title="FFMPEG" rel="1">FFMPEG</a>
                             
                         
                             
