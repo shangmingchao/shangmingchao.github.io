@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="null">
+    <meta name="keyword"  content="undefined">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          Android 学习笔记架构篇 - 商明超的博客  | Frank&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="https://franksblog.top/2019/02/22/android-notes-arch/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Frank&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archives/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="https://franksblog.top/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#Android" title="Android">Android</a>
+                        
+                          <a class="tag" href="/tags/#笔记" title="笔记">笔记</a>
+                        
+                    </div>
+                    <h1>Android 学习笔记架构篇</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by Frank on
+                        2019-02-22
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h1 id="架构原则"><a href="#架构原则" class="headerlink" title="架构原则"></a>架构原则</h1><h2 id="关注点分离"><a href="#关注点分离" class="headerlink" title="关注点分离"></a>关注点分离</h2><ul>
+<li>一个组件应该只关注一个简单的问题，只负责完成一项简单的任务，应该尽少依赖其它组件</li>
+<li>就算依赖另一个组件，也不能同时依赖它下下一级的组件，要像网络协议分层一样简单明确</li>
+<li><code>Activity</code> 和 <code>Fragment</code> 作为操作系统和应用之间的粘合类，不应该将所有代码写在它们里面，它们甚至可以看成是有生命周期的普通 View，大部分情况下就是 <strong>被</strong> 用来简单 <strong>显示数据的</strong>  <h2 id="模型驱动视图"><a href="#模型驱动视图" class="headerlink" title="模型驱动视图"></a>模型驱动视图</h2></li>
+<li>为了保证数据 model 和它对应显示的 UI 始终是一致的，应该用 model 驱动 UI，而且最好是是持久化 model。model 是负责处理应用数据的组件，只关心数据<h2 id="单一数据源"><a href="#单一数据源" class="headerlink" title="单一数据源"></a>单一数据源</h2></li>
+<li>为了保证数据的一致性，必须实现相同的数据来自同一个数据源。如: 好友列表页显示了好友的备注名，数据来源于服务器的 <code>api/friends</code> 响应，好友详情页也显示了好友的备注名，数据来源于服务器的 <code>api/user</code> 响应，此时在好友详情页更改了对这个好友的备注名，那么好友列表并不知情，它的数据模型并没有发生变化，所以还是显示原来的备注名，这就产生了数据不一致的问题</li>
+<li>要实现单一数据源（Single source of truth），最简单的方式就是将本地数据库作为单一数据源，主键和外键的存在保证了数据对应实体的一致性<h1 id="推荐架构"><a href="#推荐架构" class="headerlink" title="推荐架构"></a>推荐架构</h1><img src="https://user-gold-cdn.xitu.io/2019/1/30/1689d9f26120144d?w=960&amp;h=720&amp;f=png&amp;s=50497" alt="arch"><br>Android Jetpack 组件库中有一个叫 Architecture Components 的组件集，里面包含了 Data Binding，Lifecycles，LiveData，Navigation，Paging，Room，ViewModel，WorkManager 等组件的实现</li>
+<li><code>ViewModel</code> 用来为指定的 UI 组件提供数据，它只负责根据业务逻辑获取合适的数据，他不知道 View 的存在，所以它不受系统销毁重建的影响，一般它的生命周期比 View 更长久<br><img src="https://user-gold-cdn.xitu.io/2019/1/31/168a1a98d3e03f54?w=334&amp;h=358&amp;f=png&amp;s=27898" alt=""></li>
+<li><code>LiveData</code> 是一个数据持有者，它持有的数据可以是任何 Object 对象。它类似于传统观察者模式中的 Observable，当它持有的数据发生变化时会通知它所有的 Observer。同时它还可以感知 Activity，Fragment 和 Service 的生命周期，只通知它们中 active 的，在生命周期结束时自动取消订阅</li>
+<li><code>Activity/Fragment</code> 持有 <code>ViewModel</code> 进行数据的渲染，<code>ViewModel</code> 持有 <code>LiveData</code> 形式的数据以便尊重应用组件的生命周期，但是获取 <code>LiveData</code> 的具体实现应该由 <strong>Repository</strong> 完成</li>
+<li><strong>Repository</strong> 是数据的抽象，它提供简洁一致的操作数据的 API，内部封装好对持久化数据、缓存数据、后台服务器数据等数据源数据的操作。所以 <code>ViewModel</code> 不关心数据具体是怎么获得的，甚至可以不关心数据到底是从哪拿到的<h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><h2 id="基础设施建设"><a href="#基础设施建设" class="headerlink" title="基础设施建设"></a>基础设施建设</h2>创建项目时要勾选 【Use AndroidX artifacts】 复选框以便自动使用 AndroidX 支持库，否则需要手动在 <code>gradle.properties</code> 文件中添加<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">android.useAndroidX=<span class="literal">true</span></span><br><span class="line">android.enableJetifier=<span class="literal">true</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>然后在项目根目录创建 <code>versions.gradle</code> 文件，以便统一管理依赖和版本号<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line">ext.deps = [:]</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> build_versions = [:]</span><br><span class="line">build_versions.min_sdk = <span class="number">14</span></span><br><span class="line">build_versions.target_sdk = <span class="number">28</span></span><br><span class="line">ext.build_versions = build_versions</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> versions = [:]</span><br><span class="line">versions.android_gradle_plugin = <span class="string">"3.3.0"</span></span><br><span class="line">versions.support = <span class="string">"1.1.0-alpha01"</span></span><br><span class="line">versions.constraint_layout = <span class="string">"1.1.3"</span></span><br><span class="line">versions.lifecycle = <span class="string">"2.0.0"</span></span><br><span class="line">versions.room = <span class="string">"2.1.0-alpha04"</span></span><br><span class="line">versions.retrofit = <span class="string">"2.5.0"</span></span><br><span class="line">versions.okhttp = <span class="string">"3.12.1"</span></span><br><span class="line">versions.junit = <span class="string">"4.12"</span></span><br><span class="line">versions.espresso = <span class="string">"3.1.0-alpha4"</span></span><br><span class="line">versions.atsl_runner = <span class="string">"1.1.0-alpha4"</span></span><br><span class="line">versions.atsl_rules = <span class="string">"1.1.0-alpha4"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> deps = [:]</span><br><span class="line"></span><br><span class="line">deps.android_gradle_plugin = <span class="string">"com.android.tools.build:gradle:$versions.android_gradle_plugin"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> support = [:]</span><br><span class="line">support.app_compat = <span class="string">"androidx.appcompat:appcompat:$versions.support"</span></span><br><span class="line">support.v4 = <span class="string">"androidx.legacy:legacy-support-v4:$versions.support"</span></span><br><span class="line">support.constraint_layout = <span class="string">"androidx.constraintlayout:constraintlayout:$versions.constraint_layout"</span></span><br><span class="line">support.recyclerview = <span class="string">"androidx.recyclerview:recyclerview:$versions.support"</span></span><br><span class="line">support.cardview = <span class="string">"androidx.cardview:cardview:$versions.support"</span></span><br><span class="line">support.design = <span class="string">"com.google.android.material:material:$versions.support"</span></span><br><span class="line">deps.support = support</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> lifecycle = [:]</span><br><span class="line">lifecycle.runtime = <span class="string">"androidx.lifecycle:lifecycle-runtime:$versions.lifecycle"</span></span><br><span class="line">lifecycle.extensions = <span class="string">"androidx.lifecycle:lifecycle-extensions:$versions.lifecycle"</span></span><br><span class="line">lifecycle.java8 = <span class="string">"androidx.lifecycle:lifecycle-common-java8:$versions.lifecycle"</span></span><br><span class="line">lifecycle.compiler = <span class="string">"androidx.lifecycle:lifecycle-compiler:$versions.lifecycle"</span></span><br><span class="line">deps.lifecycle = lifecycle</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> room = [:]</span><br><span class="line">room.runtime = <span class="string">"androidx.room:room-runtime:$versions.room"</span></span><br><span class="line">room.compiler = <span class="string">"androidx.room:room-compiler:$versions.room"</span></span><br><span class="line">deps.room = room</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> retrofit = [:]</span><br><span class="line">retrofit.runtime = <span class="string">"com.squareup.retrofit2:retrofit:$versions.retrofit"</span></span><br><span class="line">retrofit.gson = <span class="string">"com.squareup.retrofit2:converter-gson:$versions.retrofit"</span></span><br><span class="line">deps.retrofit = retrofit</span><br><span class="line"></span><br><span class="line">deps.okhttp_logging_interceptor = <span class="string">"com.squareup.okhttp3:logging-interceptor:$&#123;versions.okhttp&#125;"</span></span><br><span class="line"></span><br><span class="line">deps.junit = <span class="string">"junit:junit:$versions.junit"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> espresso = [:]</span><br><span class="line">espresso.core = <span class="string">"androidx.test.espresso:espresso-core:$versions.espresso"</span></span><br><span class="line">deps.espresso = espresso</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> atsl = [:]</span><br><span class="line">atsl.runner = <span class="string">"androidx.test:runner:$versions.atsl_runner"</span></span><br><span class="line">deps.atsl = atsl</span><br><span class="line"></span><br><span class="line">ext.deps = deps</span><br></pre></td></tr></table></figure></p>
+<p>以显示 <strong>谷歌的开源仓库列表</strong>（<a href="https://api.github.com/users/google/repos" target="_blank" rel="noopener">https://api.github.com/users/google/repos</a>）为例，先依赖好 <code>ViewModel</code>、<code>LiveData</code> 和 <code>Retrofit</code>:<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">apply <span class="string">plugin:</span> <span class="string">'com.android.application'</span></span><br><span class="line"></span><br><span class="line">android &#123;</span><br><span class="line">    compileSdkVersion build_versions.target_sdk</span><br><span class="line">    defaultConfig &#123;</span><br><span class="line">        applicationId <span class="string">"cn.frank.sample"</span></span><br><span class="line">        minSdkVersion build_versions.min_sdk</span><br><span class="line">        targetSdkVersion build_versions.target_sdk</span><br><span class="line">        versionCode <span class="number">1</span></span><br><span class="line">        versionName <span class="string">"1.0"</span></span><br><span class="line">        testInstrumentationRunner <span class="string">"androidx.test.runner.AndroidJUnitRunner"</span></span><br><span class="line">    &#125;</span><br><span class="line">    buildTypes &#123;</span><br><span class="line">        release &#123;</span><br><span class="line">            minifyEnabled <span class="literal">false</span></span><br><span class="line">            proguardFiles getDefaultProguardFile(<span class="string">'proguard-android-optimize.txt'</span>), <span class="string">'proguard-rules.pro'</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    lintOptions &#123;</span><br><span class="line">        abortOnError <span class="literal">false</span></span><br><span class="line">    &#125;</span><br><span class="line">    compileOptions &#123;</span><br><span class="line">        sourceCompatibility JavaVersion.VERSION_1_8</span><br><span class="line">        targetCompatibility JavaVersion.VERSION_1_8</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">dependencies &#123;</span><br><span class="line">    implementation fileTree(<span class="string">dir:</span> <span class="string">'libs'</span>, <span class="string">include:</span> [<span class="string">'*.jar'</span>])</span><br><span class="line">    implementation deps.support.app_compat</span><br><span class="line">    implementation deps.support.constraint_layout</span><br><span class="line"></span><br><span class="line">    implementation deps.lifecycle.runtime</span><br><span class="line">    implementation deps.lifecycle.extensions</span><br><span class="line">    annotationProcessor deps.lifecycle.compiler</span><br><span class="line">    implementation deps.room.runtime</span><br><span class="line">    annotationProcessor deps.room.compiler</span><br><span class="line">    implementation deps.retrofit.runtime</span><br><span class="line">    implementation deps.retrofit.gson</span><br><span class="line">    implementation deps.okhttp_logging_interceptor</span><br><span class="line"></span><br><span class="line">    testImplementation deps.junit</span><br><span class="line">    androidTestImplementation deps.atsl.runner</span><br><span class="line">    androidTestImplementation deps.espresso.core</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后根据习惯合理地设计源码的目录结构，如<br><img src="https://user-gold-cdn.xitu.io/2019/2/1/168a7240310fd4c2?w=324&amp;h=616&amp;f=png&amp;s=53578" alt=""><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RepoRepository</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> RepoRepository sInstance;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">RepoRepository</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> RepoRepository <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (sInstance == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (RepoRepository.class) &#123;</span><br><span class="line">                <span class="keyword">if</span> (sInstance == <span class="keyword">null</span>) &#123;</span><br><span class="line">                    sInstance = <span class="keyword">new</span> RepoRepository();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> sInstance;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> LiveData&lt;List&lt;Repo&gt;&gt; getRepo(String userId) &#123;</span><br><span class="line">        <span class="keyword">final</span> MutableLiveData&lt;List&lt;Repo&gt;&gt; data = <span class="keyword">new</span> MutableLiveData&lt;&gt;();</span><br><span class="line">        ServiceGenerator.createService(GithubService.class)</span><br><span class="line">                .listRepos(userId)</span><br><span class="line">                .enqueue(<span class="keyword">new</span> Callback&lt;List&lt;Repo&gt;&gt;() &#123;</span><br><span class="line">                    <span class="meta">@Override</span></span><br><span class="line">                    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onResponse</span><span class="params">(Call&lt;List&lt;Repo&gt;&gt; call, Response&lt;List&lt;Repo&gt;&gt; response)</span> </span>&#123;</span><br><span class="line">                        data.setValue(response.body());</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    <span class="meta">@Override</span></span><br><span class="line">                    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onFailure</span><span class="params">(Call&lt;List&lt;Repo&gt;&gt; call, Throwable t)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br><span class="line">        <span class="keyword">return</span> data;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RepoViewModel</span> <span class="keyword">extends</span> <span class="title">AndroidViewModel</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> LiveData&lt;List&lt;Repo&gt;&gt; repo;</span><br><span class="line">    <span class="keyword">private</span> RepoRepository repoRepository;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">RepoViewModel</span><span class="params">(@NonNull Application application)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(application);</span><br><span class="line">        <span class="keyword">this</span>.repoRepository = ((SampleApp) application).getRepoRepository();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(String userId)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.repo != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">this</span>.repo = repoRepository.getRepo(userId);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> LiveData&lt;List&lt;Repo&gt;&gt; getRepo() &#123;</span><br><span class="line">        <span class="keyword">return</span> repo;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RepoFragment</span> <span class="keyword">extends</span> <span class="title">Fragment</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String ARG_USER_ID = <span class="string">"user_id"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> RepoViewModel viewModel;</span><br><span class="line">    <span class="keyword">private</span> TextView repoTextView;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">RepoFragment</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> RepoFragment <span class="title">newInstance</span><span class="params">(String userId)</span> </span>&#123;</span><br><span class="line">        RepoFragment fragment = <span class="keyword">new</span> RepoFragment();</span><br><span class="line">        Bundle args = <span class="keyword">new</span> Bundle();</span><br><span class="line">        args.putString(ARG_USER_ID, userId);</span><br><span class="line">        fragment.setArguments(args);</span><br><span class="line">        <span class="keyword">return</span> fragment;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Nullable</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> View <span class="title">onCreateView</span><span class="params">(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        View rootView =  inflater.inflate(R.layout.fragment_repo, container, <span class="keyword">false</span>);</span><br><span class="line">        repoTextView = (TextView) rootView.findViewById(R.id.repo);</span><br><span class="line">        <span class="keyword">return</span> rootView;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onActivityCreated</span><span class="params">(@Nullable Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onActivityCreated(savedInstanceState);</span><br><span class="line">        Bundle args = getArguments();</span><br><span class="line">        <span class="keyword">if</span> (args != <span class="keyword">null</span>) &#123;</span><br><span class="line">            String userId = args.getString(ARG_USER_ID);</span><br><span class="line">            viewModel = ViewModelProviders.of(<span class="keyword">this</span>).get(RepoViewModel.class);</span><br><span class="line">            viewModel.init(userId);</span><br><span class="line">            viewModel.getRepo().observe(<span class="keyword">this</span>, <span class="keyword">new</span> Observer&lt;List&lt;Repo&gt;&gt;() &#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onChanged</span><span class="params">(List&lt;Repo&gt; repos)</span> </span>&#123;</span><br><span class="line">                    StringBuilder builder = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">                    <span class="keyword">if</span> (repos != <span class="keyword">null</span>) &#123;</span><br><span class="line">                        <span class="keyword">for</span> (Repo repo : repos) &#123;</span><br><span class="line">                            builder.append(repo.getFull_name()).append(<span class="string">"\n"</span>);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                    repoTextView.setText(builder);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这是最简单直接的实现，但还是存下很多模板代码，还有很多地方可以优化</p>
+<ol>
+<li>既然 View 是和 ViewModel 绑定在一起的，那为什么每次都要先 <code>findViewById()</code> 再 <code>setText()</code> 呢？在声明或者创建 View 的时候就给它指定好对应的 ViewModel 不是更简单直接么</li>
+<li>网络请求的结果最好都缓存到内存和数据库中，既保证了单一数据源原则又能提升用户体验</li>
+</ol>
+<h3 id="Data-Binding"><a href="#Data-Binding" class="headerlink" title="Data Binding"></a>Data Binding</h3><p>对于第一个问题，Data Binding 组件是一个还算不错的实现，可以在布局文件中使用 <strong>表达式语言</strong> 直接给 View 绑定数据，绑定可以是单向的也可以是双向的。Data Binding 这样绑定可以避免内存泄漏，因为它会自动取消绑定。可以避免空指针，因为它会宽容评估表达式。可以避免同步问题，可以在后台线程更改非集合数据模型，因为它会在评估时本地化数据<br>为了使用 Data Binding，需要在 app module 的 <code>build.gradle</code> 文件中添加<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dataBinding &#123;</span><br><span class="line">    enabled = <span class="literal">true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>利用 <code>@{}</code> 语法可以给 View 的属性绑定数据变量，但是该表达式语法应该尽可能简单直接，复杂的逻辑应该借助于自定义 <code>BindingAdapter</code><br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">layout</span> <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">data</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">variable</span> <span class="attr">name</span>=<span class="string">"user"</span> <span class="attr">type</span>=<span class="string">"com.example.User"</span>/&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">data</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">LinearLayout</span></span></span><br><span class="line"><span class="tag">       <span class="attr">android:orientation</span>=<span class="string">"vertical"</span></span></span><br><span class="line"><span class="tag">       <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></span></span><br><span class="line"><span class="tag">       <span class="attr">android:layout_height</span>=<span class="string">"match_parent"</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">TextView</span> <span class="attr">android:layout_width</span>=<span class="string">"wrap_content"</span></span></span><br><span class="line"><span class="tag">           <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span></span></span><br><span class="line"><span class="tag">           <span class="attr">android:text</span>=<span class="string">"@&#123;user.firstName&#125;"</span>/&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">LinearLayout</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">layout</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>不需要重新编译代码，构建工具就会为每个这样的布局文件自动生成一个对应的绑定类，继承自 <code>ViewDataBinding</code>，路径为 <code>app/build/generated/data_binding_base_class_source_out/debug/dataBindingGenBaseClassesDebug/out/cn/frank/sample/databinding/FragmentRepoBinding.java</code>，默认的类名是布局文件名的大驼峰命名加上 Binding 后缀，如 <code>fragment_repo.xml</code> 对应 <code>FragmentRepoBinding</code>，可以通过 <code>&lt;data class=&quot;.ContactItem&quot;&gt;</code> 自定义类名和所在包名。可以通过 <code>DataBindingUtil</code> 的 <code>inflate()</code> 等静态方法或自动生成的绑定类的 <code>inflate()</code> 等静态方法获取绑定类的实例，然后就可以操作这个实例了  </p>
+<h4 id="操作符和关键字"><a href="#操作符和关键字" class="headerlink" title="操作符和关键字"></a>操作符和关键字</h4><p>这个表达式语言的 <strong>操作符和关键字</strong> 包括: 数学运算 <code>+ - / * %</code>，字符串拼接 <code>+</code>，逻辑 <code>&amp;&amp; ||</code>，二进制运算 <code>&amp; | ^</code>，一元操作符 <code>+ - ! ~</code>，移位 <code>&gt;&gt; &gt;&gt;&gt; &lt;&lt;</code>，比较 <code>== &gt; &lt; &gt;= &lt;=</code>，判断实例 <code>instanceof</code>，分组 <code>()</code>，字符/字符串/数字/<code>null</code> 的字面量，强制转化，方法调用，字段访问，数组访问 <code>[]</code>，三目运算符 <code>?:</code>，二目空缺省运算符 <code>??</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">android:text=&quot;@&#123;String.valueOf(index + 1)&#125;&quot;</span><br><span class="line">android:visibility=&quot;@&#123;age &gt; 13 ? View.GONE : View.VISIBLE&#125;&quot;</span><br><span class="line">android:transitionName=&apos;@&#123;&quot;image_&quot; + id&#125;&apos;</span><br><span class="line">android:text=&quot;@&#123;user.displayName ?? user.lastName&#125;&quot;</span><br><span class="line">android:text=&quot;@&#123;user.lastName&#125;&quot;</span><br><span class="line">android:padding=&quot;@&#123;large? @dimen/largePadding : @dimen/smallPadding&#125;&quot;</span><br><span class="line">android:text=&quot;@&#123;@string/nameFormat(firstName, lastName)&#125;&quot;</span><br><span class="line">android:text=&quot;@&#123;@plurals/banana(bananaCount)&#125;&quot;</span><br></pre></td></tr></table></figure></p>
+<p>小于比较符 <code>&lt;</code> 需要转义为 <code>&amp;lt;</code>，为了避免字符串转义单引号和双引号可以随便切换使用<br><code>&lt;import&gt;</code> 的类冲突时可以取别名加以区分<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">import</span> <span class="attr">type</span>=<span class="string">"android.view.View"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">import</span> <span class="attr">type</span>=<span class="string">"com.example.real.estate.View"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">alias</span>=<span class="string">"Vista"</span>/&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p><code>&lt;include&gt;</code> 布局中可以传递变量<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">layout</span> <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">xmlns:bind</span>=<span class="string">"http://schemas.android.com/apk/res-auto"</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">data</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">variable</span> <span class="attr">name</span>=<span class="string">"user"</span> <span class="attr">type</span>=<span class="string">"com.example.User"</span>/&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">data</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">LinearLayout</span></span></span><br><span class="line"><span class="tag">       <span class="attr">android:orientation</span>=<span class="string">"vertical"</span></span></span><br><span class="line"><span class="tag">       <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></span></span><br><span class="line"><span class="tag">       <span class="attr">android:layout_height</span>=<span class="string">"match_parent"</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">include</span> <span class="attr">layout</span>=<span class="string">"@layout/name"</span></span></span><br><span class="line"><span class="tag">           <span class="attr">bind:user</span>=<span class="string">"@&#123;user&#125;"</span>/&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">include</span> <span class="attr">layout</span>=<span class="string">"@layout/contact"</span></span></span><br><span class="line"><span class="tag">           <span class="attr">bind:user</span>=<span class="string">"@&#123;user&#125;"</span>/&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">LinearLayout</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">layout</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>不支持 <code>&lt;merge&gt;</code> 结合 <code>&lt;include&gt;</code> 的使用</p>
+<h4 id="事件处理"><a href="#事件处理" class="headerlink" title="事件处理"></a>事件处理</h4><p>View 事件的分发处理有两种机制，一种是 <strong>Method references</strong>，在表达式中直接通过监听器方法的签名来引用，Data Binding 会在编译时评估这个表达式，如果方法不存在或者签名错误那么编译就会报错，如果表达式评估的结果是 <code>null</code> 那么 Data Binding 就不会创建监听器而是直接设置 <code>null</code> 监听器，Data Binding 在 <strong>绑定数据的时候</strong> 就会创建监听器的实例: <code>android:onClick=&quot;@{handlers::onClickFriend}&quot;</code>。一种是 <strong>Listener bindings</strong>，Data Binding 在 <strong>事件发生的时候</strong> 才会创建监听器的实例并设置给 view然后评估 lambda 表达式，<code>android:onClick=&quot;@{(theView) -&gt; presenter.onSaveClick(theView, task)}&quot;</code>  </p>
+<h4 id="绑定-Observable-数据"><a href="#绑定-Observable-数据" class="headerlink" title="绑定 Observable 数据"></a>绑定 Observable 数据</h4><p>虽然 View 可以绑定任何 PO 对象，但是所绑定对象的更改并不能自动引起 View 的更新，所以 Data Binding 内置了 <code>Observable</code> 接口和它的 <code>BaseObservable</code>，<code>ObservableBoolean</code> 等子类可以方便地将对象、字段和集合变成 observable<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> ObservableField&lt;String&gt; firstName = <span class="keyword">new</span> ObservableField&lt;&gt;();</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> ObservableInt age = <span class="keyword">new</span> ObservableInt();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> <span class="keyword">extends</span> <span class="title">BaseObservable</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String firstName;</span><br><span class="line">    <span class="keyword">private</span> String lastName;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bindable</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getFirstName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.firstName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bindable</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getLastName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.lastName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setFirstName</span><span class="params">(String firstName)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.firstName = firstName;</span><br><span class="line">        notifyPropertyChanged(BR.firstName);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setLastName</span><span class="params">(String lastName)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.lastName = lastName;</span><br><span class="line">        notifyPropertyChanged(BR.lastName);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="执行绑定"><a href="#执行绑定" class="headerlink" title="执行绑定"></a>执行绑定</h4><p>有时候绑定需要立即执行，如在 <code>onBindViewHolder()</code> 方法中:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onBindViewHolder</span><span class="params">(BindingHolder holder, <span class="keyword">int</span> position)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> T item = mItems.get(position);</span><br><span class="line">    holder.getBinding().setVariable(BR.item, item);</span><br><span class="line">    holder.getBinding().executePendingBindings();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Data Binding 在为 View 设置表达式的值的时候会自动选择对应 View 属性的 setter 方法，如 <code>android:text=&quot;@{user.name}&quot;</code> 会选择 <code>setText()</code> 方法，但是像 <code>android:tint</code> 属性没有 setter 方法，可以使用 <code>BindingMethods</code> 注解自定义方法名<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@BindingMethods</span>(&#123;</span><br><span class="line">       <span class="meta">@BindingMethod</span>(type = <span class="string">"android.widget.ImageView"</span>,</span><br><span class="line">                      attribute = <span class="string">"android:tint"</span>,</span><br><span class="line">                      method = <span class="string">"setImageTintList"</span>),</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>如果要自定义 setter 方法的绑定逻辑，可以使用 <code>BindingAdapter</code> 注解<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@BindingAdapter</span>(<span class="string">"android:paddingLeft"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">setPaddingLeft</span><span class="params">(View view, <span class="keyword">int</span> padding)</span> </span>&#123;</span><br><span class="line">  view.setPadding(padding,</span><br><span class="line">                  view.getPaddingTop(),</span><br><span class="line">                  view.getPaddingRight(),</span><br><span class="line">                  view.getPaddingBottom());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">ImageView</span> <span class="attr">app:imageUrl</span>=<span class="string">"@&#123;venue.imageUrl&#125;"</span> <span class="attr">app:error</span>=<span class="string">"@&#123;@drawable/venueError&#125;"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@BindingAdapter</span>(&#123;<span class="string">"imageUrl"</span>, <span class="string">"error"</span>&#125;)</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">loadImage</span><span class="params">(ImageView view, String url, Drawable error)</span> </span>&#123;</span><br><span class="line">  Picasso.get().load(url).error(error).into(view);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果要自定义表达式值的自动类型转换，可以使用 <code>BindingConversion</code> 注解<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">View</span></span></span><br><span class="line"><span class="tag">   <span class="attr">android:background</span>=<span class="string">"@&#123;isError ? @color/red : @color/white&#125;"</span></span></span><br><span class="line"><span class="tag">   <span class="attr">android:layout_width</span>=<span class="string">"wrap_content"</span></span></span><br><span class="line"><span class="tag">   <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span>/&gt;</span></span><br></pre></td></tr></table></figure></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@BindingConversion</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ColorDrawable <span class="title">convertColorToDrawable</span><span class="params">(<span class="keyword">int</span> color)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ColorDrawable(color);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>ViewModel</code> 可以实现 <code>Observable</code> 接口并结合 <code>PropertyChangeRegistry</code> 可以更方便地控制数据更改后的行为</p>
+<h4 id="双向绑定"><a href="#双向绑定" class="headerlink" title="双向绑定"></a>双向绑定</h4><p>使用 <code>@={}</code> 符号可以实现 View 和数据的双向绑定<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">CheckBox</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:id</span>=<span class="string">"@+id/rememberMeCheckBox"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_width</span>=<span class="string">"wrap_content"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:checked</span>=<span class="string">"@=&#123;viewmodel.rememberMe&#125;"</span> /&gt;</span></span><br></pre></td></tr></table></figure></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LoginViewModel</span> <span class="keyword">extends</span> <span class="title">BaseObservable</span> </span>&#123;</span><br><span class="line">    <span class="comment">// private Model data = ...</span></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bindable</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Boolean <span class="title">getRememberMe</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> data.rememberMe;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setRememberMe</span><span class="params">(Boolean value)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 为了防止无限循环，必须要先检查再更新</span></span><br><span class="line">        <span class="keyword">if</span> (data.rememberMe != value) &#123;</span><br><span class="line">            data.rememberMe = value;</span><br><span class="line">            saveData();</span><br><span class="line">            notifyPropertyChanged(BR.remember_me);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>自定义属性的双向绑定还需要借助 <code>@InverseBindingAdapter</code> 和 <code>@InverseBindingMethod</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@BindingAdapter</span>(<span class="string">"time"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">setTime</span><span class="params">(MyView view, Time newValue)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// Important to break potential infinite loops.</span></span><br><span class="line">    <span class="keyword">if</span> (view.time != newValue) &#123;</span><br><span class="line">        view.time = newValue;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@InverseBindingAdapter</span>(<span class="string">"time"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Time <span class="title">getTime</span><span class="params">(MyView view)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> view.getTime();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>监听属性的更改，事件属性以 <code>AttrChanged</code> 作为后缀<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@BindingAdapter</span>(<span class="string">"app:timeAttrChanged"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">setListeners</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">        MyView view, <span class="keyword">final</span> InverseBindingListener attrChange)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// Set a listener for click, focus, touch, etc.</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以借助转换器类定制 View 的显示规则<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">EditText</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:id</span>=<span class="string">"@+id/birth_date"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:text</span>=<span class="string">"@=&#123;Converter.dateToString(viewmodel.birthDate)&#125;"</span> /&gt;</span></span><br></pre></td></tr></table></figure></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Converter</span> </span>&#123;</span><br><span class="line">    <span class="meta">@InverseMethod</span>(<span class="string">"stringToDate"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">dateToString</span><span class="params">(EditText view, <span class="keyword">long</span> oldValue,</span></span></span><br><span class="line"><span class="function"><span class="params">            <span class="keyword">long</span> value)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// Converts long to String.</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">long</span> <span class="title">stringToDate</span><span class="params">(EditText view, String oldValue,</span></span></span><br><span class="line"><span class="function"><span class="params">            String value)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// Converts String to long.</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Data Binding 内置了 <code>android:text</code>，<code>android:checked</code> 等的双向绑定</p>
+<h3 id="生命周期敏感组件"><a href="#生命周期敏感组件" class="headerlink" title="生命周期敏感组件"></a>生命周期敏感组件</h3><p>在 Activity 或 Fragment 的生命周期方法中进行其它组件的配置并不总是合理的，如在 <code>onStart()</code> 方法中注册广播接收器 A、开启定位服务 A、启用组件 A 的监听、启用组件 B 的监听等等，在 <code>onStop()</code> 方法中注销广播接收器 A、关闭定位服务 A、停用组件 A 的监听、停用组件 B 的监听等等，随着业务逻辑的增加这些生命周期方法变得越来越臃肿、越来越乱、越来越难以维护，如果这些组件在多个 Activity 或 Fragment 上使用那么还得重复相同的逻辑，就更难以维护了。 而且如果涉及到异步甚至 <strong>没办法保证</strong> <code>onStart()</code> 方法中的代码 <strong>一定</strong> 在 <code>onStop()</code> 方法执行前执行<br><strong>关注点分离</strong>，这些组件的行为受生命周期的影响，所以它们自己应该意识到自己是生命周期敏感的组件，当生命周期变化时它们应该 <strong>自己决定</strong> 自己的行为，而不是交给生命周期的拥有者去处理<br>生命周期有两个要素: 事件和状态，生命周期事件的发生一般会导致生命周期状态的改变<br>生命周期敏感组件应该实现 <code>LifecycleObserver</code> 以观察 <code>LifecycleOwner</code> 的生命周期，支持库中的 Activity 和 Fragment 都实现了 <code>LifecycleOwner</code>，可以直接通过它的 <code>getLifecycle()</code> 方法获取 <code>Lifecycle</code> 实例<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MainActivity.<span class="keyword">this</span>.getLifecycle().addObserver(<span class="keyword">new</span> MyLocationListener());</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyLocationListener</span> <span class="keyword">implements</span> <span class="title">LifecycleObserver</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span> enabled = <span class="keyword">false</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@OnLifecycleEvent</span>(Lifecycle.Event.ON_START)</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">start</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (enabled) &#123;</span><br><span class="line">           <span class="comment">// connect</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">enable</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        enabled = <span class="keyword">true</span>;</span><br><span class="line">        <span class="keyword">if</span> (lifecycle.getCurrentState().isAtLeast(STARTED)) &#123;</span><br><span class="line">            <span class="comment">// connect if not connected</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@OnLifecycleEvent</span>(Lifecycle.Event.ON_STOP)</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// disconnect if connected</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>GenericLifecycleObserver</code> 接口继承了 <code>LifecycleObserver</code>，有一个接口方法 <code>onStateChanged(LifecycleOwner, Lifecycle.Event)</code> 表明它可以接收所有的生命周期过渡事件</p>
+<h3 id="LiveData"><a href="#LiveData" class="headerlink" title="LiveData"></a>LiveData</h3><p>它的 <code>observe()</code> 方法源码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@MainThread</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">observe</span><span class="params">(@NonNull LifecycleOwner owner, @NonNull Observer&lt;? <span class="keyword">super</span> T&gt; observer)</span> </span>&#123;</span><br><span class="line">    assertMainThread(<span class="string">"observe"</span>);</span><br><span class="line">    <span class="keyword">if</span> (owner.getLifecycle().getCurrentState() == DESTROYED) &#123;</span><br><span class="line">        <span class="comment">// ignore</span></span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    LifecycleBoundObserver wrapper = <span class="keyword">new</span> LifecycleBoundObserver(owner, observer);</span><br><span class="line">    ObserverWrapper existing = mObservers.putIfAbsent(observer, wrapper);</span><br><span class="line">    <span class="keyword">if</span> (existing != <span class="keyword">null</span> &amp;&amp; !existing.isAttachedTo(owner)) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Cannot add the same observer"</span></span><br><span class="line">                + <span class="string">" with different lifecycles"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (existing != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    owner.getLifecycle().addObserver(wrapper);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>说明 <code>LiveData</code> 只能在主线程中订阅，订阅的观察者被包装成生命周期组件的观察者 <code>LifecycleBoundObserver</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LifecycleBoundObserver</span> <span class="keyword">extends</span> <span class="title">ObserverWrapper</span> <span class="keyword">implements</span> <span class="title">GenericLifecycleObserve</span></span></span><br><span class="line"><span class="class">    @<span class="title">NonNull</span></span></span><br><span class="line"><span class="class">    <span class="title">final</span> <span class="title">LifecycleOwner</span> <span class="title">mOwner</span></span>;</span><br><span class="line">    LifecycleBoundObserver(<span class="meta">@NonNull</span> LifecycleOwner owner, Observer&lt;? <span class="keyword">super</span> T&gt; observer)</span><br><span class="line">        <span class="keyword">super</span>(observer);</span><br><span class="line">        mOwner = owner;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">shouldBeActive</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> mOwner.getLifecycle().getCurrentState().isAtLeast(STARTED);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onStateChanged</span><span class="params">(LifecycleOwner source, Lifecycle.Event event)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (mOwner.getLifecycle().getCurrentState() == DESTROYED) &#123;</span><br><span class="line">            removeObserver(mObserver);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        activeStateChanged(shouldBeActive());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">isAttachedTo</span><span class="params">(LifecycleOwner owner)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> mOwner == owner;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">detachObserver</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        mOwner.getLifecycle().removeObserver(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>当观察到生命周期状态变化时会调用 <code>onStateChanged()</code> 方法，所以当状态为 <code>DESTROYED</code> 的时候会移除数据观察者和生命周期观察者，<code>shouldBeActive()</code> 方法的返回值表明只有生命周期状态是 <code>STARTED</code> 和 <code>RESUMED</code> 的 <code>LifecycleOwner</code> 对应的数据观察者才是 active 的，只有 active 的数据观察者才会被通知到，当数据观察者 <strong>第一次</strong> 从 inactive 变成 active 时，<strong>也会</strong> 收到通知<br><code>observeForever()</code> 方法也可以订阅，但是 <code>LiveData</code> 不会自动移除数据观察者，需要主动调用 <code>removeObserver()</code> 方法移除<br><code>LiveData</code> 的 <code>MutableLiveData</code> 子类提供了 <code>setValue()</code> 方法可以在主线程中更改所持有的数据，还提供了 <code>postValue()</code> 方法可以在后台线程中更改所持有的数据<br>可以继承 <code>LiveData</code> 实现自己的 observable 数据，<code>onActive()</code> 方法表明有 active 的观察者了，可以进行数据更新通知了，<code>onInactive()</code> 方法表明没有任何 active 的观察者了，可以清理资源了<br>单例的 <code>LiveData</code> 可以实现多个 Activity 或 Fragment 的数据共享<br>可以对 <code>LiveData</code> 持有的数据进行变换，需要借助 <code>Transformations</code> 工具类<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> PostalCodeRepository repository;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> MutableLiveData&lt;String&gt; addressInput = <span class="keyword">new</span> MutableLiveData();</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> LiveData&lt;String&gt; postalCode =</span><br><span class="line">    Transformations.switchMap(addressInput, (address) -&gt; &#123;</span><br><span class="line">        <span class="keyword">return</span> repository.getPostCode(address);</span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> LiveData&lt;User&gt; <span class="title">getUser</span><span class="params">(String id)</span> </span>&#123;</span><br><span class="line">  ...;</span><br><span class="line">&#125;</span><br><span class="line">LiveData&lt;String&gt; userId = ...;</span><br><span class="line">LiveData&lt;User&gt; user = Transformations.switchMap(userId, id -&gt; getUser(id) );</span><br></pre></td></tr></table></figure>
+<p><code>LiveData</code> 的 <code>MediatorLiveData</code> 子类可以 merge 多个 LiveData 源，可以像 ReactiveX 的操作符一样进行各种变换  </p>
+<h2 id="Sample"><a href="#Sample" class="headerlink" title="Sample"></a>Sample</h2><ul>
+<li><a href="https://github.com/googlesamples/android-architecture-components" target="_blank" rel="noopener">googlesamples/android-architecture-components</a>  </li>
+<li><a href="https://github.com/shangmingchao/Sample" target="_blank" rel="noopener">shangmingchao/Sample</a></li>
+</ul>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                    
+                        <li class="next">
+                            <a href="/2019/01/23/android-notes-core/" data-toggle="tooltip" data-placement="top" title="Android 学习笔记核心篇">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#Android" title="Android">Android</a>
+                        
+                          <a class="tag" href="/tags/#笔记" title="笔记">笔记</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="https://juejin.im/user/5a96922b5188257a865da3f2/posts" target="_blank">我的掘金</a></li>
+                    
+                        <li><a href="https://www.jianshu.com/u/64ac160aaac8" target="_blank">我的简书</a></li>
+                    
+                        <li><a href="https://blog.csdn.net/shangmingchao" target="_blank">我的 CSDN</a></li>
+                    
+                        <li><a href="https://joyrun.github.io/" target="_blank">悦跑圈技术团队</a></li>
+                    
+                        <li><a href="http://tech.meituan.com/" target="_blank">美团点评技术团队</a></li>
+                    
+                </ul>
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/FrankShang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/frankshang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/frankshang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/frankshangx">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/shangmingchao">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://www.linkedin.com/in/FrankShang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Frank&#39;s Blog 2019 
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a href="http://blog.kaijun.rocks">Kaijun</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://franksblog.top/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="https://franksblog.top/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
