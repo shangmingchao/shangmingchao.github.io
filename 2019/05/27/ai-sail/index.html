@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="null">
+    <meta name="keyword"  content="undefined">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          AI 之旅：启程 - 商明超的博客  | Frank&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="https://franksblog.top/2019/05/27/ai-sail/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Frank&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archives/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="https://franksblog.top/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#人工智能" title="人工智能">人工智能</a>
+                        
+                    </div>
+                    <h1>AI 之旅：启程</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by Frank on
+                        2019-05-27
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <blockquote>
+<p>“All models are wrong, but some are useful.”  </p>
+<p align="right">— George Box</p>
+</blockquote>
+<p>机器学习（Machine Learning）最大的魅力在于改变了开发者的思考方式，开发者不需要再费力地给程序编写固定的逻辑指令，而是让程序对大量的未知数据进行分析思考，然后学会如何去处理未知的输入，如何对结果进行预测，如何采取动作</p>
+<h2 id="基本术语"><a href="#基本术语" class="headerlink" title="基本术语"></a>基本术语</h2><ul>
+<li>监督式机器学习（Supervised machine learning）: 机器学习系统学习如何组合输入以对 <strong>前所未见的数据</strong> 产生 <strong>有用的预测</strong>  </li>
+<li>标签（Label）: 指我们正在预测的东西或者说试图预测的目标，如小麦将来的价格、照片中的动物种类、邮件是不是垃圾邮件等，是简单线性回归的 <code>y</code> 值</li>
+<li>特征（Feature）: 指从输入数据中提取的供机器学习系统使用的信息，是我们表示数据的方式，如邮件的发件人地址、邮件内容，是线性回归的 <code>x</code> 值，一个复杂的机器学习系统可能需要成千上万个特征</li>
+<li>样本（Example）: 指一份数据，样本分为有标签样本和无标签样本。有标签样本包含特征和标签 <code>labeled examples: {features, label}: (x, y)</code>，如这封被用户主动标记为垃圾邮件的邮件。无标签样本只有特征没有标签 <code>unlabeled examples: {features, ?}: (x, ?)</code>。我们的目的就是通过大量的有标签样本去训练模型，让它能够对任何无标签的样本进行标签的预测  </li>
+<li>模型（Model）: 是执行预测的工具，定义了特征和标签之间的关系，如垃圾邮件监测模型会将某些特征和垃圾邮件标签紧密联系起来，模型有两个阶段: 训练和推理</li>
+<li>训练（Training）: 创建模型或者让模型学习，也就是说向模型提供有标签样本，从而让模型逐渐学习到特征和标签之间的关系</li>
+<li>推理（Inference）: 将训练后的模型应用于无标签样本，也就是说用这个训练后的模型去做有用的预测的过程</li>
+<li>回归模型（Regression model）: 预测的是连续的值，如用户点击这条广告的概率、小麦的价格</li>
+<li>分类模型（Classification mode）: 预测的是离散的值，如这封邮件是不是垃圾邮件、这张图片中的动物是什么动物<h2 id="线性回归"><a href="#线性回归" class="headerlink" title="线性回归"></a>线性回归</h2>在统计学中，线性回归（Linear Regression）是对 标量响应（因变量） 和 一到多个解释变量（自变量） 之间的关系进行建模的一种线性方法，只有一个解释变量时被称为简单线性回归，有多个解释变量时被称为 multiple 线性回归，预测多个相关因变量时被称为 multivariate 线性回归<br><img src="https://user-gold-cdn.xitu.io/2019/5/8/16a95178a118acbc?w=1434&amp;h=580&amp;f=png&amp;s=219584" alt="linear regression"><br>可以看出每分钟蟋蟀的叫声和温度的关系是线性的关系，我们就可以随便画一条直线去拟合:<br>$$y = mx + b$$  </li>
+<li>$y$ 指温度（试图预测的值）</li>
+<li>$m$ 指直线的斜率</li>
+<li>$x$ 指每分钟虫鸣数（输入的特征值）</li>
+<li>$b$ 指 y 轴截距  </li>
+</ul>
+<p>在统计学中，确定函数中的参数时通常采用 “最小二乘法”，这是最常见最简单的尽可能减小误差的拟合方法。在机器学习中，这个关系模型的表示也差不多:<br>$$y’ = b + w_1x_1$$  </p>
+<ul>
+<li>$y’$ 指预测的标签（理想输出）</li>
+<li>$b$ 指偏差（y 轴截距），有时被称为 $w_0$</li>
+<li>$w_1$ 指特征 1 的权重，和传统直线方程中的斜率 $m$ 是一个概念</li>
+<li>$x_1$ 指特征（一个已知输入）</li>
+</ul>
+<p>要想推理（预测）一个新的每分钟虫鸣数 $x_1$ 对应的温度 $y’$，只需要把 $x_1$ 带入这个模型即可<br>这个预测模型只有每分钟虫鸣数一个特征，而一个复杂的模型往往有多个特征和对应的权重，如:  $y’ = b + w_1x_1 + w_2x_2 + w_3x_3$<br>创建或训练模型的过程就是寻找最好的权重和偏差值的过程（确定最好的 $b$ 和 $w_1$ 的过程），而在监督式学习中，机器学习算法通过“考察大量样本以便尝试寻找一个最小化损失的模型”来构建模型，这个过程也被称为经验式风险最小化（empirical risk minimization）<br>损失就是指对糟糕预测的惩罚，是表示模型在一个样本上预测的糟糕程度，是个数值，如果模型的预测是完美的，那么损失就是零，否则损失就很大，我们可以创建一个数学函数（损失函数）去有意义地汇总各个损失<br><img src="https://user-gold-cdn.xitu.io/2019/5/9/16a9ab47d8ff2627?w=688&amp;h=276&amp;f=png&amp;s=59994" alt="loss"><br>蓝色线表示预测，红色箭头表示各个损失，很显然右侧的要比左侧的平均损失更小。一个最常见的损失函数是平方损失函数（squared loss / $L_2$ loss），一个样本的平方损失就是标签和预测值差的平方，即 $(y - y’)^2$。整个数据集每个样本的平均平方损失被称为 <strong>均方误差 MSE</strong>（mean squared error），就是把每个样本的平方损失加起来除以样本数:<br>$$MSE = \frac{1}{N} \sum_{(x,y)\in D} (y - prediction(x))^2<br>$$</p>
+<h2 id="降低损失"><a href="#降低损失" class="headerlink" title="降低损失"></a>降低损失</h2><p>如何快速高效地确定最好（如使 MSE 最小）的 $b$ 和 $w_1$ 的值呢？最简单的办法就是先胡乱猜一个 $b$ 和 $w_1$ 的值，计算一下损失，然后调整一下 $b$ 和 $w_1$ 的值，计算损失，比较一下这两次损失再决定如何调整 $b$ 和 $w_1$ 的值（如果损失变小了说明调整的方向对了，继续按照当前方向调整就行了，如果损失变大了就要考虑改变调整的方向了），理论上不断地迭代试错下去就能找到最好的 $b$ 和 $w_1$ 的值<br><img src="https://user-gold-cdn.xitu.io/2019/5/10/16a9f4c91854c2e8?w=960&amp;h=448&amp;f=png&amp;s=89508" alt="iterative approach"><br>使用迭代法（iterative approach）不单是因为它简单直接，更是因为它在面对大型数据集时仍然表现良好<br>对于线性回归来说，选择哪个点作为起始点并不是很重要，比如我们完全可以选择 $b = 0, w_1 = 0$ 作为迭代的起始点。图中绿色的框是最关键的部分，正是它决定了迭代的方向，即新的 $b$ 和 $w_1$ 的值，迭代到总体损失不再变化或者变化极其缓慢为止，这时表示模型已收敛（converged）<br>假设我们有充足的时间和计算资源去计算所有 $w_1$ 的可能值和对应的损失，对于我们一直研究的回归问题，损失 和 $w_1$ 的关系图形始终是凸形（convex）的，或者说关系图形是个碗形:<br><img src="https://user-gold-cdn.xitu.io/2019/5/10/16aa0022fbcca4d6?w=918&amp;h=646&amp;f=png&amp;s=82008" alt="convex"><br>我们的目标就是不断改变 $w_1$ 的值直到找到唯一的损失最小的那个最低点（斜率为 0），即损失函数收敛的位置，迭代的策略有很多种，最常见的就是梯度下降法（gradient descent）<br><img src="https://user-gold-cdn.xitu.io/2019/5/10/16aa0814791961c3?w=936&amp;h=620&amp;f=png&amp;s=141194" alt="gradient descent"><br>先随便选一个点作为起始点，如图中的一个比 0 大一点的点，然后梯度下降算法会计算起始点处损失曲线的梯度，而损失的梯度在这里等于曲线在该点的导数（斜率）。如果有多个权重，那么梯度就是对应权重的偏导数，更准确点说梯度是所有自变量对应偏导数的矢量，梯度下降算法会沿着负梯度的方向一直走以便尽快降低损失，下一步的步长不能太小不然计算量会很大很慢，不能太大不然可能会导致模型偏离，所以这就涉及到学习速率（Learning Rate）的问题了<br>阶梯下降算法把梯度乘以学习速率作为下一步的变化量，而如何确定学习速率往往依赖于经验技巧，所以说学习速率是一个超参数（Hyperparameters）: 在机器学习算法中程序员要扭动的旋钮。每个回归问题都存在一个 Goldilocks 学习速率，一维空间的理想学习速率是 $\frac{ 1 }{ f(x)’’ }$（f(x) 对 x 的二阶导数的倒数），二位或多维空间的理想学习速率是海森矩阵的倒数<br>除了学习速率还有一个问题需要考虑，那就是样本的个数，如果样本个数特别大，大到几十亿甚至几千亿的数量级，那么每次迭代计算梯度时都需要输入全部的样本吗（需要的样本数量称为 batch）？所以为了减少计算量可以从数据集中随机的选择一些样本，这样经过很少的计算就可以很快地收敛。而随机梯度下降 SGD（Stochastic gradient descent）更是极端地每次迭代只使用一个样本，经过足够的迭代 SGD 可以发挥作用但是噪音更多。Mini-batch SGD 是介于 full-batch 迭代和 SGD 迭代之间的折衷方案，Mini-batch SGD 通常会随机选 10 到 1000 个样本，它比 SGD 噪音更少，比 full-batch 更有效率<br>已经大概知道了如何有效地降低损失，那损失能降低到 0 么？能根据已知的样本训练一个完美的模型么？事实上并不能，也没有必要，就算费尽心机地把模型训练地对已知样本的预测准确率是完美的 100%，但是面对新的样本时还是无法达到 100%，因为“凡事皆有例外”，而且这样看似完美的模型在面对新的样本时预测的准确率甚至还不如其他简单的模型：<br><img src="https://user-gold-cdn.xitu.io/2019/5/13/16aaf0900d5e74f8?w=874&amp;h=438&amp;f=png&amp;s=457199" alt="generalization"><br>可以看到，蓝色点代表生病的树，黄色点代表健康的树，背景色代表模型的预测，左边的图代表训练好的特别复杂但是损失很低的模型，但是在新的样本上测试时（右图）可以发现模型表现特别糟糕，对大部分新数据的分类都不准确，这就涉及到泛化的问题了</p>
+<h2 id="泛化"><a href="#泛化" class="headerlink" title="泛化"></a>泛化</h2><p>泛化（Generalization）指对新的前所未见的数据进行正确预测的能力。上面的模型过拟合（overfit）了训练数据的特性，一个过拟合的模型虽然在训练过程中损失很低但是在预测新数据时却表现糟糕，那怎么判断一个模型对新的数据能不能做出很好地预测呢？这就涉及到正则化的问题了。过拟合之所以会出现问题是因为它为了追求训练时的完美让模型变得异常复杂，而机器学习应该在拟合数据的同时尽可能地保证简单，应该符合奥卡姆剃刀定律，为了方便验证模型的泛化能力，可以将数据集分成专门用来训练的训练集和专门用来测试的测试集，在测试集上表现良好往往能表明在新的数据集也能表现良好，前提是测试集足够大且不会反复用相同测试集作假<br>泛化过程一般需要满足三项基本假设:  </p>
+<ul>
+<li>我们从分布中随机抽取独立同分布（i.i.d）的样本，样本之前不会互相影响</li>
+<li>分布是固定的（stationary），分布在数据集内不会变化</li>
+<li>我们从同一分布（same distribution）的数据划分中抽取样本</li>
+</ul>
+<p>实际上，有些情况下可能会违反其中一些假设，如广告推荐模型可能依赖于用户之前看过的广告，这违反了第一条假设，而一旦违反任意一项假设，就表示我们已经失去了重要的理论支持，就必须得时刻注意各项指标了<br>既然测试集应该足够大，那多大好呢？怎么合理地把数据集分成训练集和测试集呢？训练集和测试集应该相互独立，但 <strong>训练集的规模越大模型的学习效果就越好，测试集规模越大我们我们对评估指标的信心就越足</strong>，如果数据集的规模本身就很大就简单多了，但如果数据集规模非常小，就要先进行像交叉验证（cross-validation）之类的复杂操作了<br>测试集应该满足两个条件:  </p>
+<ul>
+<li>规模足够大以产生具有统计意义的结果</li>
+<li>能够代表整个数据集，不要选择与训练集不同特征的测试集</li>
+</ul>
+<p><strong>永远不要对测试集进行训练</strong>，如果你发现模型在测试集上预测的准确度特别高，甚至比在训练集上的还高，先不要兴奋，你很可能把一些测试数据用于训练了，得重新检查一下训练集是不是包含了一些训练集的数据<br>在训练集上训练模型，在测试集上评估模型，再根据评估的结果调整模型，如此循环下去直到能选择一个在测试集上表现最好的模型。这样的流程有点问题，我们可能无形中对测试数据的特性进行了过拟合，所以为了避免出现这种情况，我们从数据集中再单独划分出一些数据作为验证集，这样迭代评估的时候只在验证集上评估即可，测试集只用来确认结果，要确保在测试集上得出的结果基本符合在验证集上得出的结果，如果不符合就说明对验证集进行了过拟合<br><img src="https://user-gold-cdn.xitu.io/2019/5/16/16ac023292f19b9a?w=956&amp;h=146&amp;f=png&amp;s=19111" alt="validation set"></p>
+<h2 id="特征工程"><a href="#特征工程" class="headerlink" title="特征工程"></a>特征工程</h2><p>我们似乎忘了一个最基本的问题，那就是如何从原始数据中抽象出供模型使用的特征值，而从各种各样的数据源中提取数据，然后再根据这些数据创建特征向量的过程被称为特征工程（feature engineering）。像房屋的卧室数量这样的简单数值信息直接复制到特征向量就可以了，但是像房屋的所属街道这样的字符串信息怎么映射到特征向量呢？最简单的方式就是采用 one-hot 独热编码，如一共有 N 个街道，那就创建一个 N 位的编码，然后按照字典的方式将所有街道映射到这个这个编码上（第 i 个街道那一位置 1，其它位置 0），如果 N 特别大，可以采用稀疏表示法（sparse representation）压缩。那究竟什么样的特征才算好的特征呢？首先，它应该具有非零值且至少出现很多次，如果一个特征出现次数极少或只出现一次，就可以考虑在预处理时就把它过滤掉了。其次，它应该具有清晰明确的意义，以便我们在检查和调试时特征被正确的处理。第三，特征值不应随时间而发生变化。最后，特征值不应采用不理性的离群值。要做这么多工作的原因是为了把噪音降到最低，机器学习就像一个黑盒子，把数据都丢进去，却不检查数据，就盼着能获得好的结果，这从目前来看很不合适也不现实，所以在把数据交给机器学习模型之前，我们只能凭借自己的经验对特征进行抽象和过滤等处理，甚至还要监控特征随着时间变化的情况。<br>很多时候浮点特征值的范围会很大（如 100 到 900），为了让梯度下降法更快地收敛，同时为了避免数据溢出导致的 NaN 问题，可以把它缩放到标准范围（如 0 到 1 或 -1 到 +1），最简单的缩放策略就是线性的缩放，不过还有一种缩放策略是先计算每个值的 Z score，缩放后的值为 <code>(原始值 - 平均值) / 标准差</code>，这样的话大多数缩放后的值都会介于 -3 和 +3 之间了。<br>有时我们需要处理一下极端离群值（extreme outlier）:<br><img src="https://user-gold-cdn.xitu.io/2019/5/23/16ae2800f4c60794?w=1480&amp;h=344&amp;f=png&amp;s=211038" alt="extreme outliers"><br>有时我们需要对浮点数进行分箱（Binning）:<br><img src="https://user-gold-cdn.xitu.io/2019/5/23/16ae28583f641660?w=908&amp;h=378&amp;f=png&amp;s=173701" alt="bin"><br>纬度本来是连续的浮点类型的，但是小纬度内房价的差别并不是连续的，差别一般也不大，所以可以把纬度分箱，纬度 37.4 可以表示为 [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0]<br>到现在为止，我们可以假设用于训练和测试的数据是可靠的了，我们像挑出坏苹果一样把不好的样本挑出去了:  </p>
+<ul>
+<li>遗漏值，如某个房屋的年龄忘写了</li>
+<li>重复样本，如服务器错误地把相同的日志上传了两次</li>
+<li>不良标签，如一个人错误地把一个橡树图片标记为枫树</li>
+<li>不良特征值，如一个人把编号多输了几位</li>
+</ul>
+<p>良好的机器学习依赖于良好的数据</p>
+<h2 id="特征组合"><a href="#特征组合" class="headerlink" title="特征组合"></a>特征组合</h2><p>到目前为止，我们研究的都是线性问题，线性学习器不但简单而且可以很容易扩展到大型数据集，但是如果要建模的问题很复杂怎么办？<br><img src="https://user-gold-cdn.xitu.io/2019/5/24/16ae7a65f1245635?w=292&amp;h=290&amp;f=png&amp;s=142293" alt="linear problem"><br>这时候就不能用 $y = SIGN(b + w_1x_1 + w_2x_2)$ 去线性拟合了，可能你已经想到了，一种机智的做法是额外定义一种特征 $x_3 = x_1x_2$，这样我们就可以在线性模型中使用它了 $y = SIGN(b + w_1x_1 + w_2x_2 + w_3x_3)$，如果 $x_1$ 和 $x_2$ 的乘积为正，那么就是一三象限的蓝色点，否则就是二四象限的橙色点，这样我们就可以在线性模型中学习非线性的规律了，而像 $x_3$ 这种把几个特征乘起来的合成特征（synthetic feature）被称为特征交叉（feature cross），一些有趣的研究表明将特征交叉乘积获得的线性学习效果和深度网络结合起来可以实现极其强大的建模能力<br>特征交叉也会带来一些问题，比如几个特别大特别稀疏的特征交叉后将是一个更大的特征表示，这会导致模型大小膨胀，占据大量 RAM 内存，减缓运行时间，得到的噪声系数可能会导致过拟合，这就需要更复杂的如 $L_0$ 或 $L_1$ 正则化去解决这个问题了</p>
+<h2 id="正则化"><a href="#正则化" class="headerlink" title="正则化"></a>正则化</h2><p>在研究泛化问题时我们重点关注了过拟合的问题，如果我们过于追求在训练集上的损失极低，就可能会出现过拟合训练集而带来的问题:<br><img src="https://user-gold-cdn.xitu.io/2019/5/24/16ae7f9f030841f9?w=670&amp;h=308&amp;f=png&amp;s=67818" alt="regularization"><br>可以发现，在训练损失越来越低时，验证损失可能会越来越高，就像我们只跟一个人练习外语交流一样，刚开始进步非常快，但是随着时间的发展你会慢慢习惯他的表达方式和发音习惯（就像过拟合了训练数据一样），导致再跟其他人交流外语时变得很困难。那怎样处理过拟合呢？最简单的就是正则化（Regularization），正则化有很多策略，最简单的就是尽早停止（Early stopping 早停法），也就是在收敛前（红线上升之前）停止训练，但是实际上很难实现，还有一种策略就是通过惩罚模型复杂度来尽可能地降低模型的复杂度，有时也称为结构式风险最小化（structural risk minimization）<br>$$\text{minimize: } Loss(Data\;|\;Model) + complexity(Model)<br>$$<br>我们要平衡这两个因素，让损失和复杂度都尽可能地低，也就是说，要确保正确的训练数据，又不过度信赖训练数据。那如何定义模型复杂度呢？最简单的就是选择较小的权重，也就是说即使参数小到可以忽略我们依然可以获取正确的训练样本，从数学上来说一般使用 $L_2$ 正则化，也称为岭正则化，在这种正则化策略中，我们对权重的平方和进行惩罚，如果熟悉贝叶斯先验概率就知道这是一种先验概率，在我们知道训练样本之前就猜到权重应该是以 0 为中心呈正态分布的，而且数值不会太大。以数学的方式表示上面的公式为<br>$$Loss(Data|Model) + \lambda \left(w_1^2 + \ldots + w_n^2 \right)$$<br>可以看到第一项降低损失的过程取决于训练数据，而第二项简化模型则与数据无关，这两项通过 $\lambda$ 实现了平衡，$\lambda$ 的选取取决于你和实际情况，如果有大量训练数据且训练数据与测试数据看起来一致，满足独立同分布，你可能不需要多少正则化，否则可能需要大量正则化和交叉验证，$\lambda$（lambda）也被称为正则化率（regularization rate），如果 lambda 值过高，模型会非常简单，但会面临数据欠拟合的风险，模型将无法充分了解训练数据以进行有用的预测，如果 lambda 值过低，模型会比较复杂，会面临数据过拟合的风险，模型会过多解读训练数据的特殊性从而很难泛化到新的数据。将 lambda 值设为 0 可彻底取消正则化，此时训练的唯一目的就是最小化损失，但是会使过拟合的风险达到最高。<br>$L_2$ 正则化鼓励 non-informative 特征的权重趋向于 0，但是当这类特征恰好与标签相关时，会导致模型学到一个中等的权重，此时，模型错误地给了 non-informative 特征一些本应该给 informative 特征的信任。$L_2$ 正则化对大权重的惩罚比小权重更严厉，因此，即使一个权重下降得比另一个快，$L_2$ 正则化也会强制使较大权重的那个下降得比较小的更快。$L_2$ 正则化与学习速率息息相关，很容易让人困惑<br>$L_2$ 正则化虽然可以使权重变小，但不能使他们正好为 0，$L_0$ 正则化虽然可以使权重为 0，这样可以直接忽略某些特征进而减少内存消耗，但是它会将我们的凸优化问题变成非非凸优化问题（NP 困难），所以 $L_0$ 正则化并不实用。而 $L_1$ 正则化具有凸优化的优势，可以进行有效计算。$L_2$ 会降低权重的平方，$L_1$ 会降低权重的绝对值，$L_2$ 的导数是 2 乘以权重，$L_1$ 的导数是与权重无关的常量 k，也就是说 $L_2$ 每次移除权重的 x%，通常不会减到 0，$L_1$ 每次从权重中减去固定的常数，如果减法使权重从 +0.1 变成 -0.2，由于惩罚的是绝对值，所以权重会变成 0</p>
+<h2 id="逻辑回归"><a href="#逻辑回归" class="headerlink" title="逻辑回归"></a>逻辑回归</h2><p>很多问题都需要把 概率估计 作为输出，比如图片中的动物是猫的概率是多少、狗晚上吵醒人的概率是多少，既然是概率，那么概率值肯定是 0 到 1 之间，那我们之前学到的线性模型的输出能强制限制到 0 到 1 之间么？很显然不太现实，那我们就要想出一种不同的损失函数和预测方法使概率值很自然的处于 0 到 1 之间，我们将这种想法称为逻辑回归（Logistic Regression）。逻辑回归的概率就非常有用了，甚至可以被看做实际概率去做有用的预测，用这个概率乘以想要预测的项就可以得到预期值。它在二元分类（binary classification）中也非常有用，如一封邮件是垃圾邮件的概率是多少，一枚硬币朝上的概率是多少。那逻辑回归模型是怎样保证输出总是介于 0 到 1 之间呢？我们来看一下 S 型函数（sigmoid function）:<br>$$y = \frac{1}{1 + e^{-z}}$$<br><img src="https://user-gold-cdn.xitu.io/2019/5/25/16aedd52f5317d2b?w=512&amp;h=350&amp;f=png&amp;s=40976" alt="sigmoid function"><br>逻辑回归模型也类似：<br>$$y’ = \frac{1}{1 + e^{-(z)}}<br>$$<br><img src="https://user-gold-cdn.xitu.io/2019/5/25/16aede0acdb3c72f?w=512&amp;h=336&amp;f=png&amp;s=53818" alt="l"><br>$y’$ 表示逻辑回归模型的输出，$z$ 表示线性模型的 $b + w_1x_1 + w_2x_2 +  … w_Nx_N$，$z$ 也称为对数几率（log-odds），因为 $z = log(\frac{y}{1-y})<br>$，如果是二元分类问题，那么 $y$ 和 $1 - y$ 就是相对的两个概率<br>我们最开始讨论的线性回归用的损失函数是平方损失（Squared Loss），而逻辑回归用的是对数损失（Log Loss）：<br>$$\text{Log Loss} = \sum_{(x,y)\in D} -y\log(y’) - (1 - y)\log(1 - y’)<br>$$<br>其中 $(x,y)\in D<br>$ 表示包含很多有标签样本的数据集，$y$ 表示有标签样本中的标签，$y’<br>$ 表示预测的值<br>在逻辑回归模型中正则化变得更加重要，如果没有正则化，那么逻辑回归的渐进性将在高维上让损失趋向于 0 ，如果未指定正则化函数，模型将变得完全过拟合，因此逻辑回归模型通常使用 $L_2$ 正则化或早停法降低模型的复杂度  </p>
+<h2 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h2><p>机器学习模型解决的最常见的问题就是分类问题，如邮件是正常邮件还是垃圾邮件，图片中的物体是什么，我们可以使用逻辑回归作为分类的基础，给 概率输出 应用 固定的阈值（threshold）就行了，如一封邮件为垃圾邮件的概率超过了 0.8，我们就认为它是垃圾邮件，0.8 就是分类的阈值（分类阈值 classification threshold 也被称为判定阈值 decision threshold），一旦选定了分类阈值，那我们怎么评估这个阈值下模型的质量呢？最传统的方式就是用准确率（accuracy）这个指标，也就是预测正确数除以总数。但是准确率有时会成为很差或者误导性的指标，比如当不同错误的类型代价不一样时，当分类不平衡（正例或负例极少）时（一个广告的点击率是千分之一万分之一甚至更低，那么一个模型预测一个广告不被点击的的准确率是 99.999% 没有任何意义），此时区分不同错误的类型可能会有所帮助:  </p>
+<ul>
+<li>真正例（<strong>T</strong>rue <strong>P</strong>ositives）：狼真的来了，正确喊出狼来了</li>
+<li>假正例（<strong>F</strong>alse <strong>P</strong>ositives）：狼没有来，却喊狼来了，所有人都很生气</li>
+<li>假负例（<strong>F</strong>alse <strong>N</strong>egatives）：狼真的来了，却没发现，后果更严重</li>
+<li>真负例（<strong>T</strong>rue <strong>N</strong>egatives）：狼没有来，也没喊狼来了，一切安好</li>
+</ul>
+<p>也就是说，TP 和 TN 都是正确的预测，而 FP 是指模型错误地将负类别预测成正类别，FN 更是严重错误地将正类别预测成负类别<br>现在假如出现了 100 次狼来了事件，有 1 次狼真的来了小男孩喊狼来了，有 1 次狼没来却喊狼来了，有 8 次狼来了却没喊，有 90 次 狼没来也没喊，那么小男孩的准确率高达 $\frac{TP+TN}{TP+TN+FP+FN} = \frac{1+90}{1+90+1+8} = 0.91<br>$，从 91% 的准确率来看这个小男孩还挺好，但是事实是这样的吗？在 91 次狼没来中小男孩有 90 次没喊狼来了，但是，在 9 次狼真的来了的时候小男孩却只有 1 次喊狼来了，这是多么可怕啊！如果是肿瘤诊断模型，9 个恶性肿瘤中只有 1 个被发现是恶性肿瘤，那后果将更加的可怕<br>因此我们需要一些新的指标来评估，如精确率（precision），也就是小男孩喊狼来了的情况中有多少次是对的，$\frac{TP}{TP+FP} = \frac{1}{1+1} = 0.5<br>$。另一方面，召回率（recall）是指在所有尝试进入村子的狼中我们发现了多少头，即正确被识别为正例的比例，$\frac{TP}{TP+FN} = \frac{1}{1+8} = 0.11<br>$。有趣的是这些指标往往是此消彼长的，如为了把召回率做得好只要有风吹草动就喊狼来了，这会降低分类阈值，为了精确率高只有在确认狼真的来了才喊狼来了，这会提高分类阈值，因此只有这两方面都做得好才能评价模型的优劣。<strong>一般来说</strong>，提高分类阈值会减少假正例，从而提高精确率<br>你可能会说，那我把所有可能的分类阈值都试一下看那个阈值下模型的表现更好不就行了么？事实上确实有这样的，叫 ROC 曲线<br>真正例率 TPR（True Positive Rate）为 $TPR = \frac{TP} {TP + FN}<br>$，和召回率一样<br>假正例率 FPR（False Positive Rate）为 $FPR = \frac{FP} {FP + TN}<br>$<br>将不同阈值下的 TPR 和 FPR 值的点连成一条曲线就是 ROC 曲线：<br><img src="https://user-gold-cdn.xitu.io/2019/5/26/16af241ffcc6c209?w=478&amp;h=378&amp;f=png&amp;s=79425" alt="roc"><br>观察这个 ROC 曲线，我们惊讶地发现曲线下的面积就可以很好地表示分类模型的好坏，面积越大，那么随机选择一个正样本和一个负样本时正样本排在前面的概率就越大。而这个曲线下面积简称为 AUC（Area under the ROC Curve）<br>还有一个指标，那就是偏差，回归模型应该是无偏差的，也就是说，预测的平均值和观察到的平均值差不多是一样的，预测偏差（Prediction bias）等于预测的平均值减去数据集中标签的平均值，如果预测偏差不为 0 那么说明模型可能有问题，需要找一下是什么原因导致的非零偏差，当然，即使是预测偏差为零也不能说明模型是完美的，还要看其他指标。造成预测偏差的原因可能有特征集不完整，数据集中的噪音，有偏差的训练样本，太强的正则化等等，可以通过添加校准层（calibration layer）来调整模型的输出，从而减少偏差，但是这只是下策，因为这个治标不治本，而且你还得维护这个脆弱的系统  </p>
+<h2 id="神经网络"><a href="#神经网络" class="headerlink" title="神经网络"></a>神经网络</h2><p>当问题复杂到无法用线性回归解决怎么办？即使是利用特征交叉也无法解决非线性的问题呢？这个时候我们希望通过某种方式，让模型自己学习非线性的规律，而不用我们手动为它设置参数。这一愿景可以通过深度神经网络（Deep Neural Networks）实现，它在复杂数据问题上做得特别好，例如图片数据，视频数据，音频数据等。先来看一下线性模型的表示:<br><img src="https://user-gold-cdn.xitu.io/2019/5/26/16af33ee3061643e?w=530&amp;h=326&amp;f=png&amp;s=64108" alt="linear"><br>每个特征输入都有一个权重，这些权重以线性方式结合到一起产生唯一的输出，也就是各个输入特征的加权和，那我们怎么把它扩展到非线性模型呢？<br><img src="https://user-gold-cdn.xitu.io/2019/5/26/16af3451ea2600e3?w=930&amp;h=414&amp;f=png&amp;s=204010" alt=""><br>我们发现，不管我们以线性的方式往中间加多少层，线性函数的组合依然是线性函数，模型依然是线性的。因此我们想办法加一些非线性函数进去，这些非线性函数可能位于任何小的隐藏式节点的输出中：<br><img src="https://user-gold-cdn.xitu.io/2019/5/26/16af34c6d178cea5?w=1070&amp;h=534&amp;f=png&amp;s=209418" alt=""><br>这种非线性函数也被称为激活函数（Activation Function），常见的激活函数有 S 型激活函数和 ReLU 激活函数，S 型函数之前提到过，可以把加权和平滑地限制到 0 到 1 之间，而 ReLU（rectified linear unit） 激活函数更加的简单，它接受线性函数，并在零值处截断，即 $F(x)=max(0,x)<br>$：<br><img src="https://user-gold-cdn.xitu.io/2019/5/26/16af3569f79381a0?w=998&amp;h=410&amp;f=png&amp;s=65413" alt=""><br>事实上，任何数学函数都可以作为激活函数，假设用 $\sigma$ 表示激活函数，那么网络中节点的值就是 $\sigma(\boldsymbol w \cdot \boldsymbol x+b)<br>$<br>现在，我们有了人们常说的神经网络的所有标准组件:  </p>
+<ul>
+<li>一组节点，类似于神经元，位于层中</li>
+<li>一组权重，表示每个神经网络层与其下层的关系，下面的层可以是另一个神经网络层也可以是其它类型的层</li>
+<li>一组偏差，每个节点一个偏差</li>
+<li>激活函数，用来转换层中每个节点的输出，不同层可能有不同的激活函数</li>
+</ul>
+<p>训练神经网络最常用的训练算法就是反向传播算法（Backpropagation），它使梯度下降用于多层神经网络成为可能，反向传播依赖梯度这个概念，事物必须是可微的，这样我们才能进行学习<br>需要注意的是，可能会出现梯度消失（Vanishing Gradients）的情况，如果网络太过深入，信噪比随着模型的深入变差，学习可能变得特别慢，这个时候 ReLU 或其他策略可能比较有用。如果网络中的权重太大，那么较低层的梯度会涉及许多大项的乘积，可能就会出现梯度爆炸（Exploding Gradients）的情况，此时梯度太大根本无法收敛，Batch 标准化或者降低学习速率会比较有用。如果加权和都低于 0，那么 ReLU 单元会卡住，对网络输出没有任何贡献，梯度就无法反向传播，永远无法返回存在 ReLU 层的位置，就会出现死亡 ReLU 单元（Dead ReLU Units）的情况，此时使用不同的初始化或降低学习速率会有所帮助<br>训练神经网络时还有一个很有用的技巧，正则化的另一种形式，叫做丢弃（Dropout），就是针对概率 P 取一个节点，然后从网络的一个梯度步长中把它移除。在其他梯度步长中重复此过程，并随机取不同的节点进行丢弃，丢弃的越多，正则化的效果就越强<br>到目前为止，我们讨论的分类问题都是二元分类问题，如邮件是不是垃圾邮件，肿瘤是恶性的还是良性的，我们也知道了，利用逻辑回归和可以很好地解决二元分类问题，但是生活中很多分类问题是多类别（multi-class）的，如图片中的东西是苹果还是梨还是小狗还是其他的东西，这朵花是什么花。那我们怎么把二元分类拓展到多类别分类呢？one-vs.-all 提供了利用二元分类的方式，如果有 N 个可能解，one-vs.-all 就包含 N 个单独的二元分类器，也就是说每个可能的结果都对应一个二元分类器，在训练的时候，模型会运行一系列二元分类器，对每个分类器进行训练以回答单独的分类问题，如给定一张狗狗的图片，可能会训练五种不同的识别器:  </p>
+<ul>
+<li>这是一张苹果的图片吗？不是</li>
+<li>这是一张小熊的图片吗？不是</li>
+<li>这是一张糖果的图片吗？不是</li>
+<li>这是一张狗狗的图片吗？是</li>
+<li>这是一张鸡蛋的图片吗？不是</li>
+</ul>
+<p>当类别很少时还可以接受，但类别很多时，效率就会变得异常低下，因此我们可以使用深度神经网络创建一个明显更高效的 one-vs.-all 模型，其中每个输出节点代表不同的类型：<br><img src="https://user-gold-cdn.xitu.io/2019/5/26/16af3e325a7950e6?w=642&amp;h=470&amp;f=png&amp;s=226753" alt="on-vs.-all"><br>我们已经知道，逻辑回归在处理二元分类问题时很有用，它可以把输出（概率）限制在 0 到 1 之内， 如果一封邮件是垃圾邮件的概率是 80%，那么是正常邮件的概率就是 20%，加起来肯定等于 1，那怎么把这个扩展到多类别问题中呢？答案是 Softmax，它为每个类别分配一个概率，这些概率加起来必须等于 1，这会帮助训练比其他方式更快地收敛：<br><img src="https://user-gold-cdn.xitu.io/2019/5/26/16af3f087d791a7a?w=644&amp;h=462&amp;f=png&amp;s=253359" alt="softmax"><br>Softmax 层是输出层之前的神经网络层，必须和输出层有一样的节点数，它的公式本质上也是逻辑回归公式的延伸：<br>$$p(y = j|\textbf{x})  = \frac{e^{(\textbf{w}_j^{T}\textbf{x} + b_j)}}{\sum_{k\in K} {e^{(\textbf{w}_k^{T}\textbf{x} + b_k)}} }<br>$$<br>当类别很多时，Softmax 的代价会变得很大，所以除了 Full Softmax 还有一种策略叫 Candidate sampling，对所有正例标签计算概率，但只对负例标签的随机样本计算概率，如我们想确定图片是小猎犬还是寻血猎犬，我们就不必为每个非狗样本提供概率了<br>Softmax 假设每个样本只能有一个类别，如果一个样本同时属于多个类别，那么你就不能用 Softmax，你只能依赖多个逻辑回归</p>
+<h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><p>现在我们思考一个问题，我们在读一本书的时候，在思考的时候，脑海里总有一个声音跟你说话，这个声音很像你自己的声音，但又不是你的声音，如果你看过西部世界，或者对心理学有过了解，你可能知道有一种理论叫做二分心智。二分心智一般被看做是人类意识的起源，而人们对于意识这种东西并不是真正的了解，但是人类却总想扮演上帝的角色，想要赋予一个人造的机器意识。上个世纪人们开动自己的想象力，想象着赋予机器意识的那一天，各种科幻电影更是把这种想象表达的淋漓尽致，然而到现在人们才冷静下来，发现人工智能还有很长很长一段路要走，与其创建人工智能不如利用已有的知识水平为人工智能铺路，不如将已有的人工智能成果（机器学习）应用于现实生活中，Google 的 AI 向善就是很好地方式，利用 AI 技术可以预测洪水，可以用于医疗，可以预测疾病，可以帮助聋哑人跟正常人沟通等等等等<br>机器学习作为实现 AI 的主要手段，涉及到的知识和领域非常多，而 Google 提供的 TensorFlow 平台让普通人创建或训练机器学习模型成为可能，作为普通人，你无法提出革命性的机器学习理论，甚至无法理解很多数学知识，但是有了 TensorFlow 平台，有了一些训练好的模型，你就可以创建自己想要的，能帮助你自己或者帮助他人解决问题的模型</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://developers.google.cn/machine-learning/crash-course/" target="_blank" rel="noopener">Machine Learning Crash Course</a></li>
+<li><a href="https://www.tensorflow.org/" target="_blank" rel="noopener">TensorFlow</a><h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><img src="https://user-gold-cdn.xitu.io/2019/5/11/16aa5f30d170281f?w=972&amp;h=456&amp;f=png&amp;s=159333" alt="TensorFlow"></li>
+<li>“Goldilocks and the Three Bears” 的故事讲述了 Goldilocks 小女孩闯入了已经外出的三只小熊的家，她觉得不硬不软的椅子坐起来最舒服，不热不冷的粥最好吃，不硬不软的床睡着最舒服。用来形容刚刚好、最适合的东西</li>
+<li>奥卡姆剃刀用来指简约法则，简单的解决方案相对于复杂的解决方案更可能是正确的，大道至简</li>
+<li>one-hot encoding 通常被翻译为独热编码，所有编码位中只有一个是热的，也就是 1，多个 1 叫做 multi-hot encoding  </li>
+<li>feature cross 中的 cross 属于源自 cross product，即叉积/向量积</li>
+<li>可以下载 Jupyter Notebook 在本地做练习题：<a href="http://download.mlcc.google.cn/mledu-exercises/mlcc-exercises_zh-CN.zip" target="_blank" rel="noopener">http://download.mlcc.google.cn/mledu-exercises/mlcc-exercises_zh-CN.zip</a> </li>
+<li>steps 表示训练迭代的总次数</li>
+<li>batch size 表示每次迭代需要的样本数</li>
+<li>训练模型需要的总样本数等于 $batch\,size * steps$</li>
+<li>periods 表示报告的粒度，每个 periods 内需要的训练样本数等于 $\frac{batch\,size * steps} {periods}$  </li>
+</ul>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                    
+                        <li class="next">
+                            <a href="/2019/02/22/android-notes-arch/" data-toggle="tooltip" data-placement="top" title="Android 学习笔记架构篇">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#人工智能" title="人工智能">人工智能</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="https://juejin.im/user/5a96922b5188257a865da3f2/posts" target="_blank">我的掘金</a></li>
+                    
+                        <li><a href="https://www.jianshu.com/u/64ac160aaac8" target="_blank">我的简书</a></li>
+                    
+                        <li><a href="https://blog.csdn.net/shangmingchao" target="_blank">我的 CSDN</a></li>
+                    
+                        <li><a href="https://joyrun.github.io/" target="_blank">悦跑圈技术团队</a></li>
+                    
+                        <li><a href="http://tech.meituan.com/" target="_blank">美团点评技术团队</a></li>
+                    
+                </ul>
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/FrankShang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/frankshang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/frankshang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/frankshangx">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/shangmingchao">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://www.linkedin.com/in/FrankShang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Frank&#39;s Blog 2019 
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a href="http://blog.kaijun.rocks">Kaijun</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://franksblog.top/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="https://franksblog.top/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
