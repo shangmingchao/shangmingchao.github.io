@@ -90,6 +90,13 @@
 
                         
                         <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
                             <a href="/archives/">Archives</a>
                         </li>
                         
@@ -98,13 +105,6 @@
                         
                         <li>
                             <a href="/tags/">Tags</a>
-                        </li>
-                        
-                    
-
-                        
-                        <li>
-                            <a href="/about/">About</a>
                         </li>
                         
                     
@@ -257,7 +257,7 @@
 <li>真负例（<strong>T</strong>rue <strong>N</strong>egatives）：狼没有来，也没喊狼来了，一切安好</li>
 </ul>
 <p>也就是说，TP 和 TN 都是正确的预测，而 FP 是指模型错误地将负类别预测成正类别，FN 更是严重错误地将正类别预测成负类别<br>现在假如出现了 100 次狼来了事件，有 1 次狼真的来了小男孩喊狼来了，有 1 次狼没来却喊狼来了，有 8 次狼来了却没喊，有 90 次 狼没来也没喊，那么小男孩的准确率高达 $\frac{TP+TN}{TP+TN+FP+FN} = \frac{1+90}{1+90+1+8} = 0.91<br>$，从 91% 的准确率来看这个小男孩还挺好，但是事实是这样的吗？在 91 次狼没来中小男孩有 90 次没喊狼来了，但是，在 9 次狼真的来了的时候小男孩却只有 1 次喊狼来了，这是多么可怕啊！如果是肿瘤诊断模型，9 个恶性肿瘤中只有 1 个被发现是恶性肿瘤，那后果将更加的可怕<br>因此我们需要一些新的指标来评估，如精确率（precision），也就是小男孩喊狼来了的情况中有多少次是对的，$\frac{TP}{TP+FP} = \frac{1}{1+1} = 0.5<br>$。另一方面，召回率（recall）是指在所有尝试进入村子的狼中我们发现了多少头，即正确被识别为正例的比例，$\frac{TP}{TP+FN} = \frac{1}{1+8} = 0.11<br>$。有趣的是这些指标往往是此消彼长的，如为了把召回率做得好只要有风吹草动就喊狼来了，这会降低分类阈值，为了精确率高只有在确认狼真的来了才喊狼来了，这会提高分类阈值，因此只有这两方面都做得好才能评价模型的优劣。<strong>一般来说</strong>，提高分类阈值会减少假正例，从而提高精确率<br>你可能会说，那我把所有可能的分类阈值都试一下看那个阈值下模型的表现更好不就行了么？事实上确实有这样的，叫 ROC 曲线<br>真正例率 TPR（True Positive Rate）为 $TPR = \frac{TP} {TP + FN}<br>$，和召回率一样<br>假正例率 FPR（False Positive Rate）为 $FPR = \frac{FP} {FP + TN}<br>$<br>将不同阈值下的 TPR 和 FPR 值的点连成一条曲线就是 ROC 曲线：<br><img src="https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_14.png" alt="roc"><br>观察这个 ROC 曲线，我们惊讶地发现曲线下的面积就可以很好地表示分类模型的好坏，面积越大，那么随机选择一个正样本和一个负样本时正样本排在前面的概率就越大。而这个曲线下面积简称为 AUC（Area under the ROC Curve）<br>还有一个指标，那就是偏差，回归模型应该是无偏差的，也就是说，预测的平均值和观察到的平均值差不多是一样的，预测偏差（Prediction bias）等于预测的平均值减去数据集中标签的平均值，如果预测偏差不为 0 那么说明模型可能有问题，需要找一下是什么原因导致的非零偏差，当然，即使是预测偏差为零也不能说明模型是完美的，还要看其他指标。造成预测偏差的原因可能有特征集不完整，数据集中的噪音，有偏差的训练样本，太强的正则化等等，可以通过添加校准层（calibration layer）来调整模型的输出，从而减少偏差，但是这只是下策，因为这个治标不治本，而且你还得维护这个脆弱的系统  </p>
-<h2 id="神经网络"><a href="#神经网络" class="headerlink" title="神经网络"></a>神经网络</h2><p>当问题复杂到无法用线性回归解决怎么办？即使是利用特征交叉也无法解决非线性的问题呢？这个时候我们希望通过某种方式，让模型自己学习非线性的规律，而不用我们手动为它设置参数。这一愿景可以通过深度神经网络（Deep Neural Networks）实现，它在复杂数据问题上做得特别好，例如图片数据，视频数据，音频数据等。先来看一下线性模型的表示:<br><img src="https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_15.png" alt="linear"><br>每个特征输入都有一个权重，这些权重以线性方式结合到一起产生唯一的输出，也就是各个输入特征的加权和，那我们怎么把它扩展到非线性模型呢？<br><img src="https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_16.png" alt=""><br>我们发现，不管我们以线性的方式往中间加多少层，线性函数的组合依然是线性函数，模型依然是线性的。因此我们想办法加一些非线性函数进去，这些非线性函数可能位于任何小的隐藏式节点的输出中：<br><img src="https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_17.png" alt=""><br>这种非线性函数也被称为激活函数（Activation Function），常见的激活函数有 S 型激活函数和 ReLU 激活函数，S 型函数之前提到过，可以把加权和平滑地限制到 0 到 1 之间，而 ReLU（rectified linear unit） 激活函数更加的简单，它接受线性函数，并在零值处截断，即 $F(x)=max(0,x)<br>$：<br><img src="https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_18.png" alt=""><br>事实上，任何数学函数都可以作为激活函数，假设用 $\sigma$ 表示激活函数，那么网络中节点的值就是 $\sigma(\boldsymbol w \cdot \boldsymbol x+b)<br>$<br>现在，我们有了人们常说的神经网络的所有标准组件:  </p>
+<h2 id="神经网络"><a href="#神经网络" class="headerlink" title="神经网络"></a>神经网络</h2><p>当问题复杂到无法用线性回归解决怎么办？即使是利用特征交叉也无法解决非线性的问题呢？这个时候我们希望通过某种方式，让模型自己学习非线性的规律，而不用我们手动为它设置参数。这一愿景可以通过深度神经网络（Deep Neural Networks）实现，它在复杂数据问题上做得特别好，例如图片数据，视频数据，音频数据等。先来看一下线性模型的表示，如 $y = b + w_1x_1 + w_2x_2 + w_3x_3$:<br><img src="https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_15.png" alt="linear"><br>每个特征输入都有一个权重，这些权重以线性方式结合到一起产生唯一的输出，也就是各个输入特征的加权和，那我们怎么把它扩展到非线性模型呢？<br><img src="https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_16.png" alt=""><br>我们发现，不管我们以线性的方式往中间加多少层，线性函数的组合依然是线性函数，模型依然是线性的。因此我们想办法加一些非线性函数进去，这些非线性函数可能位于任何小的隐藏式节点的输出中：<br><img src="https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_17.png" alt=""><br>这种非线性函数也被称为激活函数（Activation Function），常见的激活函数有 S 型激活函数和 ReLU 激活函数，S 型函数之前提到过，可以把加权和平滑地限制到 0 到 1 之间，而 ReLU（rectified linear unit） 激活函数更加的简单，它接受线性函数，并在零值处截断，即 $F(x)=max(0,x)<br>$：<br><img src="https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_18.png" alt=""><br>事实上，任何数学函数都可以作为激活函数，假设用 $\sigma$ 表示激活函数，那么网络中节点的值就是 $\sigma(\boldsymbol w \cdot \boldsymbol x+b)<br>$<br>现在，我们有了人们常说的神经网络的所有标准组件:  </p>
 <ul>
 <li>一组节点，类似于神经元，位于层中</li>
 <li>一组权重，表示每个神经网络层与其下层的关系，下面的层可以是另一个神经网络层也可以是其它类型的层</li>
