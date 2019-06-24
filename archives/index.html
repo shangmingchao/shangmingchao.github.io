@@ -90,14 +90,14 @@
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/archives/">Archives</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/archives/">Archives</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
@@ -333,9 +333,9 @@
                  <li >
                     02-28
                     <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-                    <a href="/2018/02/28/annotation-in-android/" style="color: #0085a1">
+                    <a href="/2018/02/28/gradle-tips/" style="color: #0085a1">
                         <span>
-                            Android 中优雅地使用注解
+                            Android 构建那些事
                         </span>
                     </a>
                     <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
@@ -348,9 +348,9 @@
                  <li >
                     02-28
                     <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-                    <a href="/2018/02/28/gradle-tips/" style="color: #0085a1">
+                    <a href="/2018/02/28/annotation-in-android/" style="color: #0085a1">
                         <span>
-                            Android 构建那些事
+                            Android 中优雅地使用注解
                         </span>
                     </a>
                     <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
@@ -524,6 +524,21 @@
 <img src="https://franksblog.top/img/icon_wechat.png" width="0" height="0" />
 <!-- Migrate from head to bottom, no longer block render and still work -->
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 
 </html>

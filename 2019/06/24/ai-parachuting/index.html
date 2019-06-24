@@ -90,14 +90,14 @@
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/archives/">Archives</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/archives/">Archives</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
@@ -192,7 +192,7 @@
                 post-container">
 
                 <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>像跳伞、蹦极、滑雪之类惊险刺激的运动是旅行乐趣中非常重要的一部分，而 AI 之旅中同样存在这样好玩刺激的项目，它就是 Magenta，一个探索机器学习在创作艺术和音乐过程中的作用的研究项目。也就是说，让 AI 涉足艺术领域，包括写歌、画画、写小说等，你可能会说了，AI 所谓的创作永远无法超越人类，是这样的，至少目前和可预见的未来是这样的，而 Magenta 的目的不是为了取代人类进行创作，而是探索艺术创作的过程，可以作为一种工具在人类创作艺术的过程中提供有价值的帮助<br>Magenta 众多的模型中最出名的当属 Sketch-RNN 了，就像它的名字一样，它是一个可以自动生成素描（sketch）的循环神经网络（recurrent neural network）模型。如果你没听过 Sketch-RNN，那你一定玩过或者听过猜画小歌（Quick, Draw!）这款游戏吧，给你一个名字，你把它画出来，看 AI 能不能猜出你画的是什么，到目前为止，Quick, Draw! 数据集已经收集了 345 个类别共计 5000 万个矢量素描图，如果你玩过这个游戏，那么其中也有你的一份贡献<br><img src="https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_parachuting_1.png" alt="sketch_rnn"><br>有趣的是谷歌的工程师小姐姐利用 Sketch-RNN 做了个魔法画板，能帮助你自动画猫<br><img src="https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_parachuting_2.gif" alt="magic_skatchpad"><br>Sketch-RNN 目前只提供了 JavaScript 的实现，再加上模型和数据集比较大，我们就先不关心具体的实现细节了，我们更感兴趣的是名字叫 RNN 的这种神经网络究竟是什么，它为什么适合这种手绘图的生成，除了 RNN 还有什么比较有趣的神经网络</p>
-<h2 id="人工智能简史"><a href="#人工智能简史" class="headerlink" title="人工智能简史"></a>人工智能简史</h2><h3 id="传说"><a href="#传说" class="headerlink" title="传说"></a>传说</h3><p>早在希腊神话中就出现了机器人和人造人，如火神赫菲斯托斯的黄金机器人女仆和塞浦路斯国王皮格马利翁的妻子加拉泰亚（被爱神赐予生命的雕像）<br>中国古代也有类似的记载，在公元前 3 世纪的《列子》一书中曾记录了一个 “偃师献技” 的故事，讲述的是周穆王西巡归来的途中，还没有到达中国境内，遇到了自愿前来献技的工匠偃师，偃师第二天带来了一个像真人一样的歌舞艺人，能歌善舞，且心肝脾胃肾等虽然都是假的但一应俱全，连周穆王都感叹道 “人之巧乃可与造化者同功乎？”<br>中世纪的时候，有传言说炼金术士可以将心智放入物品中<br>到了 19 时机，关于人造人和思考机器的想法在小说中发展起来，如玛丽·雪莱的弗兰肯斯坦（有兴趣的可以看一下科幻电影）<br>虽然早在公元前 1000 年前中国、印度以及希腊的哲学家都开发了形式演绎的结构化方法，但是这么多世纪过去了，随着许多哲学家、心理学家、数学家等伟人的不断探索，才让人工智能或者说机械推理慢慢变为可能，如 17 世纪的莱布尼兹和笛卡尔等人探索了所有理性思想可以像代数或几何一样系统化的可能性，受到 1913 年罗素和怀特海所著《数学原理》的启发，David Hilbert 向二十世纪二三十年代的数学家们提出挑战：“所有的数学推理都可以形式化么？”，图灵机和 Lambda 演算等都给出了回答，这些回答令人惊讶的有两方面，一是它们证明了数学逻辑被实现时确实存在限制，二是这也表明在这些限制范围内任何形式的数学推理都可以机械化  </p>
+<h2 id="人工智能简史"><a href="#人工智能简史" class="headerlink" title="人工智能简史"></a>人工智能简史</h2><h3 id="传说"><a href="#传说" class="headerlink" title="传说"></a>传说</h3><p>早在希腊神话中就出现了机器人和人造人，如火神赫菲斯托斯的黄金机器人女仆和塞浦路斯国王皮格马利翁的妻子加拉泰亚（被爱神赐予生命的雕像）<br>中国古代也有类似的记载，在公元前 3 世纪的《列子》一书中曾记录了一个 “偃师献技” 的故事，讲述的是周穆王西巡归来的途中，还没有到达中国境内，遇到了自愿前来献技的工匠偃师，偃师第二天带来了一个像真人一样的歌舞艺人，能歌善舞，且心肝脾胃肾等虽然都是假的但一应俱全，连周穆王都感叹道 “人之巧乃可与造化者同功乎？”<br>中世纪的时候，有传言说炼金术士可以将心智放入物品中<br>到了 19 时机，关于人造人和思考机器的想法在小说中发展起来，如玛丽·雪莱的弗兰肯斯坦（有兴趣的可以看一下这个电影）<br>虽然早在公元前 1000 年前中国、印度以及希腊的哲学家都开发了形式演绎的结构化方法，但是这么多世纪过去了，随着许多哲学家、心理学家、数学家等伟人的不断探索，才让人工智能或者说机械推理慢慢变为可能，如 17 世纪的莱布尼兹和笛卡尔等人探索了所有理性思想可以像代数或几何一样系统化的可能性，受到 1913 年罗素和怀特海所著《数学原理》的启发，David Hilbert 向二十世纪二三十年代的数学家们提出挑战：“所有的数学推理都可以形式化么？”，图灵机和 Lambda 演算等都给出了回答，这些回答令人惊讶的有两方面，一是它们证明了数学逻辑被实现时确实存在限制，二是这也表明在这些限制范围内任何形式的数学推理都可以机械化  </p>
 <h3 id="神经网络"><a href="#神经网络" class="headerlink" title="神经网络"></a>神经网络</h3><p>20 世纪开始人们就已经知道了我们神经元的大概结构<br><img src="https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_parachuting_3.png" alt="neuron"><br>1943 年 Warren S. McCulloch 和 Walter Pitts 发表的论文 “A Logical Calculus of Ideas Immanent in Nervous Activity” 提出了第一个神经网络的数学模型，该模型的每个单元都是一个简单形式化的神经元（neuron），也被称为 McCulloch–Pitts 神经元，可以执行简单的逻辑功能，灵感来自上面所说的神经元结构，这个模型就像后来的冯诺依曼计算机之于计算机领域一样深刻影响着神经网络领域，现在人们对于神经网络的研究与实践基本都是以此为基础的<br><img src="https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_parachuting_4.png" alt="mp"><br>还记得我们在《AI 之旅：启程》中是怎么把线性模型扩展到网络模型的么？没错，我们往一些隐藏层的节点中添加了非线性的函数，这些非线性函数也被称为激活函数，这样的话，节点（神经元）就可以通过把激活函数应用于输入值的加权和来计算输出值了，事实证明，通过这种方式构造的神经网络模型可以解决几乎所有的线性和非线性问题<br>1949 年，Donald O. Hebb 在他的著作 “The Organization of Behavior” 中提出了 Hebbian 学习理论，这个理论为创建模拟生物神经系统的生理过程的计算机模型开辟了道路，也就是说，从这时开始，计算机的工程师们意识到了通过动态调整各个权重的方式就可以训练出一个好的模型了<br>1950 年图灵在具有里程碑意义的论文中提出了著名的 “图灵测试”，简单点说就是让人和机器进行对话，如果有超过 30% 的人都不知道跟自己对话的是人还是机器，那么就表明这个机器通过了测试，表明这个机器具有人工智能<br>1951 年，受到 McCulloch 和 Pitts 的启发，年仅 24 岁的学生 Marvin Minsky（和 Dean Edmonds 一起） 建造了第一个神经网络机器 SNARC，他也成为了 AI 下一个 50 年的重要领导者和创新者之一。同年 Christopher Strachey 写的跳棋程序也标志着游戏 AI 应用的开始<br>1955 年，Allen Newell 和 Herbert A. Simon 创造了 “Logic Theorist” 程序，该程序证明了《数学原理》中的前 52 个定理中的 38 个，西蒙说他们已经 “解决了古老的 心智/身体 问题，解释了物质组成的系统如何具有心智的属性”  </p>
 <h3 id="AI-诞生"><a href="#AI-诞生" class="headerlink" title="AI 诞生"></a>AI 诞生</h3><p>1956 年，Marvin Minsky, John McCarthy 和来自 IBM 的两位资深科学家 Claude Shannon 和 Nathan Rochester 组织召开了达特茅斯会议（Dartmouth Conference），会议提出了一个主张 “学习的每个方面或任何其它智能特征都可以如此精确地描述，以便可以使机器模拟它”，McCarthy 说服了与会者接受 “人工智能”（Artificial Intelligence）作为该领域的名字，因此这次会议也被广泛认为是 AI 的诞生之日  </p>
 <h3 id="黄金年代"><a href="#黄金年代" class="headerlink" title="黄金年代"></a>黄金年代</h3><p>1956 – 1974 年，是人工智能的黄金年代，对于人工智能理论和程序的成果让人们充满了乐观和热情，甚至有研究人员乐观地认为不到 20 年就可以建造一台完全智能的机器，各个政府、公司也投入了大量的资金和人力参与人工智能的研发。1958 年康奈尔航空实验室的 Frank Rosenblatt 发明了被叫做感知器（perceptron）的机器（程序），从现在来看，它其实就是一个简单的二元线性分类器的监督式机器学习算法，但是在当时可以识别图像再加上美国军方的参与也引起了很大的轰动和争议  </p>
@@ -447,6 +447,21 @@
 <img src="https://franksblog.top/img/icon_wechat.png" width="0" height="0" />
 <!-- Migrate from head to bottom, no longer block render and still work -->
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 
 </html>
