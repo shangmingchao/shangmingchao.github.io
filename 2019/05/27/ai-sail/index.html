@@ -90,14 +90,14 @@
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/archives/">Archives</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/archives/">Archives</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
@@ -274,14 +274,14 @@
 </ul>
 <p>当类别很少时还可以接受，但类别很多时，效率就会变得异常低下，因此我们可以使用深度神经网络创建一个明显更高效的 one-vs.-all 模型，其中每个输出节点代表不同的类型：<br><img src="https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_19.png" alt="on-vs.-all"><br>我们已经知道，逻辑回归在处理二元分类问题时很有用，它可以把输出（概率）限制在 0 到 1 之内， 如果一封邮件是垃圾邮件的概率是 80%，那么是正常邮件的概率就是 20%，加起来肯定等于 1，那怎么把这个扩展到多类别问题中呢？答案是 Softmax，它为每个类别分配一个概率，这些概率加起来必须等于 1，这会帮助训练比其他方式更快地收敛：<br><img src="https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_20.png" alt="softmax"><br>Softmax 层是输出层之前的神经网络层，必须和输出层有一样的节点数，它的公式本质上也是逻辑回归公式的延伸：  </p>
 <script type="math/tex; mode=display">p(y = j|\textbf{x})  = \frac{e^{(\textbf{w}_j^{T}\textbf{x} + b_j)}}{\sum_{k\in K} {e^{(\textbf{w}_k^{T}\textbf{x} + b_k)}} }</script><p>当类别很多时，Softmax 的代价会变得很大，所以除了 Full Softmax 还有一种策略叫 Candidate sampling，对所有正例标签计算概率，但只对负例标签的随机样本计算概率，如我们想确定图片是小猎犬还是寻血猎犬，我们就不必为每个非狗样本提供概率了<br>Softmax 假设每个样本只能有一个类别，如果一个样本同时属于多个类别，那么你就不能用 Softmax，你只能依赖多个逻辑回归</p>
-<h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><p>现在我们思考一个问题，我们在读一本书的时候，在思考的时候，脑海里总有一个声音跟你说话，这个声音很像你自己的声音，但又不是你的声音，如果你看过西部世界，或者对心理学有过了解，你可能知道有一种理论叫做二分心智。二分心智一般被看做是人类意识的起源，而人们对于意识这种东西并不是真正的了解，但是人类却总想扮演上帝的角色，想要赋予一个人造的机器意识。上个世纪人们开动自己的想象力，想象着赋予机器意识的那一天，各种科幻电影更是把这种想象表达的淋漓尽致，然而到现在人们才冷静下来，发现人工智能还有很长很长一段路要走，与其创建人工智能不如利用已有的知识水平为人工智能铺路，不如将已有的人工智能成果（机器学习）应用于现实生活中，Google 的 AI 向善就是很好地方式，利用 AI 技术可以预测洪水，可以用于医疗，可以预测疾病，可以帮助聋哑人跟正常人沟通等等等等<br>机器学习作为实现 AI 的主要手段，涉及到的知识和领域非常多，而 Google 提供的 TensorFlow 平台让普通人创建或训练机器学习模型成为可能，作为普通人，你无法提出革命性的机器学习理论，甚至无法理解很多数学知识，但是有了 TensorFlow 平台，有了一些训练好的模型，你就可以创建自己想要的，能帮助你自己或者帮助他人解决问题的模型</p>
+<h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><p>现在我们思考一个问题，我们在读一本书的时候，或者在思考的时候，脑海里总有一个声音跟你说话，这个声音很像你自己的声音，但又不是你的声音，如果你看过西部世界，或者对心理学有过了解，你可能知道有一种理论叫做二分心智。二分心智一般被看做是人类意识的起源，而人们对于意识这种东西并不是真正的了解，但是人类却总想扮演上帝的角色，想要赋予一个人造的机器意识。上个世纪人们开动自己的想象力，想象着赋予机器意识的那一天，各种科幻电影更是把这种想象表达的淋漓尽致，然而到现在人们才冷静下来，发现人工智能还有很长很长一段路要走，与其创建人工智能不如利用已有的知识水平为人工智能铺路，不如将已有的人工智能成果（机器学习）应用于现实生活中，Google 的 AI 向善就是很好地方式，利用 AI 技术可以预测洪水，可以用于医疗，可以预测疾病，可以帮助聋哑人跟正常人沟通等等等等<br>机器学习作为实现 AI 的主要手段，涉及到的知识和领域非常多，而 Google 提供的 TensorFlow 平台让普通人创建或训练机器学习模型成为可能，作为普通人，你无法提出革命性的人工智能理论，甚至无法理解很多数学知识，但是有了 TensorFlow 平台，有了一些训练好的模型，你就可以创建自己想要的，能帮助你自己或者帮助他人解决问题的模型</p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
 <li><a href="https://developers.google.cn/machine-learning/crash-course/" target="_blank" rel="noopener">Machine Learning Crash Course</a></li>
 <li><a href="https://www.tensorflow.org/" target="_blank" rel="noopener">TensorFlow</a><h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><img src="https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_21.png" alt="TensorFlow"></li>
-<li>“Goldilocks and the Three Bears” 的故事讲述了 Goldilocks 小女孩闯入了已经外出的三只小熊的家，她觉得不硬不软的椅子坐起来最舒服，不热不冷的粥最好吃，不硬不软的床睡着最舒服。用来形容刚刚好、最适合的东西</li>
-<li>奥卡姆剃刀用来指简约法则，简单的解决方案相对于复杂的解决方案更可能是正确的，大道至简</li>
-<li>one-hot encoding 通常被翻译为独热编码，所有编码位中只有一个是热的，也就是 1，多个 1 叫做 multi-hot encoding  </li>
-<li>feature cross 中的 cross 属于源自 cross product，即叉积/向量积</li>
+<li>“Goldilocks and the Three Bears” 的故事讲述了 Goldilocks 小女孩闯入了已经外出的三只小熊的家，她觉得三把椅子中不硬不软的椅子坐起来最舒服，三碗粥中不热不冷的粥最好吃，三张床中不硬不软的床睡着最舒服。所以 Goldilocks 通常用来形容刚刚好的东西</li>
+<li>奥卡姆剃刀是指简约法则，简单的解决方案相对于复杂的解决方案更可能是正确的，也就是说，大道至简</li>
+<li>one-hot encoding 通常被翻译为独热编码，所有编码位中只有一个是热的，也就是 1，多个 1 的编码被叫做 multi-hot encoding  </li>
+<li>feature cross 中的 cross 源自 cross product，即叉积/向量积</li>
 <li>可以下载 Jupyter Notebook 在本地做练习题：<a href="http://download.mlcc.google.cn/mledu-exercises/mlcc-exercises_zh-CN.zip" target="_blank" rel="noopener">http://download.mlcc.google.cn/mledu-exercises/mlcc-exercises_zh-CN.zip</a> </li>
 <li>steps 表示训练迭代的总次数</li>
 <li>batch size 表示每次迭代需要的样本数</li>
