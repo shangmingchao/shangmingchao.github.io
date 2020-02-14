@@ -5,8 +5,8 @@
 像跳伞、蹦极、滑雪之类惊险刺激的运动是旅行乐趣中非常重要的一部分，而 AI 之旅中同样存在这样好玩刺激的项目，它就是 Magenta，一个探索机器学习在创作艺术和音乐过程中的作用的研究项目。也就是说，让 AI 涉足艺术领域，包括写歌、画画、写小说等，你可能会说了，AI 所谓的创作永远无法超越人类，是这样的，至少目前和可预见的未来是这样的，而 Magenta 的目的不是为了取代人类进行创作，而是探索艺术创作的过程，可以作为一种工具在人类创作艺术的过程中提供有价值的帮助  
 Magenta 众多的模型中最出名的当属 Sketch-RNN 了，就像它的名字一样，它是一个可以自动生成素描（sketch）的循环神经网络（recurrent neural network）模型。如果你没听过 Sketch-RNN，那你一定玩过或者听过猜画小歌（Quick, Draw!）这款游戏吧，给你一个名字，你把它画出来，看 AI 能不能猜出你画的是什么，到目前为止，Quick, Draw! 数据集已经收集了 345 个类别共计 5000 万个矢量素描图，如果你玩过这个游戏，那么其中也有你的一份贡献  
 ![sketch_rnn](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_parachuting_1.png)  
-有趣的是谷歌的工程师小姐姐利用 Sketch-RNN 做了个魔法画板，能帮助你自动画猫
-![magic_skatchpad](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_parachuting_2.gif)
+有趣的是谷歌的工程师小姐姐利用 Sketch-RNN 做了个魔法画板，能帮助你自动画猫  
+![magic_skatchpad](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_parachuting_2.gif)  
 Sketch-RNN 目前只提供了 JavaScript 的实现，再加上模型和数据集比较大，我们就先不关心具体的实现细节了，我们更感兴趣的是名字叫 RNN 的这种神经网络究竟是什么，它为什么适合这种手绘图的生成，除了 RNN 还有什么比较有趣的神经网络
 
 ## 人工智能简史
@@ -22,9 +22,9 @@ Sketch-RNN 目前只提供了 JavaScript 的实现，再加上模型和数据集
 ### 神经网络
 
 20 世纪开始人们就已经知道了我们神经元的大概结构  
-![neuron](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_parachuting_3.png)
+![neuron](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_parachuting_3.png)  
 1943 年 Warren S. McCulloch 和 Walter Pitts 发表的论文 “A Logical Calculus of Ideas Immanent in Nervous Activity” 提出了第一个神经网络的数学模型，该模型的每个单元都是一个简单形式化的神经元（neuron），也被称为 McCulloch–Pitts 神经元，可以执行简单的逻辑功能，灵感来自上面所说的神经元结构，这个模型就像后来的冯诺依曼计算机之于计算机领域一样深刻影响着神经网络领域，现在人们对于神经网络的研究与实践基本都是以此为基础的  
-![mp](hhttps://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_parachuting_4.png)
+![mp](hhttps://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_parachuting_4.png)  
 还记得我们在《AI 之旅：启程》中是怎么把线性模型扩展到网络模型的么？没错，我们往一些隐藏层的节点中添加了非线性的函数，这些非线性函数也被称为激活函数，这样的话，节点（神经元）就可以通过把激活函数应用于输入值的加权和来计算输出值了，事实证明，通过这种方式构造的神经网络模型可以解决几乎所有的线性和非线性问题  
 1949 年，Donald O. Hebb 在他的著作 “The Organization of Behavior” 中提出了 Hebbian 学习理论，这个理论为创建模拟生物神经系统的生理过程的计算机模型开辟了道路，也就是说，从这时开始，计算机的工程师们意识到了通过动态调整各个权重的方式就可以训练出一个好的模型了  
 1950 年图灵在具有里程碑意义的论文中提出了著名的 “图灵测试”，简单点说就是让人和机器进行对话，如果有超过 30% 的人都不知道跟自己对话的是人还是机器，那么就表明这个机器通过了测试，表明这个机器具有人工智能  
@@ -62,17 +62,17 @@ Sketch-RNN 目前只提供了 JavaScript 的实现，再加上模型和数据集
 
 卷积神经网络（convolutional neural network）一般简写成 CNN 或 ConvNet，是用来分析视觉图像最常用的一类深度神经网络，它受到生物过程的启发，因为神经元之间的模式类似于动物视觉皮层的组织，皮质神经元仅仅对视野的限制区域的刺激做出反应（这个区域也被称为 receptive field），不同神经元的 receptive field 部分重叠以便可以覆盖整个视野  
 卷积是分析数学中的一种积分运算，在图像处理中可以进行特征值的处理，以便消除噪声和特征增强  
-![cnn](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_parachuting_5.png)
+![cnn](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_parachuting_5.png)  
 CNN 的隐藏层通常由一系列卷积层组成，激活函数通常是 RELU 层，随后是附加的卷积，如池化层（pooling layer）、全连接层（fully connected layer）、正则化层（normalization layer），最后的卷积通常涉及反向传播以便更准确地最最终结果进行加权  
 CNN 广泛应用于图像和视频识别、推荐系统、图像分类、医学图像分析、药物发现、自然语言处理以及游戏 AI（如 AlphaGo）中  
 
 ### 循环神经网络
 
 循环神经网络（recurrent neural network）一般简写成 RNN，是节点之间的连接形成沿时间序列的有向图的一类神经网络，与前馈神经网络（feedforward neural networks）不同的是，RNN 可以通过内部状态来处理输入序列，这使得它适用于处理未分段、连续手写识别或语音识别等任务  
-![rnn](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_parachuting_6.png)
+![rnn](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_parachuting_6.png)  
 其实 RNN 是概况指代具有类似一般结构的两大类网络：有限脉冲（finite impulse）和无限脉冲（infinite impulse），有限脉冲循环网络是有向无环图，可以被展开并用严格的前馈神经网络替代，而无限脉冲循环网络则是无法展开的有向循环图。两者都可以有额外的存储状态，存储可以由神经网络直接控制，如果包含时间延迟或者反馈循环，那么存储可以被其它网络或图替代。这些受控状态被称为门控状态或门控存储器，是 LSTM（long short-term memory）网络和门控循环单元的一部分  
 LSTM 是 RNN 最关键最优魅力的一部分，有了它才会有效防止反向传播时梯度消失和梯度爆炸情况的发生  
-![lstm](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_parachuting_7.png)
+![lstm](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_parachuting_7.png)  
 很多应用选择使用 LSTM RNN 栈并用 CTC（Connectionist Temporal Classification）算法训练他们以找到一个 RNN 权重矩阵（在给定相应输入序列的情况下最大化训练集中标签序列的可能性），CTC 实现了对齐和识别  
 与之前基于隐式马尔科夫模型或类似概念的模型不同的是，LSTM 可以学习识别上下文敏感的语言  
 值得一提的是，2014 年百度使用 CTC 训练的 RNN 打破了 Switchboard Hub5'00 语音识别基准，而不使用任何传统的语音处理方法

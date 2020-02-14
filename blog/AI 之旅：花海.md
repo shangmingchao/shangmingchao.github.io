@@ -37,7 +37,7 @@ tflite_model = converter.convert()
 open("converted_model.tflite", "wb").write(tflite_model)
 ```
 
-![converter](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_flower_1.png)
+![converter](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_flower_1.png)  
 生成的 .tflite 文件就是供解释器使用的模型，将它和标签文件一同放到 assets 目录下，为了避免被 AAPT 工具压缩，需要添加配置项：  
 
 ```groovy
@@ -82,7 +82,7 @@ tflite = new Interpreter(tfliteModel, options);
 ```
 
 以图像分类模型的简单应用为例，我们的输入是个 Bitmap 对象，输出应该是包含标签和对应概率的实体类列表：  
-![demo](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_flower_2.gif)
+![demo](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_flower_2.gif)  
 
 ```java
 public List<Recognition> recognizeImage(final Bitmap bitmap) {
@@ -169,7 +169,7 @@ public void runInference() {
 
 我们发现 `mobilenet_v1_1.0_224.tflite` 模型文件的大小有 16.9 MB 这么大，那我们有没有可能把它压缩的更小呢？有，由于模型使用了浮点的权重和激活函数，我们就可以通过量化（Quantization）的方式把模型压缩至少 4 倍，量化有两种方式，一种是训练后量化（post-training quantization），不需要重新训练模型，不过可能会有准确率的损失，如果这个损失超过了可接受的阈值，就只能使用另一种方式，即量化训练（quantized training）了。如果我们选择使用 `mobilenet_v1_1.0_224_quant.tflite` 模型文件，我们会发现它只有 4.3 MB  
 另一个比较重要的点是要学会权衡，有些模型虽然很复杂很大但是准确率很高，有些模型虽然准确率不是很高但是更小巧执行更快，你需要根据实际情况选择最适合的模型  
-![tradeoff](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_flower_3.png)
+![tradeoff](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_flower_3.png)  
 使用硬件加速并不总是最好的选择，有时候开启硬件加速甚至不如不开，所以你最好做好基准测试（benchmark）
 
 ## 参考

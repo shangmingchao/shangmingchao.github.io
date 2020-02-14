@@ -128,8 +128,8 @@ if (intent.resolveActivity(getPackageManager()) != null) {
 ```
 
 * 只有动画、菜单、raw 资源 以及 xml/ 目录中的资源不能使用别名
-* 寻找使用最优资源的流程:
-![res](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/android_notes_core_1.png)
+* 寻找使用最优资源的流程:  
+![res](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/android_notes_core_1.png)  
 * 在应用程序运行时，设备的配置可能会发生变化（如屏幕方向变化、切换到多窗口模式，切换了系统语言），默认情况下系统会销毁重建正在运行的 `Activity` ，所以应用程序必须保证销毁重建的过程中用户的数据和页面状态完好无损地恢复。如果不想系统销毁重建你的 `Activity` 只需要在 manifest 文件的 `<activity>` 标签的 `android:configChanges` 属性中添加你想自己处理的配置更改，多个配置使用 "`|`" 隔开，此时系统就不会在这些配置更改后销毁重建你的这个 `Activity` 而是直接调用它的 `onConfigurationChanged()` 回调方法，你需要在这个回调中自己处理配置更改后的行为。
 * `Activity` 的销毁重建不但发生在设备配置更改后，只要用户离开了某个 `Activity`，那么那个 `Activity` 就随时可能被系统销毁。所以销毁重建是无法避免的，也不应该逃避，而是应该想办法保存和恢复状态
 * 由于各种各样的硬件都能安装 Android 操作系统，Android 操作系统之间也可能千差万别，而应用程序的一些功能是与这些软硬件息息相关的，如拍照应用需要设备必须有摄像头才能正常工作。应用可以通过 `<uses-feature>` 标签声明只有满足这些软硬件要求的设备才能安装，通过它的 `android:required` 属性设置该要求是不是必须的，程序中可以通过 `PackageManager.hasSystemFeature()` 方法判断
@@ -318,8 +318,8 @@ decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityCha
 * **曲线**动画移动 view 还需要借助 Android 5.0 (API level 21) 开始提供的 `PathInterpolator` 插值器（对应于 XML 文件中的 `<pathInterpolator>`），他需要个 `Path` 对象描述运动的贝塞尔曲线。可以使用 `ObjectAnimator.ofFloat(view, "translationX", 100f)` 同时设置 `PathInterpolator` 也可以直接设置 view 动画路径 `ObjectAnimator.ofFloat(view, View.X, View.Y, path)`。系统提供的 `fast_out_linear_in.xml`、`fast_out_slow_in.xml`、`linear_out_slow_in.xml` 三个基础的曲线插值器可以直接使用
 * 基于物理的动画需要引用 `support-dynamic-animation` 支持库，最常见的就是 `FlingAnimation` 和 `SpringAnimation` 动画，物理动画主要是模拟现实生活中的物理世界，利用经典物理学的知识和原理实现动画过程，其中最关键的就是**力**的概念。`FlingAnimation` 就是用户通过手势给动画元素一个力，动画元素在这个力的作用下运动，之后由于摩擦力的存在慢慢减速直到结束，当然这个力也可以通过程序直接指定（指定固定的初始速度）。`SpringAnimation` 就是弹簧动画，动画元素的运动与弹簧有关
 * `FlingAnimation` 通过 `setStartVelocity()` 方法设置初始速度，通过 `setMinValue()` 和 `setMaxValue()` 约束动画值的范围，通过 `setFriction()` 设置摩擦力（如果不设置默认为 1）。如果动画的属性不是以像素为单位的，那么需要通过 `setMinimumVisibleChange()` 方法设置用户可察觉到动画值的最小更改，如对于 `TRANSLATION_X`，`TRANSLATION_Y`，`TRANSLATION_Z`，`SCROLL_X`，`SCROLL_Y` 1 像素的更改就对用户可见了，而对于 `ROTATION`，`ROTATION_X`，`ROTATION_Y` 最小可见更改是 `MIN_VISIBLE_CHANGE_ROTATION_DEGREES` 即 1/10 像素，对于 `ALPHA` 最小可见更改是 `MIN_VISIBLE_CHANGE_ALPHA` 即 1/256 像素，对于 `SCALE_X` 和 `SCALE_Y` 最小可见更改是 `MIN_VISIBLE_CHANGE_SCALE` 即 1/500 像素，计算公式为: 自定义属性值的范围 / 动画的变化像素范围。
-* `SpringAnimation` 需要先巩固一下弹簧的知识，弹簧有一个属性叫**阻尼比 ζ**（damping ratio），是实际的粘性阻尼系数 C 与临界阻尼系数 Cr 的比。ζ = 1 时为临界阻尼，这是最小的能阻止系统震荡的情况，系统可以最快回到平衡位置。0 < ζ < 1 时为欠阻尼，物体会作对数衰减振动。ζ > 1 时为过阻尼，物体会没有振动地缓慢回到平衡位置。ζ = 0 表示不考虑阻尼，震动会一直持续下去不会停止。默认是 `SpringForce.DAMPING_RATIO_MEDIUM_BOUNCY` 即 0.5，可以通过 `getSpring().setDampingRatio()` 设置。弹簧另一个属性叫**刚度**（stiffness），刚度越大形变产生的力就越大，默认是 `SpringForce.STIFFNESS_MEDIUM` 即 1500.0，可以通过 `getSpring().setStiffness()` 设置
-![damping ratio](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/android_notes_core_2.png)
+* `SpringAnimation` 需要先巩固一下弹簧的知识，弹簧有一个属性叫**阻尼比 ζ**（damping ratio），是实际的粘性阻尼系数 C 与临界阻尼系数 Cr 的比。ζ = 1 时为临界阻尼，这是最小的能阻止系统震荡的情况，系统可以最快回到平衡位置。0 < ζ < 1 时为欠阻尼，物体会作对数衰减振动。ζ > 1 时为过阻尼，物体会没有振动地缓慢回到平衡位置。ζ = 0 表示不考虑阻尼，震动会一直持续下去不会停止。默认是 `SpringForce.DAMPING_RATIO_MEDIUM_BOUNCY` 即 0.5，可以通过 `getSpring().setDampingRatio()` 设置。弹簧另一个属性叫**刚度**（stiffness），刚度越大形变产生的力就越大，默认是 `SpringForce.STIFFNESS_MEDIUM` 即 1500.0，可以通过 `getSpring().setStiffness()` 设置  
+![damping ratio](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/android_notes_core_2.png)  
 * `FlingAnimation` 和 `SpringAnimation` 动画通过 `setStartVelocity()` 设置固定的初始速度时最好用 dp/s 转成 px/s : `TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpPerSecond, getResources().getDisplayMetrics())`，用户手势的初始速度可以通过 `GestureDetector.OnGestureListener` 或 `VelocityTracker` 计算
 * `SpringAnimation` 动画使用 `start()` 方法开始动画时属性值不会马上变化，而是在每次动画脉冲即绘制之前更改。`animateToFinalPosition()` 方法会马上设置最终的属性值，如果动画没开始就开始动画，这在链式依赖的弹簧动画中非常有用。`cancel()` 方法可以结束动画在其当前位置，`skipToEnd()` 方法会跳转至终止值再结束动画，可以通过 `canSkipToEnd()` 方法判断是否是阻尼动画
 * 放大预览动画只需要同时动画更改目标 view 的 `X`，`Y`，`SCALE_X`，`SCALE_Y` 属性即可，不过要先计算好两个 view 最终的位置和初始缩放比
@@ -329,7 +329,7 @@ decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityCha
 * 自定义过渡动画需要继承 `Transition`，实现 `captureStartValues()` 和 `captureEndValues()` 方法捕获过渡的 view 属性值并告诉过渡框架，具体实现为通过 `transitionValues.view` 检索当前 view，通过 `transitionValues.values.put(PROPNAME_BACKGROUND, view.getBackground())` 存储属性值，为了避免冲突 key 的格式必须为 `package_name:transition_name:property_name`。同时还要实现 `createAnimator(ViewGroup sceneRoot, TransitionValues startValues, TransitionValues endValues)` 方法，框架调用这个方法的次数取决于开始和结束 scene 需要更改的元素数
 * 动画可能会影响性能，必要时可以启用 Profile GPU Rendering 进行调试
 
-#### 其它
+#### 其它 UI 细节
 
 * Android 8.0 (API level 26) 开始支持自适应启动图标，自适应启动图标必须由前景和背景两部分组成，尺寸必须都是 108 x 108 dp，其中内部的 72 x 72 dp 用来显示图标，靠近四个边缘的 18 dp 是保留区域，用来进行视觉交互
 * 对于字体大小自适应的 `TextView` 宽和高都不能是 `wrap_content`，`autoSizeTextType` 默认是 `none`，设置为 `uniform` 开启自适应，默认最小 `12sp`，最大 `112sp`，粒度 `1px`。`autoSizePresetSizes` 属性可以设置预置的一些大小
@@ -414,7 +414,7 @@ if (activities.size() > 0) {
 revokeUriPermission(outputUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 ```
 
-#### ContentProvider
+#### ContentProvider 存储
 
 * `ContentProvider` 的数据形式和关系型数据库的表格数据类似，因此 API 也像数据库一样包含增删改查（CRUD）操作，但为了更好地组织管理一个或多个 `ContentProvider`，最好通过 `ContentResolver` 操作 `ContentProvider`
 * 对于 `ContentProvider` 的增删改查操作，**不能直接在 UI 线程上执行**
@@ -439,7 +439,7 @@ mCursor = getContentResolver().query(
 * 使用者需要事先通过 `<uses-permission>` 标签获取访问权限
 * 创建 `ContentProvider` 需要继承 `ContentProvider` 并实现增删改查等一系列方法: `onCreate()` 在系统创建 provider 后马上调用，可以在这里创建数据库，但不要在这里做耗时操作。`getType()` 返回 content URI 的 MIME 类型。`query()`、`insert()`、`update()`、`delete()` 进行增删改查。除了 `onCreate()` 方法其它方法必须要保证是线程安全的
 
-#### 其它
+#### 其它存储细节
 
 * Android 7.0 (API level 24) 开始禁止使用 file URI 进行文件共享
 * Android 7.1.1 (API level 25) 开始安装 APK 时必须声明 `REQUEST_INSTALL_PACKAGES` 权限，数据必须通过 `FileProvider` 形式共享，数据类型是 `application/vnd.android.package-archive`，必须给 Intent 添加 `FLAG_GRANT_READ_URI_PERMISSION` flag 授予临时访问权限

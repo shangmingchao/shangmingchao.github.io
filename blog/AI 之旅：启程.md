@@ -1,7 +1,7 @@
 # AI 之旅：启程
 
 > “All models are wrong, but some are useful.”  
-> <p align="right">— George Box</p>
+> -— George Box
 
 机器学习（Machine Learning）最大的魅力在于改变了开发者的思考方式，开发者不需要再费力地给程序编写固定的逻辑指令，而是让程序对大量的未知数据进行分析思考，然后学会如何去处理未知的输入，如何对结果进行预测，如何采取动作
 
@@ -41,7 +41,7 @@ $$y' = b + w_1x_1$$
 这个预测模型只有每分钟虫鸣数一个特征，而一个复杂的模型往往有多个特征和对应的权重，如:  $y' = b + w_1x_1 + w_2x_2 + w_3x_3$  
 创建或训练模型的过程就是寻找最好的权重和偏差值的过程（确定最好的 $b$ 和 $w_1$ 的过程），而在监督式学习中，机器学习算法通过“考察大量样本以便尝试寻找一个最小化损失的模型”来构建模型，这个过程也被称为经验式风险最小化（empirical risk minimization）  
 损失就是指对糟糕预测的惩罚，是表示模型在一个样本上预测的糟糕程度，是个数值，如果模型的预测是完美的，那么损失就是零，否则损失就很大，我们可以创建一个数学函数（损失函数）去有意义地汇总各个损失  
-![loss](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_2.png)
+![loss](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_2.png)  
 蓝色线表示预测，红色箭头表示各个损失，很显然右侧的要比左侧的平均损失更小。一个最常见的损失函数是平方损失函数（squared loss / $L_2$ loss），一个样本的平方损失就是标签和预测值差的平方，即 $(y - y')^2$。整个数据集每个样本的平均平方损失被称为 **均方误差 MSE**（mean squared error），就是把每个样本的平方损失加起来除以样本数:  
 $$MSE = \frac{1}{N} \sum_{(x,y)\in D} (y - prediction(x))^2
 $$
@@ -49,18 +49,18 @@ $$
 ## 降低损失
 
 如何快速高效地确定最好（如使 MSE 最小）的 $b$ 和 $w_1$ 的值呢？最简单的办法就是先胡乱猜一个 $b$ 和 $w_1$ 的值，计算一下损失，然后调整一下 $b$ 和 $w_1$ 的值，计算损失，比较一下这两次损失再决定如何调整 $b$ 和 $w_1$ 的值（如果损失变小了说明调整的方向对了，继续按照当前方向调整就行了，如果损失变大了就要考虑改变调整的方向了），理论上不断地迭代试错下去就能找到最好的 $b$ 和 $w_1$ 的值  
-![iterative approach](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_3.png)
+![iterative approach](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_3.png)  
 使用迭代法（iterative approach）不单是因为它简单直接，更是因为它在面对大型数据集时仍然表现良好  
 对于线性回归来说，选择哪个点作为起始点并不是很重要，比如我们完全可以选择 $b = 0, w_1 = 0$ 作为迭代的起始点。图中绿色的框是最关键的部分，正是它决定了迭代的方向，即新的 $b$ 和 $w_1$ 的值，迭代到总体损失不再变化或者变化极其缓慢为止，这时表示模型已收敛（converged）  
 假设我们有充足的时间和计算资源去计算所有 $w_1$ 的可能值和对应的损失，对于我们一直研究的回归问题，损失 和 $w_1$ 的关系图形始终是凸形（convex）的，或者说关系图形是个碗形:  
-![convex](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_4.png)
+![convex](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_4.png)  
 我们的目标就是不断改变 $w_1$ 的值直到找到唯一的损失最小的那个最低点（斜率为 0），即损失函数收敛的位置，迭代的策略有很多种，最常见的就是梯度下降法（gradient descent）  
-![gradient descent](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_5.png)
+![gradient descent](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_5.png)  
 先随便选一个点作为起始点，如图中的一个比 0 大一点的点，然后梯度下降算法会计算起始点处损失曲线的梯度，而损失的梯度在这里等于曲线在该点的导数（斜率）。如果有多个权重，那么梯度就是对应权重的偏导数，更准确点说梯度是所有自变量对应偏导数的矢量，梯度下降算法会沿着负梯度的方向一直走以便尽快降低损失，下一步的步长不能太小不然计算量会很大很慢，不能太大不然可能会导致模型偏离，所以这就涉及到学习速率（Learning Rate）的问题了  
 阶梯下降算法把梯度乘以学习速率作为下一步的变化量，而如何确定学习速率往往依赖于经验技巧，所以说学习速率是一个超参数（Hyperparameters）: 在机器学习算法中程序员要扭动的旋钮。每个回归问题都存在一个 Goldilocks 学习速率，一维空间的理想学习速率是 $\frac{ 1 }{ f(x)'' }$（f(x) 对 x 的二阶导数的倒数），二位或多维空间的理想学习速率是海森矩阵的倒数  
 除了学习速率还有一个问题需要考虑，那就是样本的个数，如果样本个数特别大，大到几十亿甚至几千亿的数量级，那么每次迭代计算梯度时都需要输入全部的样本吗（需要的样本数量称为 batch）？所以为了减少计算量可以从数据集中随机的选择一些样本，这样经过很少的计算就可以很快地收敛。而随机梯度下降 SGD（Stochastic gradient descent）更是极端地每次迭代只使用一个样本，经过足够的迭代 SGD 可以发挥作用但是噪音更多。Mini-batch SGD 是介于 full-batch 迭代和 SGD 迭代之间的折衷方案，Mini-batch SGD 通常会随机选 10 到 1000 个样本，它比 SGD 噪音更少，比 full-batch 更有效率  
 已经大概知道了如何有效地降低损失，那损失能降低到 0 么？能根据已知的样本训练一个完美的模型么？事实上并不能，也没有必要，就算费尽心机地把模型训练地对已知样本的预测准确率是完美的 100%，但是面对新的样本时还是无法达到 100%，因为“凡事皆有例外”，而且这样看似完美的模型在面对新的样本时预测的准确率甚至还不如其他简单的模型：  
-![generalization](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_6.png)
+![generalization](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_6.png)  
 可以看到，蓝色点代表生病的树，黄色点代表健康的树，背景色代表模型的预测，左边的图代表训练好的特别复杂但是损失很低的模型，但是在新的样本上测试时（右图）可以发现模型表现特别糟糕，对大部分新数据的分类都不准确，这就涉及到泛化的问题了
 
 ## 泛化
@@ -81,7 +81,7 @@ $$
 
 **永远不要对测试集进行训练**，如果你发现模型在测试集上预测的准确度特别高，甚至比在训练集上的还高，先不要兴奋，你很可能把一些测试数据用于训练了，得重新检查一下训练集是不是包含了一些训练集的数据  
 在训练集上训练模型，在测试集上评估模型，再根据评估的结果调整模型，如此循环下去直到能选择一个在测试集上表现最好的模型。这样的流程有点问题，我们可能无形中对测试数据的特性进行了过拟合，所以为了避免出现这种情况，我们从数据集中再单独划分出一些数据作为验证集，这样迭代评估的时候只在验证集上评估即可，测试集只用来确认结果，要确保在测试集上得出的结果基本符合在验证集上得出的结果，如果不符合就说明对验证集进行了过拟合  
-![validation set](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_7.png)
+![validation set](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_7.png)  
 
 ## 特征工程
 
@@ -90,7 +90,7 @@ $$
 有时我们需要处理一下极端离群值（extreme outlier）:  
 ![extreme outliers](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_8.png)  
 有时我们需要对浮点数进行分箱（Binning）:  
-![bin](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_9.png)
+![bin](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_9.png)  
 纬度本来是连续的浮点类型的，但是小纬度内房价的差别并不是连续的，差别一般也不大，所以可以把纬度分箱，纬度 37.4 可以表示为 [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0]  
 到现在为止，我们可以假设用于训练和测试的数据是可靠的了，我们像挑出坏苹果一样把不好的样本挑出去了:  
 
@@ -125,11 +125,11 @@ $L_2$ 正则化虽然可以使权重变小，但不能使他们正好为 0，$L_
 
 很多问题都需要把 概率估计 作为输出，比如图片中的动物是猫的概率是多少、狗晚上吵醒人的概率是多少，既然是概率，那么概率值肯定是 0 到 1 之间，那我们之前学到的线性模型的输出能强制限制到 0 到 1 之间么？很显然不太现实，那我们就要想出一种不同的损失函数和预测方法使概率值很自然的处于 0 到 1 之间，我们将这种想法称为逻辑回归（Logistic Regression）。逻辑回归的概率就非常有用了，甚至可以被看做实际概率去做有用的预测，用这个概率乘以想要预测的项就可以得到预期值。它在二元分类（binary classification）中也非常有用，如一封邮件是垃圾邮件的概率是多少，一枚硬币朝上的概率是多少。那逻辑回归模型是怎样保证输出总是介于 0 到 1 之间呢？我们来看一下 S 型函数（sigmoid function）:  
 $$y = \frac{1}{1 + e^{-z}}$$  
-![sigmoid function](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_12.png)
+![sigmoid function](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_12.png)  
 逻辑回归模型也类似：  
 $$y' = \frac{1}{1 + e^{-(z)}}
 $$  
-![l](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_13.png)
+![l](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_13.png)  
 $y'$ 表示逻辑回归模型的输出，$z$ 表示线性模型的 $b + w_1x_1 + w_2x_2 +  ... w_Nx_N$，$z$ 也称为对数几率（log-odds），因为 $z = log(\frac{y}{1-y})
 $，如果是二元分类问题，那么 $y$ 和 $1 - y$ 就是相对的两个概率  
 我们最开始讨论的线性回归用的损失函数是平方损失（Squared Loss），而逻辑回归用的是对数损失（Log Loss）：  
@@ -161,21 +161,21 @@ $，和召回率一样
 假正例率 FPR（False Positive Rate）为 $FPR = \frac{FP} {FP + TN}
 $  
 将不同阈值下的 TPR 和 FPR 值的点连成一条曲线就是 ROC 曲线：  
-![roc](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_14.png)
+![roc](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_14.png)  
 观察这个 ROC 曲线，我们惊讶地发现曲线下的面积就可以很好地表示分类模型的好坏，面积越大，那么随机选择一个正样本和一个负样本时正样本排在前面的概率就越大。而这个曲线下面积简称为 AUC（Area under the ROC Curve）  
 还有一个指标，那就是偏差，回归模型应该是无偏差的，也就是说，预测的平均值和观察到的平均值差不多是一样的，预测偏差（Prediction bias）等于预测的平均值减去数据集中标签的平均值，如果预测偏差不为 0 那么说明模型可能有问题，需要找一下是什么原因导致的非零偏差，当然，即使是预测偏差为零也不能说明模型是完美的，还要看其他指标。造成预测偏差的原因可能有特征集不完整，数据集中的噪音，有偏差的训练样本，太强的正则化等等，可以通过添加校准层（calibration layer）来调整模型的输出，从而减少偏差，但是这只是下策，因为这个治标不治本，而且你还得维护这个脆弱的系统  
 
 ## 神经网络
 
 当问题复杂到无法用线性回归解决怎么办？即使是利用特征交叉也无法解决非线性的问题呢？这个时候我们希望通过某种方式，让模型自己学习非线性的规律，而不用我们手动为它设置参数。这一愿景可以通过深度神经网络（Deep Neural Networks）实现，它在复杂数据问题上做得特别好，例如图片数据，视频数据，音频数据等。先来看一下线性模型的表示，如 $y = b + w_1x_1 + w_2x_2 + w_3x_3$:  
-![linear](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_15.png)
+![linear](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_15.png)  
 每个特征输入都有一个权重，这些权重以线性方式结合到一起产生唯一的输出，也就是各个输入特征的加权和，那我们怎么把它扩展到非线性模型呢？  
-![ext](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_16.png)
+![ext](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_16.png)  
 我们发现，不管我们以线性的方式往中间加多少层，线性函数的组合依然是线性函数，模型依然是线性的。因此我们想办法加一些非线性函数进去，这些非线性函数可能位于任何小的隐藏式节点的输出中：  
-![hidden](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_17.png)
+![hidden](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_17.png)  
 这种非线性函数也被称为激活函数（Activation Function），常见的激活函数有 S 型激活函数和 ReLU 激活函数，S 型函数之前提到过，可以把加权和平滑地限制到 0 到 1 之间，而 ReLU（rectified linear unit） 激活函数更加的简单，它接受线性函数，并在零值处截断，即 $F(x)=max(0,x)
 $：  
-![max](hhttps://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_18.png)
+![max](hhttps://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_18.png)  
 事实上，任何数学函数都可以作为激活函数，假设用 $\sigma$ 表示激活函数，那么网络中节点的值就是 $\sigma(\boldsymbol w \cdot \boldsymbol x+b)
 $  
 现在，我们有了人们常说的神经网络的所有标准组件:  
@@ -197,9 +197,9 @@ $
 - 这是一张鸡蛋的图片吗？不是
 
 当类别很少时还可以接受，但类别很多时，效率就会变得异常低下，因此我们可以使用深度神经网络创建一个明显更高效的 one-vs.-all 模型，其中每个输出节点代表不同的类型：  
-![on-vs.-all](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_19.png)
+![on-vs.-all](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_19.png)  
 我们已经知道，逻辑回归在处理二元分类问题时很有用，它可以把输出（概率）限制在 0 到 1 之内， 如果一封邮件是垃圾邮件的概率是 80%，那么是正常邮件的概率就是 20%，加起来肯定等于 1，那怎么把这个扩展到多类别问题中呢？答案是 Softmax，它为每个类别分配一个概率，这些概率加起来必须等于 1，这会帮助训练比其他方式更快地收敛：  
-![softmax](hhttps://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_20.png)
+![softmax](hhttps://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_20.png)  
 Softmax 层是输出层之前的神经网络层，必须和输出层有一样的节点数，它的公式本质上也是逻辑回归公式的延伸：  
 $$p(y = j|\textbf{x})  = \frac{e^{(\textbf{w}_j^{T}\textbf{x} + b_j)}}{\sum_{k\in K} {e^{(\textbf{w}_k^{T}\textbf{x} + b_k)}} }
 $$  
