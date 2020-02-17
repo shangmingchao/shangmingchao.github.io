@@ -20,7 +20,7 @@
 ## 线性回归
 
 在统计学中，线性回归（Linear Regression）是对 标量响应（因变量） 和 一到多个解释变量（自变量） 之间的关系进行建模的一种线性方法，只有一个解释变量时被称为简单线性回归，有多个解释变量时被称为 multiple 线性回归，预测多个相关因变量时被称为 multivariate 线性回归  
-![linear regression](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_1.png)
+![linear regression](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/ai_sail_1.png)  
 可以看出每分钟蟋蟀的叫声和温度的关系是线性的关系，我们就可以随便画一条直线去拟合:  
 $$y = mx + b$$  
 
