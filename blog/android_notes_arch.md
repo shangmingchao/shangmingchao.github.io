@@ -19,11 +19,11 @@
 
 ## 推荐架构
 
-![arch](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/android_notes_arch_1.png.png)  
+![arch](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/android_notes_arch_1.png)  
 Android Jetpack 组件库中有一个叫 Architecture Components 的组件集，里面包含了 Data Binding，Lifecycles，LiveData，Navigation，Paging，Room，ViewModel，WorkManager 等组件的实现
 
 * `ViewModel` 用来为指定的 UI 组件提供数据，它只负责根据业务逻辑获取合适的数据，他不知道 View 的存在，所以它不受系统销毁重建的影响，一般它的生命周期比 View 更长久  
-![viewmodel](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/android_notes_arch_2.png.png)  
+![viewmodel](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/android_notes_arch_2.png)  
 * `LiveData` 是一个数据持有者，它持有的数据可以是任何 Object 对象。它类似于传统观察者模式中的 Observable，当它持有的数据发生变化时会通知它所有的 Observer。同时它还可以感知 Activity，Fragment 和 Service 的生命周期，只通知它们中 active 的，在生命周期结束时自动取消订阅
 * `Activity/Fragment` 持有 `ViewModel` 进行数据的渲染，`ViewModel` 持有 `LiveData` 形式的数据以便尊重应用组件的生命周期，但是获取 `LiveData` 的具体实现应该由 **Repository** 完成
 * **Repository** 是数据的抽象，它提供简洁一致的操作数据的 API，内部封装好对持久化数据、缓存数据、后台服务器数据等数据源数据的操作。所以 `ViewModel` 不关心数据具体是怎么获得的，甚至可以不关心数据到底是从哪拿到的
@@ -158,7 +158,7 @@ dependencies {
 ```
 
 然后根据习惯合理地设计源码的目录结构，如  
-![dic](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/android_notes_arch_3.png.png)
+![dic](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/android_notes_arch_3.png)
 
 ```java
 public class RepoRepository {
