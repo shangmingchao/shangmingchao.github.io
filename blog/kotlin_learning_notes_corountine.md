@@ -226,9 +226,9 @@ fun foo(): Flow<Int> = flow {
 foo().collect { value -> println(value) }
 ```
 
-Flow 只有在 collect 的时候才会运行，像个 cold stream
+Flow 只有在 collect 的时候才会运行，像个 cold stream  
 这么一看，怎么跟 Reactive Streams 这么像啊，确实，它跟 RxJava，project Reactor 等一样，但是它想要更加简单，更加 Kotlin 友好，更加挂起友好，更加尊重结构化并发，同时它也提供了对应的转换器可以和其它的 Stream 相互转换  
-Flow 本身没有取消的机制，只能借助里面的挂起函数实现取消
+Flow 本身没有取消的机制，只能借助里面的挂起函数实现取消  
 
 ## 参考
 
