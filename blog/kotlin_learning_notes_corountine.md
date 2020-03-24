@@ -67,8 +67,8 @@ val job = launch(Dispatchers.Default) {
 }
 ```
 
-当然，可以在挂起函数抛出 `CancellationException` 异常后利用 `try {...} finally {...}` 做一些资源回收工作，而如果 `finally` 里也有挂起函数怎么办，也会抛异常啊，可以使用 `withContext(NonCancellable) {...}` 来保证里面的逻辑是不能被取消的
-`withTimeout` 函数可以用来检测协程的执行的超时，一旦协程执行超时会马上抛出 `TimeoutCancellationException` 异常，它是 `CancellationException` 的子类，所以也是表明协程完成的正常异常
+当然，可以在挂起函数抛出 `CancellationException` 异常后利用 `try {...} finally {...}` 做一些资源回收工作，而如果 `finally` 里也有挂起函数怎么办，也会抛异常啊，可以使用 `withContext(NonCancellable) {...}` 来保证里面的逻辑是不能被取消的  
+`withTimeout` 函数可以用来检测协程的执行的超时，一旦协程执行超时会马上抛出 `TimeoutCancellationException` 异常，它是 `CancellationException` 的子类，所以也是表明协程完成的正常异常  
 `withTimeoutOrNull` 不会抛异常，只会返回 `null`
 
 ## 并发协程
