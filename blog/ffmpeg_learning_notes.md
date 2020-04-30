@@ -55,21 +55,21 @@ PS（Program Streams）指将多个打包的基本码流 PES （通常是一个�
 PTS（Presentation time stamps）: PS 中的 PTS 用来校正音频和视频 SCR（system clock reference）值之间的不可避免的差异（时基校正），如 PS 头中的 90 kHz PTS 值告诉解码器哪些视频 SCR 值与哪些音频 SCR 值匹配。PTS 决定了何时显示 MPEG program 的一部分，并且解码器还使用它来确定何时可以从缓冲器中丢弃数据。解码器将延迟视频或音频中的一个，直到另一个的相应片段到达并且可以被解码。  
 DTS（Decoding Time Stamps）: 对于视频流中的 B 帧，必须对相邻帧进行无序编码和解码（重新排序的帧）。DTS 与 PTS 非常相似，但它不仅仅处理顺序帧，而是包含适当的时间戳，在它的锚帧（P 帧 或 I 帧）之前，告诉解码器何时解码并显示下一个 B 帧。如果视频中没有B帧，那么 PTS 和 DTS 值是相同的。  
 
-# FFMPEG
+## FFMPEG
 
-## FFMPEG 概述
+### FFMPEG 概述
 
 [FFMPEG](http://ffmpeg.org/) 项目是在 2000 年由法国著名程序员 Fabrice Bellard 发起的，名字是受到 MPEG 专家组的启发，前面的 “FF” 是 “fast forward” 快进的意思。FFMPEG 是一个可以录制音视频，转码音视频的格式，将音视频转成媒体流的完整的、跨平台的 **解决方案**。它是一个自由的软件项目，任何人都可以免费使用和修改，只要遵循 GPL 或者 LGPL 协议引用或公开源码就行。它中的编解码库也是 VLC 播放器所使用的核心编解码库，B 站（Bilibili）开源的 [ijkplayer](https://github.com/Bilibili/ijkplayer) 、著名的 [MPlayer](http://www.mplayerhq.hu/design7/news.html) 等基本所有主流播放器也都是基于 FFMPEG 开发的。  
 
-## FFMPEG 使用
+### FFMPEG 使用
 
-### 注册编解码器
+#### 注册编解码器
 
 `libavcodec/allcodecs.c` 文件中的 `avcodec_register_all()` 函数用来注册所有的编解码器（包括硬件加速、视频、音频、PCM、DPCM、ADPCM、字幕、文本、外部库、解析器）。  
 `libavformat/allformats.c` 文件中的 `av_register_all()` 函数中调用了 `avcodec_register_all()` 注册所有的编解码器并注册了所有 muxer 和 demuxer。  
 因此使用 FFMPEG 一般都要先调用 `av_register_all()`。  
 
-### 打开输入流
+#### 打开输入流
 
 要读取一个媒体文件，可以使用 `libavformat/utils.c` 文件中的 `avformat_open_input()` 函数:  
 
@@ -114,7 +114,7 @@ err =
 `http_open_cnx_internal()` 中先是对视频 URL 进行分析，比如如果使用了代理那么还要重新组装 URL 以避免将一些信息暴露给代理服务器，如果是 HTTPS 那么底层协议就是 TLS 否则底层协议就是 TCP，然后调用 `ffurl_open_whitelist()` 进行底层协议的处理（如 DNS 解析，TCP 握手建立 Socket 连接）。然后调用 `http_connect()` 函数进行 HTTP 请求，当然请求前要给 Header 设置默认值并且添加用户自定义的 Header，然后调用 `libavformat/avio.c` 文件中的 `ffurl_write()` 函数发送请求数据，它调用底层协议的 `url_write`，而位于 `libavformat/tcp.c` 文件中的 TCP 协议 `ff_tcp_protocol` 的 `url_write` 指向了 `tcp_write()` 函数，`tcp_write()` 主要是调用系统函数 `send()` 发送数据（`tcp_read` 调用系统函数 `recv()`）。最后，在发送完数据后会调用 `http_read_header()` 函数读取响应报文的 Header，而 `http_read_header()` 中有个死循环，就是不停地 `http_get_line()` 和 `process_line()` 直到所有 Header 数据处理完毕，`http_get_line()` 内部其实也是调用了 `ffurl_read()`（跟 `ffurl_write()` 逻辑类似）。  
 至此，如果 `avformat_open_input()` 返回了大于等于零的数，就算是第一次拿到了媒体文件的数据，播放器就可以向上层发一个 `FFP_MSG_OPEN_INPUT` 的消息表示成功打开了输入流。  
 
-### 分析输入流
+#### 分析输入流
 
 打开输入流并一定能精确地知道媒体流实际的时长、帧率等信息，一般情况下还需要调用 `libavformat/utils.c` 文件中的 `avformat_find_stream_info()` 函数对输入流进行探测分析:  
 
@@ -125,15 +125,15 @@ int avformat_find_stream_info(AVFormatContext *ic, AVDictionary **options)
 由于读取一部分媒体数据进行分析的过程还是非常耗时的，所以需要一个时间限制，这个时间限制不能太短以避免成功率太低。`max_analyze_duration` 如果不指定那么默认是 `5 * AV_TIME_BASE`（时间都是基于时基的，而时基 `AV_TIME_BASE` 是 `1000000`），对于 `mpeg` 或 `mpegts` 格式的视频流 `max_stream_analyze_duration = 90 * AV_TIME_BASE`。  
 对于媒体中的所有流（包括视频流、音频流、字幕流），先根据之前的 `codec_id` 调用 `find_probe_decoder()` 函数寻找合适的解码器，再调用 `libavcodec/utils.c` 文件中的 `avcodec_open2()` 函数打开解码器，再调用 `read_frame_internal()` 函数读取一个完整的 `AVPacket`，再调用 `try_decode_frame()` 函数尝试解码 packet。  
 
-### 获取各个媒体类型的流的索引
+#### 获取各个媒体类型的流的索引
 
 一般媒体流中都会包括 `AVMEDIA_TYPE_VIDEO`、`AVMEDIA_TYPE_AUDIO` 和 `AVMEDIA_TYPE_SUBTITLE` 等媒体类型的流，可以通过 `libavformat/utils.c` 文件中的 `av_find_best_stream()` 函数获取他们的索引。  
 
-### 打开各个媒体流
+#### 打开各个媒体流
 
 根据各个媒体流的索引就可以打开各个媒体流了，首先调用 `libavcodec/utils.c` 文件中的 `avcodec_find_decoder()` 函数找到该媒体流的解码器，然后调用 `libavcodec/options.c` 文件中的 `avcodec_alloc_context3()` 为解码器分配空间，然后调用 `libavcodec/utils.c` 文件中的 `avcodec_parameters_to_context()` 为解码器复制上下文参数，然后调用 `libavcodec/utils.c` 文件中的 `avcodec_open2()` 打开解码器，然后调用 `libavutil/frame.c` 文件中的 `av_frame_alloc()` 为 `AVFrame` 分配空间，然后调用 `libavutil/imgutils.c` 文件中的 `av_image_get_buffer_size()` 获取需要的缓冲区大小并为其分配空间，然后调用 `libavcodec/avpacket.c` 文件中的 `av_init_packet()` 对 `AVPacket` 进行初始化。  
 
-### 循环读取每一帧
+#### 循环读取每一帧
 
 通过 `libavformat/utils.c` 文件中的 `av_read_frame()` 函数就可以读取完整的一帧数据了:  
 
@@ -174,7 +174,7 @@ int avformat_find_stream_info(AVFormatContext *ic, AVDictionary **options)
     } while (!end_of_stream || got_frame);
 ```
 
-# 编译 ijkplayer
+### 编译 ijkplayer
 
 如果编译过程中出现 `linux-perf` 相关文件未找到的错误可以在编译脚本文件中添加下面这一行以禁用相关调试功能:  
 
@@ -254,7 +254,7 @@ git clone https://github.com/Bilibili/ijkplayer.git ijkplayer-android && cd ijkp
 ijkplayer-android/android/ijkplayer/ijkplayer-armv7a/src/main/libs/armeabi-v7a/libijkffmpeg.so
 ```
 
-# 参考
+## 参考
 
 - [MPEG-1 Wiki](https://en.wikipedia.org/wiki/MPEG-1)
 - [H.261 Wiki](https://en.wikipedia.org/wiki/H.261)
