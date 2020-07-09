@@ -167,106 +167,19 @@ Sn = 2^n - 1 = a_n+1 - 1
 #### 正常二分查
 
 ```java
-private static int binarySearch(int[] a, int fromIndex, int toIndex, int key) {
-    // TODO: 参数检查
-    int left = fromIndex;
-    int right = toIndex;
-    while (left <= right) {
-        int mid = (left + right) >>> 1;
-        int midVal = a[mid];
-        if (midVal < key) {
-            left = mid + 1;
-        } else if (midVal > key) {
-            right = mid - 1;
-        } else {
-            return mid;
-        }
-    }
-    return -1;
-}
-```
-
-循环终止条件: 找到了 key 直接 return 或者 right 变成了 left 的左边（由于没找到的时候 left 或 right 至少会向彼此的方向移动 1 位所以循环肯定会终止）  
-循环后的状态: 如果没找到，那么  right 为 fromIndex - 1 或者 left 为 toIndex + 1，right 正好在 left 左边 1 位
-
-#### 二分查并确定插入位置
-
-```java
-private static int binarySearch(int[] a, int fromIndex, int toIndex, int key) {
-    // TODO: 参数检查
-    int left = fromIndex;
-    int right = toIndex;
-    while (left < right - 1) {
-        int mid = (left + right) >>> 1;
-        int midVal = a[mid];
-        if (midVal > key) {
-            right = mid - 1;
-        } else {
-            left = mid;
-        }
-    }
-    if (a[right] == key) {
-        return right;
-    }
-    if (a[right] < key) {
-        return right + 1;
-    }
-    if(a[left] >= key) {
-        return left;
-    }
-    return left + 1;
-}
-```
-
-循环终止条件: left 变成了 right 左边 1 位或者 left 变成了 right（由于 mid 肯定在 left 和 right 中间每轮 left 向右至少走 1 位或者 right 向左至少走 1 位所以循环肯定会终止）  
-循环后的状态: left 变成了 right 左边 1 位或者 left 变成了 right，right 右边肯定是大于 key 的，如果找到了那么 key 肯定是 left 或者 right，如果没找到，那么插入位置肯定是 right + 1（key 太大了）或者 left （key 太小了）或者 left + 1
-
-#### 二分查并确定元素区间
-
-```java
-private static int[] binarySearch(int[] a, int fromIndex, int toIndex, int key) {
-    // TODO: 参数检查
-    int[] ret = new int[2];
-    int left = fromIndex;
-    int right = toIndex;
-    while (left < right - 1) {
-        int mid = (left + right) >>> 1;
-        int midVal = a[mid];
-        if (midVal >= key) {
-            right = mid;
-        } else {
-            left = mid + 1;
-        }
-    }
-    if (a[left] == key) {
-        ret[0] = left;
-    } else if (a[right] == key) {
-        ret[0] = right;
+int l = 0, r = a.length - 1;
+while (l <= r) {
+    int m = (l + r) >>> 1;
+    if (a[m] == key) {
+        return m;
+    } else if (a[m] > key) {
+        r = m - 1;
     } else {
-        ret[0] = ret[1] = -1;
-        return ret;
+        l = m + 1;
     }
-    right = toIndex;
-    while (left < right - 1) {
-        int mid = (left + right) >>> 1;
-        int midVal = a[mid];
-        if (midVal <= key) {
-            left = mid;
-        } else {
-            right = mid - 1;
-        }
-    }
-    if (a[right] == key) {
-        ret[1] = right;
-    } else if (a[left] == key) {
-        ret[1] = left;
-    }
-    return ret;
 }
+return -1;
 ```
-
-循环终止条件: left 变成了 right 左边 1 位或者 left 变成了 right（由于 mid 肯定在 left 和 right 中间每轮 left 向右至少走 1 位或者 right 向左至少走 1 位所以循环肯定会终止）  
-循环后的状态: left 变成了 right 左边 1 位或者 left 变成了 right，第一个循环保证 left 左边肯定是小于 key 的以确保 left 或 right 是 key 第一次出现的位置，第二个循环保证 right 右边肯定是大于 key 的以确保 left 或 right 是 key 最后一次出现的位置  
 
 #### 查找和在数组中的位置
 
@@ -289,7 +202,7 @@ private static int[] twoSum(int[] nums, int target) {
 ```java
 static long[] sumMap;
 
-private static void preTreatment(int[] nums) {
+private static void preprocess(int[] nums) {
     sumMap = new long[nums.length];
     sumMap[0] = nums[0];
     for (int i = 1; i < nums.length; i++) {
@@ -298,21 +211,145 @@ private static void preTreatment(int[] nums) {
 }
 
 private static long sum(int[] nums, int fromIndex, int toIndex) {
-    // TODO: 边界检查
     return sumMap[toIndex] - (fromIndex == 0 ? 0 : sumMap[fromIndex - 1]);
 }
 ```
 
-打表只是 **预处理**（pre-treatment）的一种方式，预处理虽然简单暴力，但是面对大量同类型操作时效率很高
+#### 素数
 
-### 【拳脚功夫】Hash function
+- 2, 3, 5, 7, 11, 13, 17 ...  
+- 素数/质数：大于 1 的自然数中，除了 1 和它本身外不再有其它因数的自然数  
+- 孪生素数：相差 2 的素数对，(3, 5)，(11, 13)  
+- 所有大于 10 的素数中，个位只可能是 1, 3, 7, 9
+- 对正整数 n，如果用 2 到 sqrt (n) 之间的所有整数去除都无法整除，则 n 为质数  
+
+```java
+public boolean isPrime(int n) {
+    if (n <= 3) {
+        return n > 1;
+    }
+    for (int i = 2; i <= Math.sqrt(n); i++) {
+        if (n % i == 0) {
+            return false;
+        }
+    }
+    return true;
+}
+```
+
+#### Hash
 
 - Hash 音译为哈希，直译为散列  
 - 试想一个生活中的场景：一个朋友 A 问你另一个朋友 Z 的电话号码是多少，你把你的通讯录打开，直接点击 "Z" 就跳转到 Z 的那条电话号码信息了，这比你从电话本的第一条开始找要快得多，这就是哈希索引的好处，你只需要知道 Z 的信息在第 "Z" 个位置就可以快速地获取到 Z 的相关信息了  
 - Hash 函数是将任意大小的数据映射到固定大小的数据的函数，函数的返回值通常被称为哈希值、哈希码、摘要、哈希。Hash 本意指的是将什么东西切碎或弄乱，所以 Hash 函数就是把输入的数据扰乱以获得它们的输出  
 - Hash 最常见的应用就是应用于 Hash 表，对于给定的关键词可以快速地定位要查找的那条数据记录，因为 Hash 函数的值就是记录的索引。通常 Hash 函数都是不完美的，函数的的值域会小于定义域，所以有可能不同的几个 key 会映射到相同的索引，从而出现冲突/碰撞（collision），也正只是因为这样，Hash 表的每个槽（slot）可能对应几个记录，这个槽也被称为桶（bucket），Hash 值也被称为桶索引  
 - Hash 函数大多是用来保护数据的，这就要求 Hash 函数必须是抗碰撞（collision-resistant）的，用于密码学领域的 Hash 函数有三个安全类型: Pre-image resistance 表示给你加密后的 h 你很 **难** 找到原始消息 m 满足 h = hash(m)，Second pre-image resistance 表示给你 m1 你很 **难** 找到 m2 满足 hash(m1) = hash(m2)，Collision resistance 表示你很 **难** 找到 m1 和 m2 满足 hash(m1) = hash(m2)。“ **难**” 有两种含义，一是表示几乎可以肯定系统的安全性超出了任何对手的攻击范围，二是表示从理论上来说计算的复杂度复杂到几乎不可能计算出来。用来保护数据的 Hash 函数分为两种，一种叫 Cryptographic hash functions，就是通过一些复杂的位运算等方式生成 Hash 码，生成的过程虽然通常很复杂但并不是基于纯粹的数学函数的，没有理论支撑，没法证明它具有抗碰撞性，MD5、SHA-1 系列、SHA-2 系列（如 SHA-224，SHA-256，SHA-384，SHA-512）等 Hash 函数都属于这种，还有一种叫 Provably secure hash functions，建立在纯粹的数学问题上，但是目前并不实用，因为设计这样的函数太难了，就算设计出来往往效率特别低，没办法满足性能的要求  
-- Hash 函数的应用特别广泛，还可以用来进行缓存的处理；作为 Bloom filter 的一部分；用来快速寻找重复的记录；用来寻找相似的记录；用来寻找相似的子串；用于计算机图形学中的几何哈希；用于身份认证、消息完整性校验、消息指纹、数据损坏检测、和高效数字签名等密码学领域
+- Hash 函数的应用特别广泛，还可以用来进行缓存的处理；作为 Bloom filter 的一部分；用来快速寻找重复的记录；用来寻找相似的记录；用来寻找相似的子串；用于计算机图形学中的几何哈希；用于身份认证、消息完整性校验、消息指纹、数据损坏检测、和高效数字签名等密码学领域  
+- Hash 是不可逆的，因为 Hash 本质上是个信息摘要算法，这些摘要和原本的信息之间没有本质上的相互关系  
+
+#### 字符串哈希  
+
+![image.png](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/nature_of_things_hashing_strings.png)  
+
+```java
+// Java 字符串哈希
+int h = 0, len = s.length();
+for (int i = 0; i < len; i++) {
+    h = 31 * h + s.charAt(i);
+}
+return h;
+```
+
+#### 字符串无序包含  
+
+```java
+int[] dic = new int[] {
+        2, 3, 5, 7, 11, 13, 17,
+        19, 23, 29, 31, 37, 41, 43,
+        47, 53, 59, 61, 67, 71,
+        73, 79, 83, 89, 97, 101
+};
+public boolean contains(String a, String b) {
+    BigInteger m = BigInteger.ONE;
+    for (char c : a.toCharArray()) {
+        m = m.multiply(BigInteger.valueOf(dic[c - 'a']));
+    }
+    for (char c : b.toCharArray()) {
+        if (!m.remainder(BigInteger.valueOf(dic[c - 'a'])).equals(BigInteger.ZERO)) {
+            return false;
+        }
+    }
+    return true;
+}
+```
+
+#### 字符串匹配/字符串搜索
+
+![image.png](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/nature_of_things_string_searching.png)  
+
+RK 算法（Rabin–Karp）使用 rolling hash 迅速过滤掉与 pattern 不匹配的位置，然后检查剩下的位置是否匹配。也就是说，长度为 m 的窗口放到 t 串上，然后每次向右移动一格，每次都比较窗口内的 hash 值是不是等于 pattern 的 hash 值，如果不相等那就继续向右移动，最多 n - m + 1 次比较。而第 2 步 计算窗口 hash 值的时候，只需要根据第一步的 hash 值减去最左边字符，然后剩下的都乘以一个基数，再加上最后一个字符，经过 “减乘加” 就可以算出第二步以及之后的窗口 hash 值了。所以 RK 第一次 hash 的复杂度是 O(m)，之后就是 O(1) 了  
+RK 一般取 基数(base) 为 31，模(mod) 为 1e9 + 7  
+
+```java
+public static final int base = 31;
+public static final int mod = 1000000007;
+public int rk(String t, String p) {
+    int n = t.length(), m = p.length(), mul = 1;
+    int th = 0, ph = 0;
+    for (int i = 0; i < m; i++) {
+        ph = (ph * base + p.charAt(i) - 'a') % mod;
+        th = (th * base + t.charAt(i) - 'a') % mod;
+        mul = i == 0 ? 1 : (mul * base) % mod;
+    }
+    for (int i = 0; i < n - m + 1; i++) {
+        if (th == ph) {
+            return i;
+        }
+        if (i == n - m) {
+            break;
+        }
+        th = (th - mul * (t.charAt(i) - 'a')) * base + t.charAt(i + m) - 'a';
+    }
+    return -1;
+}
+```
+
+KMP（Knuth–Morris–Pratt）算法只是简化了回退的步骤：
+
+```java
+public int[] kmp(String pattern) {
+    int[] next = new int[pattern.length()];
+    int l = 0;
+    for (int i = 1; i < pattern.length(); i++) {
+        while (l > 0 && pattern.charAt(i) != pattern.charAt(l)) {
+            l = next[l - 1];
+        }
+        if (pattern.charAt(i) == pattern.charAt(l)) {
+            l++;
+        }
+        next[i] = l;
+    }
+    return next;
+}
+public List<Integer> search(String text, String pattern) {
+    List<Integer> res = new ArrayList<>();
+    int[] maxMatchLens = kmp(pattern);
+    int j = 0;
+    for (int i = 0; i < text.length(); i++) {
+        while (j > 0 && text.charAt(i) != pattern.charAt(j)) {
+            j = maxMatchLens[j - 1];
+        }
+        if (pattern.charAt(j) == text.charAt(i)) {
+            j++;
+        }
+        if (j == pattern.length()) {
+            res.add(i - j + 1);
+            j = maxMatchLens[j - 1];
+        }
+    }
+    return res;
+}
+```
 
 ### 【内功】动态规划
 
@@ -334,12 +371,12 @@ private static long sum(int[] nums, int fromIndex, int toIndex) {
 - 钢条切割，长度为 i 英寸的钢条价格为 P[i]，给定长度为 n 的钢条如何切割使收益 r[n] **最大** ？  
 r[n] = max{ P[i], r[n - i] }, i >= 0 && i <= n  
 - 在一个夜黑风高的晚上，有n（n <= 50）个小朋友在桥的这边，现在他们需要过桥，但是由于桥很窄，每次只允许不大于两人通过，他们只有一个手电筒，所以每次过桥的两个人需要把手电筒带回来，i 号小朋友过桥的时间为T[i]，两个人过桥的总时间为二者中时间最长的那个。问所有小朋友过桥的总时间 **最短** 是多少？  
-opt[i] = min { opt[i - 1] + T[1] + T[i], opt[i - 2] + T[1] + T[i] + T[2] + T[2] }  
+f[i] = min { f[i - 1] + T[1] + T[i], f[i - 2] + T[1] + T[i] + T[2] + T[2] }  
 
 #### 区间模型
 
 - 给定一个长度为 n（n <= 1000）的字符串 A，插入 **最少** 多少个字符使得它变成一个回文串？  
-d[i][j] = min { d[i + 1][j], d[i][j - 1] } + 1  
+f[i][j] = min { f[i + 1][j], f[i][j - 1] } + 1  
 
 #### 背包模型
 
@@ -386,8 +423,7 @@ f[i][v] = max { f[i - 1][v], f[i - 1][v - C[i]] + W[i] }
 - 数组: 广度优先的隐式数据结构，如果是完全二叉树那么每个节点都会紧紧地挨在一起，没有任何的空间浪费。第 i 个节点的两个孩子肯定在 2*i + 1 和 2*i + 2 的位置，唯一父亲的位置肯定在 (i - 1) / 2 的位置  
 
 > 霍夫曼编码: 霍夫曼在 MIT 读博的时候，为了完成 **找到最有效的二进制编码** 的  term paper，最终发现了 **基于有序频率构建二叉树** 进行编码的编码方式，并证明了它是最有效的编码方式  
-> ![image.png](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/nature_of_things_19.png)  
-> ![image.png](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/nature_of_things_20.png)  
-
-> 二叉查找树: 中序遍历的结果就是一个升序的数组，所以可以使用二分查，但是最坏的情况是构造的树是个病态的绝对左倾或绝对右倾树，直接退化成线性结构了，所以时间复杂度平均 O(log n)，最坏 O(n)，在 n 很大时 O(log n) 和 O(n) 的差别会特别大，所以为了避免二叉树退化，可以在插入节点时根据情况旋转一下来达到自平衡  
+![image.png](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/nature_of_things_19.png)  
+![image.png](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/nature_of_things_20.png)  
+二叉查找树: 中序遍历的结果就是一个升序的数组，所以可以使用二分查，但是最坏的情况是构造的树是个病态的绝对左倾或绝对右倾树，直接退化成线性结构了，所以时间复杂度平均 O(log n)，最坏 O(n)，在 n 很大时 O(log n) 和 O(n) 的差别会特别大，所以为了避免二叉树退化，可以在插入节点时根据情况旋转一下来达到自平衡  
 自平衡查找树的实现还有 B 树，伸展树，2-3 树等的实现
