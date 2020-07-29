@@ -57,7 +57,7 @@ Call<User> user = userService.getASingleUser("google");
 
 ### WebService
 
-客户端描述一个 RESTful API 有很多种方式。最传统的方式就是声明 API 的 url 常量字符串，但是这个 API 所属的 httpMethod 和 所需要的 field 等参数都没法指定，只能通过代码注释说明，在每次使用的时候按照注释单独实现，这种方式既繁琐又不直观又容易出错。还有一种方式是声明一个接口，通过接口的抽象方法来描述 API，抽象方法的参数可以用来描述 query 和 field 等参数，而 httpMethod 可以通过方法注解来描述。而 Retrofit 选择了后者，也就是接口的方式，这种方式虽然不一定是最好的，但是比传统的方式（前者）要好很多  
+客户端描述一个 RESTful API 有很多种方式。最传统的方式就是声明 API 的 url 常量字符串，但是这个 API 所属的 httpMethod 和 所需要的 field 等参数都没法指定，只能通过代码注释说明，在每次使用的时候按照注释单独实现，这种方式既繁琐又不直观又容易出错。还有一种方式是声明一个接口，通过接口的抽象方法来描述 API，抽象方法的参数可以用来描述 query 和 field 等参数，而 httpMethod 可以通过方法注解来描述。Retrofit 选择了后者，也就是接口的方式，这种方式虽然不一定是最好的，但是比传统的方式（前者）要好很多  
 此时 Retrofit 就要面临一个问题， **怎么根据一个接口，生成自己的网络请求实现呢**  
 
 ```java
@@ -80,14 +80,14 @@ public class OkHttpUserService implements UserService {
 }
 ```
 
-也就是说生成一个实现类，实现每个 API 方法，每个方法的内部实现 OkHttpCall 的组装和调用，完成请求结果的解析和封装  
+也就是说生成一个实现类，实现每个 API 方法，每个方法的内部实现 okhttp3.Call 的组装和调用，完成请求结果的解析和封装  
 实现这样的代码生成有两种方式，一种是利用 [编译时注解和 APT 技术](https://github.com/shangmingchao/shangmingchao.github.io/blob/master/blog/android_annotation_exercises.md) 在编译时自动生成这样的代码，一种是利用 [运行时注解和动态代理技术](https://github.com/shangmingchao/shangmingchao.github.io/blob/master/blog/design_pattern_proxy.md) 在运行时动态生成代理对象。Retrofit 选择了后者，即在运行时通过反射解析注解并生成代理对象  
 
 > 对于开发者，尤其是 Android 开发者，对性能的要求甚至到了苛刻的地步，对于枚举和反射等技术的使用更是敏感。传统方式虽然也能完成枚举和反射的工作，也会比枚举和反射更快一点，但是复杂度要更高，直观性不好。而枚举反射虽然性能差了一些但是要更加的简单直观，我觉得这是一个权衡问题（Trade off）。很多时候总是要做取舍的，就像有人花费了大量的时间、精力和资源把性能提升了一二十，可能在我看来不值得也没有必要。我用简单的方式实现了一个功能，可能在他人看来不够完美精致。所以我觉得以包容的态度看待技术还是很重要的  
 
 ### create
 
-Retrofit 的 create 就是用来创建代理对象的，这个代理对象封装并实现了具体的网络请求逻辑。通过 《设计模式：代理模式》一文我们已经知道，动态代理会把代理对象的 `hashCode()`, `equals()`, `toString()`, `getASingleUser()` 方法的调用都转发给 `InvocationHandler` 的 `invoke` 处理，所以只需要在 `invoke` 完成对 API 的解析和请求逻辑的封装即可，而 `hashCode()`, `equals()`, `toString()` 这些方法不需要处理：  
+Retrofit 的 `create` 就是用来创建代理对象的，这个代理对象封装并实现了具体的网络请求逻辑。通过 《设计模式：代理模式》一文我们已经知道，动态代理会把代理对象的 `hashCode()`, `equals()`, `toString()`, `getASingleUser()` 方法的调用都转发给 `InvocationHandler` 的 `invoke` 处理，所以只需要在 `invoke` 完成对 API 的解析和请求逻辑的封装即可，而 `hashCode()`, `equals()`, `toString()` 这些方法不需要特别处理：  
 
 ```java
 if (method.getDeclaringClass() == Object.class) {
@@ -95,13 +95,13 @@ if (method.getDeclaringClass() == Object.class) {
 }
 ```
 
-而 `getASingleUser()` 方法会被封装为 `ServiceMethod` 并调用它的 `invoke` 实现
+而对于 `getASingleUser()` 方法，只需要把这个方法封装为 `ServiceMethod` 并调用它的 `invoke` 实现
 
 ```java
 loadServiceMethod(method).invoke(args);
 ```
 
-`HttpServiceMethod` 或它的子类 `CallAdapted` 会利用 `RequestFactory` 完成对方法注解的解析以及请求 URL、请求参数等的拼装，利用 `okhttp3.Call.Factory` 组装成 okhttp3.Call  
+`HttpServiceMethod` 或它的子类 `CallAdapted` 会利用 `RequestFactory` 完成对方法注解的解析以及请求 URL、Header 等的拼装，最终和 `okhttp3.Call.Factory` 一起完成对 okhttp3.Call 的组装  
 
 ```java
 RequestFactory requestFactory = RequestFactory.parseAnnotations(retrofit, method);
@@ -133,9 +133,9 @@ RequestBuilder requestBuilder =
 return requestBuilder.get().tag(Invocation.class, new Invocation(method, argumentList)).build();
 ```
 
-至此 Retrofit 已经可以用了，而 Retrofit 灵活的一点是可以对这个 okhttp3.Call 进行封装，如封装成 `retrofit2.Call`、`io.reactivex.Observable` 等  
-利用 `CallAdapter.Factory` 完成对 okhttp3.Call 的封装，利用 `Converter.Factory` 完成对请求响应 ResponseBody 的解析  
-Retrofit 默认有两个 `CallAdapter.Factory` 一个是可以把 OkHttpCall 封装成 `CompletableFuture`，一个可以把 OkHttpCall 封装成 `Call`  
+至此 Retrofit 已经组装好 okhttp3.Call 了，已经可以用了。而 Retrofit 灵活的一点是可以对这个 okhttp3.Call 进行封装，如封装成 `retrofit2.Call`、`io.reactivex.Observable` 等  
+Retrofit 利用 `CallAdapter.Factory` 完成对 okhttp3.Call 的封装，利用 `Converter.Factory` 完成对请求响应 ResponseBody 的解析  
+Retrofit 默认有两个 `CallAdapter.Factory`，一个是可以把 okhttp3.Call 封装成 `CompletableFuture`，一个可以把 okhttp3.Call 封装成 `retrofit2.Call`  
 
 ```java
 List<CallAdapter.Factory> callAdapterFactories = new ArrayList<>(this.callAdapterFactories);
@@ -150,15 +150,24 @@ List<? extends CallAdapter.Factory> defaultCallAdapterFactories(
 }
 ```
 
-Retrofit 默认只能把响应结果解析成 `ResponseBody` 和 `Optional`  
+Retrofit 默认有两个转换器，一个可以把响应转成 `ResponseBody`，一个可以把响应转成 `Optional`  
 
 ```java
 converterFactories.add(new BuiltInConverters());
 converterFactories.addAll(this.converterFactories);
 converterFactories.addAll(platform.defaultConverterFactories());
+...
+List<? extends Converter.Factory> defaultConverterFactories() {
+  return hasJava8Types ? singletonList(OptionalConverterFactory.INSTANCE) : emptyList();
+}
 ```
 
 ### Retrofit 分析
 
 Retrofit 最大个贡献是改变了描述 API 的方式，尤其是描述 RESTful API 的方式，让客户端对 API 的调用更加的简单、直观、安全  
 Retrofit 这种 "接口 + 抽象方法 + 注解" 的方式虽然可以实现 API 的描述，但是不能可视化，不能文档化，不能 mock，不能自动化测试。所以我觉得换成 "配置文件 + 插件" 等其它方式可能要更好一点  
+
+## 参考
+
+- [Glide](https://github.com/bumptech/glide)
+- [Retrofit](https://github.com/square/retrofit)
