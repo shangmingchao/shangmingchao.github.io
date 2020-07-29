@@ -1,12 +1,11 @@
 # 设计模式：代理模式
 
-## 代理模式
+## 静态代理
 
 ```java
 public interface UserService {
     String getASingleUser(String username);
 }
-
 public class OkHttpUserService implements UserService {
     @Override
     public String getASingleUser(String username) {
@@ -14,7 +13,6 @@ public class OkHttpUserService implements UserService {
         return String.join("-", "UserInfo", username);
     }
 }
-
 public class RetrofitUserService implements UserService {
     UserService service;
     RetrofitUserService(UserService obj) {
@@ -46,8 +44,9 @@ Proxy do something after OkHttp call, ret: UserInfo-GOOGLE -> USERINFO-GOOGLE
 Final result: USERINFO-GOOGLE
 ```
 
-代理对象和被代理的对象实现相同的接口，同时代理对象会持有被代理对象，完成对被代理对象的控制和访问  
+代理对象和被代理对象实现相同的接口，同时代理对象会持有被代理对象，完成对被代理对象的控制和访问  
 这种传统的代理模式也被称为静态代理  
+代理对象就像现实生活中的经纪人或律师一样，可以在客户访问真实对象前做一些工作，也可以在访问后做一些工作，可以帮真实对象拒绝不合理的请求，可以把事情交给真实对象处理  
 
 ## 动态代理
 
@@ -88,7 +87,7 @@ Final result: USERINFO-GOOGLE
 ```
 
 可以看到我们不需要书写代理类，所有对代理对象的方法调用就会被转发到 `InvocationHandler` 的 `invoke` 回调中  
-只需要通过 `Proxy` 的静态方法 `newProxyInstance` 就可以获取代理对象，那究竟怎么生成代理对象的类并创建对象的呢？  
+只需要通过 `Proxy` 的静态方法 `newProxyInstance` 就可以获取代理对象，那系统又是怎么生成代理对象的类并创建代理对象呢？  
 当然是通过反射，先继承 `Proxy` 并实现 `UserService` :  
 
 ```java
@@ -116,7 +115,7 @@ for (Class<?> intf : interfaces) {
 }
 ```
 
-然后添加参数为 `InvocationHandler` 的构造器，以及把方法都声明成静态常量并用静态代码快初始化就完成代理类的生成了：  
+然后添加参数为 `InvocationHandler` 的构造器，以及把方法都声明成静态常量并用静态代码快初始化，这样就完成代理类的生成了：  
 
 ```java
 generateConstructor();
@@ -153,7 +152,7 @@ public final class $1 extends Proxy implements UserService {
         m0 = Class.forName("java.lang.Object").getMethod("hashCode");
         m1 = Class.forName("java.lang.Object").getMethod("equals", Class.forName("java.lang.Object"));
         m2 = Class.forName("java.lang.Object").getMethod("toString");
-        m3 = Class.forName("com.frank.UserService").getMethod("getASingleUser");
+        m3 = Class.forName("com.frank.UserService").getMethod("getASingleUser", Class.forName("java.lang.String"));
     }
     public $1(InvocationHandler var1) {
         super(var1);
