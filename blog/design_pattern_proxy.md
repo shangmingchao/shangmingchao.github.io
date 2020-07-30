@@ -86,8 +86,8 @@ Proxy do something after OkHttp call, ret: UserInfo-GOOGLE -> USERINFO-GOOGLE
 Final result: USERINFO-GOOGLE
 ```
 
-可以看到我们不需要书写代理类，所有对代理对象的方法调用就会被转发到 `InvocationHandler` 的 `invoke` 回调中  
-只需要通过 `Proxy` 的静态方法 `newProxyInstance` 就可以获取代理对象，那系统又是怎么生成代理对象的类并创建代理对象呢？  
+可以看到我们不需要书写代理类，所有对代理对象的方法调用就会被转发到 `InvocationHandler` 的 `invoke()` 回调中  
+只需要通过 `Proxy` 的静态方法 `newProxyInstance()` 就可以获取代理对象，那系统又是怎么生成代理对象的类并创建代理对象呢？  
 当然是通过反射，先继承 `Proxy` 并实现 `UserService` :  
 
 ```java
@@ -115,7 +115,7 @@ for (Class<?> intf : interfaces) {
 }
 ```
 
-然后添加参数为 `InvocationHandler` 的构造器，以及把方法都声明成静态常量并用静态代码快初始化，这样就完成代理类的生成了：  
+然后添加参数为 `InvocationHandler` 的构造器，以及把方法都声明成静态常量并用静态代码快初始化，最后把方法的实现都代理到 `InvocationHandler` 成员变量 `h` 去处理，这样就完成代理类的生成了：  
 
 ```java
 generateConstructor();
@@ -138,8 +138,8 @@ generateStaticInitializer();
 return cons.newInstance(new Object[]{h});
 ```
 
-现在即使我们没有看见生成的代理类是什么样子，我们也清楚了它是什么结构了，它继承了 `Proxy` 并实现了我们给定的接口，它的构造器有 `InvocationHandler` 参数，它重写了 `hashCode()`, `equals()`, `toString()` 方法并把它们都转发给 `InvocationHandler` 的 `invoke` 处理  
-它实现了我们给定接口的所有方法，并把它们都转发给 `InvocationHandler` 的 `invoke` 处理  
+现在即使我们没有看见生成的代理类是什么样子，我们也清楚了它是什么结构了，它继承了 `Proxy` 并实现了我们给定的接口，它的构造器有 `InvocationHandler` 参数，它重写了 `hashCode()`, `equals()`, `toString()` 方法并把它们都转发给 `InvocationHandler` 的 `invoke()` 处理  
+它实现了我们给定接口的所有方法，并把它们都转发给 `InvocationHandler` 的 `invoke()` 处理  
 所以代理类肯定类似于这样：
 
 ```java
