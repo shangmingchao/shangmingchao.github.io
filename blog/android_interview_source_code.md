@@ -190,7 +190,7 @@ for (;;) {
 `queue.next()` 最终调用的是名为 `nativePollOnce()` 的 native 方法，而该方法使用的是 `epoll_wait` 系统调用，表示自己在等待 I/O 事件，线程可以让出 CPU，等到 I/O 事件来了才可以进入 CPU 执行  
 而每次有新消息来的时候 `enqueueMessage()`，最终都会调用名为 `nativeWake()` 的 native 方法，该方法会产生 I/O 事件唤醒等待的线程  
 所以 `nativePollOnce()` / `nativeWake()` 就像对象的 `wait()` / `notify()` 一样，死循环并不会一直占用 CPU，如果没有消息要处理，就让出 CPU 进入休眠，只有被唤醒的时候才会进入 CPU 处理工作  
-`IdleHandler` 可以在消息队列中的消息处理完了，进入休眠之前做一些工作，所以可以利用 `Looper.myQueue().addIdleHandler()` 做一些延迟任务，如在主线程中延迟初始化一些大对象会耗时引擎  
+`IdleHandler` 可以在消息队列中的消息处理完了，进入休眠之前做一些工作，所以可以利用 `Looper.myQueue().addIdleHandler()` 做一些延迟任务，如在主线程中延迟初始化一些大对象或可能耗时的操作  
 `Handler` 的延迟发消息功能如 `sendMessageDelayed`，`postDelayed()` 也是通过延迟唤醒实现的，在消息入队的时候就确定好消息要唤醒的时间，即 `msg.when = SystemClock.uptimeMillis() + delayMillis`，插入自己在队列中应该出现的位置，在取消息时延迟 `nextPollTimeoutMillis = (int) Math.min(msg.when - now, Integer.MAX_VALUE)` 时间去取即可  
 
 ## 参考
