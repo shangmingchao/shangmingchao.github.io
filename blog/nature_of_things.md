@@ -76,6 +76,10 @@
 - 信号量 Semaphore 可以控制资源访问，acquire() 申请，release() 释放  
 - Exchanger 用于两个线程交换数据，阻塞在 exchange() 处，等待另一个线程准备好数据后交换，之后再继续向下执行  
 
+## JDK 语言机制
+
+Java8 之前创建的匿名内部类中不能访问局部变量，除非把局部变量声明成 `final` 的。因为局部变量只存在方法中，方法执行完了出栈后这个局部变量就没有了，所以匿名内部类会拷贝一份局部变量作为自己的成员变量才能继续使用它，由于变量传递的是引用（地址），所以如果局部变量被更改了，那么会产生数据不一致问题或安全问题，所以 java 直接强制这样的局部变量是不能更改的，即 `final` 的，Java8 之后只是不用显式声明成 `final` 的而已，编译器还是认为这个局部变量是 `final` 的  
+
 ## 协程
 
 > Coroutines are computer program components that generalize subroutines for non-preemptive multitasking, by allowing execution to be suspended and resumed

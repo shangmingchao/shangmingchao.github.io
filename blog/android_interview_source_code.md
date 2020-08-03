@@ -111,9 +111,8 @@ for (Annotation annotation : method.getAnnotations()) {
 }
 ...
 private void parseMethodAnnotation(Annotation annotation) {
-  if (annotation instanceof DELETE) {
-    parseHttpMethodAndPath("DELETE", ((DELETE) annotation).value(), false);
-  } else if (annotation instanceof GET) {
+  ...
+  if (annotation instanceof GET) {
     parseHttpMethodAndPath("GET", ((GET) annotation).value(), false);
   }
   ...
@@ -131,12 +130,18 @@ RequestBuilder requestBuilder =
         isMultipart);
 ...
 return requestBuilder.get().tag(Invocation.class, new Invocation(method, argumentList)).build();
+...
+if (callFactory == null) {
+  callFactory = new OkHttpClient();
+}
+...
+okhttp3.Call call = callFactory.newCall(requestFactory.create(args));
 ```
 
 至此 Retrofit 已经组装好 okhttp3.Call 了，已经可以用了。而 Retrofit 灵活的一点是可以对这个 okhttp3.Call 进行封装，如封装成 `retrofit2.Call`、`io.reactivex.Observable` 等  
 Retrofit 利用 `CallAdapter.Factory` 完成对 okhttp3.Call 的封装，利用 `Converter.Factory` 完成对请求响应的解析  
 
-Retrofit 默认有两个 `CallAdapter.Factory`，一个是可以把 okhttp3.Call 封装成 `CompletableFuture`，一个可以把 okhttp3.Call 封装成 `retrofit2.Call`  
+Retrofit 默认有两个 `CallAdapter.Factory`，一个可以把 okhttp3.Call 封装成 `CompletableFuture`，一个可以把 okhttp3.Call 封装成 `retrofit2.Call`  
 
 ```java
 List<CallAdapter.Factory> callAdapterFactories = new ArrayList<>(this.callAdapterFactories);
@@ -176,7 +181,7 @@ Retrofit 这种 "接口 + 抽象方法 + 注解" 的方式虽然可以实现 API
 
 `Looper.prepare();` 可以给一个普通线程关联一个消息队列，`Looper.loop();` 开始循环处理消息队列中的消息，new 一个 `Handler` 可以发送和处理消息，创建 `Handler` 需要指定 `Looper`，如果不指定那么表明是针对当前线程的 `Looper` 的，主线程有个创建好的 `Looper.getMainLooper()` 单例可以直接用  
 
-`Looper.loop();` 是个死循环，循环获取队列中的消息，转发给消息的 target，也就是发送它的 `Handler` 去处理  
+`Looper.loop();` 是个死循环，循环获取队列中的消息，转发给消息的 target 去处理，也就是当初发送它的 `Handler` 去处理  
 而 `Handler` 处理消息的线程就是它关联的 `Looper` 所在的线程，也就是说创建 `Handler` 时传的 `Looper` 在哪个线程调用了 `Looper.loop();`，那么就在哪个线程回调 `handleMessage()`  
 
 ```java
@@ -190,8 +195,8 @@ for (;;) {
 `queue.next()` 最终调用的是名为 `nativePollOnce()` 的 native 方法，而该方法使用的是 `epoll_wait` 系统调用，表示自己在等待 I/O 事件，线程可以让出 CPU，等到 I/O 事件来了才可以进入 CPU 执行  
 而每次有新消息来的时候 `enqueueMessage()`，最终都会调用名为 `nativeWake()` 的 native 方法，该方法会产生 I/O 事件唤醒等待的线程  
 所以 `nativePollOnce()` / `nativeWake()` 就像对象的 `wait()` / `notify()` 一样，死循环并不会一直占用 CPU，如果没有消息要处理，就让出 CPU 进入休眠，只有被唤醒的时候才会进入 CPU 处理工作  
-`IdleHandler` 可以在消息队列中的消息处理完了，进入休眠之前做一些工作，所以可以利用 `Looper.myQueue().addIdleHandler()` 做一些延迟任务，如在主线程中延迟初始化一些大对象或可能耗时的操作  
-`Handler` 的延迟发消息功能如 `sendMessageDelayed`，`postDelayed()` 也是通过延迟唤醒实现的，在消息入队的时候就确定好消息要唤醒的时间，即 `msg.when = SystemClock.uptimeMillis() + delayMillis`，插入自己在队列中应该出现的位置，在取消息时延迟 `nextPollTimeoutMillis = (int) Math.min(msg.when - now, Integer.MAX_VALUE)` 时间去取即可  
+`IdleHandler` 可以在消息队列中的消息都处理完了，进入休眠之前做一些工作，所以可以利用 `Looper.myQueue().addIdleHandler()` 做一些延迟任务，如在主线程中延迟初始化一些大对象或做一些可能耗时的操作  
+`Handler` 的延迟发消息功能如 `sendMessageDelayed`，`postDelayed()` 也是通过延迟唤醒实现的，在消息入队的时候就确定好消息要唤醒的时间，即 `msg.when = SystemClock.uptimeMillis() + delayMillis`，插入自己在队列中应该出现的位置，在取下一个消息时延迟 `nextPollTimeoutMillis = (int) Math.min(msg.when - now, Integer.MAX_VALUE)` 时间去取即可  
 
 ## 参考
 
