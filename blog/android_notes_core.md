@@ -60,7 +60,7 @@ List<ResolveInfo> activities = packageManager.queryIntentActivities(intent,
 boolean isIntentSafe = activities.size() > 0;
 ```
 
-* 使用隐式 `Intent` 时每次都强制用户选择一个组件激活:
+* 使用隐式 `Intent` 时如果想每次都强制用户选择一个组件激活，可以这样:
 
 ```java
 Intent intent = new Intent(Intent.ACTION_SEND);
@@ -71,7 +71,7 @@ if (intent.resolveActivity(getPackageManager()) != null) {
 }
 ```
 
-* 如果想要你的 `Activity` 能被隐式 `Intent` 激活，如果想要某个 **链接** 能直接跳转到你的 `Activity`，必须配置好 `IntentFilter`。这种链接分为两种: **Deep links** 和 **Android App Links**
+* 如果想要你的 `Activity` 能被隐式 `Intent` 激活，如果想要某个 **链接** 能直接跳转到你的 `Activity`，必须配置好 `IntentFilter`。而链接分为两种: **Deep links** 和 **Android App Links**
 * **Deep links** 对链接的 scheme 没有要求，对系统版本也没有要求，也不会验证链接的安全性，不过需要一个 `android.intent.action.VIEW` 的 action 以便 Google Search 能直接打开，需要 `android.intent.category.DEFAULT` 的 category 才能响应隐式 Intent，需要 `android.intent.category.BROWSABLE` 的 category 浏览器打开链接时才能跳转到应用，所以经典用例如下。一个 intent filter 最好只声明一个 data 描述，否则你得考虑和测试所有变体的情况。系统处理这个链接的流程为: 如果用户之前指定了打开这个链接的默认应用就直接打开这个应用 → 如果只有一个应用可以处理这个链接就直接打开这个应用 → 弹窗让用户选择用哪个应用打开
 
 ```xml
@@ -144,9 +144,11 @@ if (intent.resolveActivity(getPackageManager()) != null) {
 * `onPause()` 被调用时 `Activity` 可能依然对用户全部可见，如多窗口模式下没有获得焦点时，所以在 `onResume()` 中申请资源在 `onPause()` 中释放资源的想法并不总是合理的
 * `onStop()` 被调用时表示 `Activity` 已经完全不可见了，此时应该尽量停止包含动画在内的 UI 更新，尽量释放暂时不用的资源。对于 stopped 的 `Activity`，系统随时可能杀掉包含这个 `Activity` 的进程，如果没有合适的机会可以在 `onStop()` 中保存一些数据
 * 如果系统在未经用户允许的情况下销毁了 `Activity`（杀掉了该 `Activity` 实例所在的进程），那么系统肯定记得这个实例存在过，在用户重新回到这个 `Activity` 时会重新创建一个新的实例，并将之前保存好的实例状态传递给这个新的实例。这个系统之前保存好的用来恢复 `Activity` 状态的数据被称为**实例状态**（Instance state），实例状态是以键值对的形式存储在 Bundle 对象中的，默认系统只能自动存储和恢复有 ID 的 View 的简单状态（如输入框的文本，滚动控件的滚动位置），但由于在主线程中序列化或反序列化 `Bundle` 对象既消耗时间又消耗系统进程内存，所以最好只用它保存简单、轻量的数据
-* `onSaveInstanceState()` 被调用的时机: 对于 `Build.VERSION_CODES.P` 及之后的系统该方法会在 `onStop()` 之后随时可能被调用，对于之前的系统该方法会在 `onStop()` 之前随时被调用
+* `onSaveInstanceState()` 被调用的时机: 对于 Android 9 (API level 28) 及之后的系统该方法会在 `onStop()` 之后随时可能被调用，对于之前的系统该方法会在 `onStop()` 之前随时被调用
 * `onRestoreInstanceState()` 被调用的时机: 如果有实例状态要恢复那么一定会在 `onStart()` 之后被调用
-* `onActivityResult()` 被调用时机: `onResume()` 之前。目标 `Activity` 没有显式返回任何结果或者崩溃那么 resultCode 就会是 `RESULT_CANCELED`
+* `onActivityResult()` 被调用时机: `onResume()` 之前。目标 `Activity` 没有显式返回任何结果或者崩溃那么 resultCode 就会是 `RESULT_CANCELED`  
+* `onCreate()` 中也能恢复状态，但是有了 `onRestoreInstanceState()` 方法，就可以方便地在初始化都完成后做一些恢复状态工作了，而且该方法的默认实现是恢复 View 的状态，你可以利用它重写实现
+* `Activity` A 跳转到 B 的生命周期为：A.onPause() → `B.onCreate()` → `B.onStart()` → `B.onResume()` → A.onStop()。B 返回 A 时：B.onPause() → `A.onRestart()` → `A.onStart()` → `A.onResume()` → B.onStop() → B.onDestroy()。B 返回 A 但是 A 已经被销毁时：B.onPause() → `A.onCreate()` → `A.onStart()` → `A.onRestoreInstanceState()` → `A.onResume()` → B.onStop() → B.onDestroy()  
 * 在保存实例状态之后恢复实例状态之前的一些操作（如 Fragment 的事务提交）是不允许的，Android 系统会不惜一切代价避免状态丢失。`Activity#onCreate()` 方法中提交事务是没问题的，因为你可以在里面根据保存的状态重建，但是在其他生命周期回调中提交事务就可能会出现问题了。`FragmentActivity#onPostResume()` 方法中调用了 `FragmentActivity#onResumeFragments()` 方法完成其关联的所有的 Fragment 的 resume 事件的分发，执行完这两个方法 Activity 和它关联的所有 Fragment 才算真正的 resumed，才算恢复了状态，才可以提交事务，所以如果非要在 `Activity#onCreate()` 之外的回调中提交事务那么 `FragmentActivity#onPostResume()` 和 `FragmentActivity#onResumeFragments()` 是最好的选择。避免在异步的回调中提交事务: 因为在这些回调执行的时候很难确定当前 Activity 正处于什么生命周期状态，而且突然地提交事务更改大量 UI 会产生糟糕的用户体验，所以如果遇到这样的场景可以考虑换一种实现思路，不要随便使用 `commitAllowingStateLoss()` 方法  
 * 如非必须，避免使用多层嵌套的 Fragment，否则容易出现 Bug
 
@@ -160,7 +162,7 @@ if (intent.resolveActivity(getPackageManager()) != null) {
 * `FLAG_ACTIVITY_NEW_TASK` : 行为和 `singleTask` 一样，不过在新建任务之前会先寻找是否已经存在和这个 `Activity` 有相同 affinity 的任务，如果已经存在就不新建任务了，而是直接在那个任务中启动
 * `FLAG_ACTIVITY_SINGLE_TOP` : 行为和 `singleTop` 一样
 * `FLAG_ACTIVITY_CLEAR_TOP` : 如果当前任务中已经有要启动的 `Activity` 的实例了，那么就销毁它上面所有的 `Activity`(**甚至包括它自己**)，由于 `launchMode` 属性是 `standard` 的 `Activity` 一个新的 Intent 总会创建一个新的实例，所以如果要启动的 `Activity` 的 `launchMode` 属性是 `standard` 的并且没有 `FLAG_ACTIVITY_SINGLE_TOP` 的 flag，那么这个 flag 会**销毁它自己**然后创建一个**新的实例**
-* `FLAG_ACTIVITY_CLEAR_TOP` 和 `FLAG_ACTIVITY_NEW_TASK` 结合使用可以直接定位指定的 `Activity` 到前台
+* `FLAG_ACTIVITY_CLEAR_TOP` 和 `FLAG_ACTIVITY_NEW_TASK` 结合使用可以直接定位指定的 Activity 到前台，`FLAG_ACTIVITY_CLEAR_TOP` 和 `FLAG_ACTIVITY_SINGLE_TOP` 结合可以返回之前的某个 Activity  
 * 不管要启动的 `Activity` 是在当前任务中启动还是在新任务中启动，点击返回键都可以直接或间接回到之前的 `Activity`，间接的情况像 `singleTask` 是将整个任务而不是只有一个 `Activity` 移到前台，任务中的所有的 `Activity` 在点击返回键的时候都要依次弹出
 * 如果离开了任务，系统可能会清除任务中除了最底层 `Activity` 外的的所有 `Activity`。将最底层 `Activity` 的 `<activity>` 标签的 `alwaysRetainTaskState` 属性设置为 `true` 可以保留任务中所有的 `Activity`。将最底层 `Activity` 的 `<activity>` 标签的 `clearTaskOnLaunch` 属性设置为 `true` 可以在无论何时进入或离开这个任务都清除任务中除了最底层 `Activity` 外的的所有 `Activity`。包含最底层 `Activity` 在内的任何 `Activity` 只要 `finishOnTaskLaunch` 属性设置为 `true` 那么离开任务再回来都不会出现了
 * 将 `Activity` 作为新文档添加到最近任务中需要设置 `newDocumentIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);` 且 `launchMode` 必须是 `standard` 的，如果此时又设置了 `newDocumentIntent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK)` 那么系统每次都会创建新的任务并将目标 `Activity` 作为根 `Activity`，如果没有设置 `FLAG_ACTIVITY_MULTIPLE_TASK`，那么 `Activity` 实例会被重用到新的任务中（如果已经存在这样的任务就不会重建，而是直接将任务移到前台并调用 `onNewIntent()`）

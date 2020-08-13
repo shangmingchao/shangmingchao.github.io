@@ -88,7 +88,7 @@ Final result: USERINFO-GOOGLE
 
 可以看到我们不需要书写代理类，所有对代理对象的方法调用就会被转发到 `InvocationHandler` 的 `invoke()` 回调中  
 只需要通过 `Proxy` 的静态方法 `newProxyInstance()` 就可以获取代理对象，那系统又是怎么生成代理对象的类并创建代理对象呢？  
-当然是通过反射，先继承 `Proxy` 并实现 `UserService` :  
+当然是通过反射，先继承 `Proxy` 并实现给定的接口:  
 
 ```java
 visit(V14, accessFlags, dotToSlash(className), null,
