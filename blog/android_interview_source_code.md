@@ -428,9 +428,9 @@ ViewHolder getScrapOrHiddenOrCachedHolderForPosition(int position, boolean dryRu
 所以对于屏幕中已经有的 View 每次直接返回即可，这就是 `mAttachedScrap`，`ArrayList<ViewHolder>` 类型的  
 对于动画过程中已经隐藏的 View 也可以复用，这就是 `mHiddenViews`，`List<View>` 类型的  
 对于刚刚划出屏幕的 View 是可以马上拿过来显示的，这就是 `mCachedViews`，`ArrayList<ViewHolder>` 类型的  
-对于想要多个 RecyclerView 共享 View，可以使用 RecycledViewPool（如果不显示指定的话每个 RecyclerView 都会创建自己的 RecycledViewPool），这个 RecycledViewPool 里会维护一个 `SparseArray<ScrapData>`，key 就是 viewType，值是 `ArrayList<ViewHolder>` 类型的  
+对于想要多个 RecyclerView 共享 View，可以使用 RecycledViewPool（如果不显式指定的话每个 RecyclerView 都会创建自己的 RecycledViewPool），这个 RecycledViewPool 里会维护一个 `SparseArray<ScrapData>`，key 就是 viewType，值是 `ArrayList<ViewHolder>` 类型的  
 
-所以，真正的缓存有两个，一个是 `mCachedViews`，默认容量为 2，超过了就从头删（FIFO）:  
+所以，真正的缓存（真正回收复用的缓存）有两个，一个是 `mCachedViews`，默认容量为 2，超过了就从头删（FIFO）:  
 
 ```java
 if (cachedViewSize >= mViewCacheMax && cachedViewSize > 0) {
@@ -447,7 +447,7 @@ if (mScrap.get(viewType).mMaxScrap <= scrapHeap.size()) {
 }
 ```
 
-RecyclerView 缓存灵活的一点是对于动画过程中的 `mChangedScrap` 和 `mHiddenViews` 也可以回收复用，也可以通过 `setViewCacheExtension` 自定义缓存策略  
+RecyclerView 缓存灵活的一点是对于动画过程中的 `mChangedScrap` 和 `mHiddenViews` 也可以回收复用，也可以通过 `setViewCacheExtension` 自定义 RecycledViewPool 前一级缓存  
 
 ### RecyclerView 分析
 
