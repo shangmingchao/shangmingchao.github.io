@@ -378,7 +378,80 @@ ViewHolder tryGetViewHolderForPositionByDeadline(int position,
     ...
     return holder;
 }
+ViewHolder getScrapOrHiddenOrCachedHolderForPosition(int position, boolean dryRun) {
+    final int scrapCount = mAttachedScrap.size();
+    for (int i = 0; i < scrapCount; i++) {
+        final ViewHolder holder = mAttachedScrap.get(i);
+        if (!holder.wasReturnedFromScrap() && holder.getLayoutPosition() == position
+                && !holder.isInvalid() && (mState.mInPreLayout || !holder.isRemoved())) {
+            return holder;
+        }
+    }
+    if (!dryRun) {
+        View view = mChildHelper.findHiddenNonRemovedView(position);
+        if (view != null) {
+            final ViewHolder vh = getChildViewHolderInt(view);
+            mChildHelper.unhide(view);
+            mChildHelper.detachViewFromParent(layoutIndex);
+            scrapView(view);
+            return vh;
+        }
+    }
+    final int cacheSize = mCachedViews.size();
+    for (int i = 0; i < cacheSize; i++) {
+        final ViewHolder holder = mCachedViews.get(i);
+        if (!holder.isInvalid() && holder.getLayoutPosition() == position
+                && !holder.isAttachedToTransitionOverlay()) {
+            if (!dryRun) {
+                mCachedViews.remove(i);
+            }
+            return holder;
+        }
+    }
+    return null;
+}
 ```
+
+所以取 ViewHolder（View） 的过程大体是这样的  
+
+- `getChangedScrapViewForPosition()`  *isPreLayout*  
+- **`getScrapOrHiddenOrCachedHolderForPosition()`**  
+  - `mAttachedScrap`  
+  - `findHiddenNonRemovedView()`
+  - `mCachedViews`
+- `getScrapOrCachedViewForId()` *hasStableIds*  
+- `getChildViewHolder()`  *mViewCacheExtension*  
+- **`getRecycledViewPool().getRecycledView()`**  
+- `mAdapter.createViewHolder()`  
+
+每次 layout 或者 scroll 的时候都会取 ViewHolder 来更新 RecyclerView 的渲染（`dispatchLayoutStep2()` 最终会调用 `fill()`，`scrollBy()` 最终也会调用 `fill()`，`fill()` 就是不断地取 View 来填充满容器）  
+所以对于屏幕中已经有的 View 每次直接返回即可，这就是 `mAttachedScrap`，`ArrayList<ViewHolder>` 类型的  
+对于动画过程中已经隐藏的 View 也可以复用，这就是 `mHiddenViews`，`List<View>` 类型的  
+对于刚刚划出屏幕的 View 是可以马上拿过来显示的，这就是 `mCachedViews`，`ArrayList<ViewHolder>` 类型的  
+对于想要多个 RecyclerView 共享 View，可以使用 RecycledViewPool（如果不显示指定的话每个 RecyclerView 都会创建自己的 RecycledViewPool），这个 RecycledViewPool 里会维护一个 `SparseArray<ScrapData>`，key 就是 viewType，值是 `ArrayList<ViewHolder>` 类型的  
+
+所以，真正的缓存有两个，一个是 `mCachedViews`，默认容量为 2，超过了就从头删（FIFO）:  
+
+```java
+if (cachedViewSize >= mViewCacheMax && cachedViewSize > 0) {
+    recycleCachedViewAt(0);
+    cachedViewSize--;
+}
+```
+
+一个是 RecycledViewPool 中的 `ScrapData`，默认容量为 5，超过了直接丢弃:  
+
+```java
+if (mScrap.get(viewType).mMaxScrap <= scrapHeap.size()) {
+    return;
+}
+```
+
+RecyclerView 缓存灵活的一点是对于动画过程中的 `mChangedScrap` 和 `mHiddenViews` 也可以回收复用，也可以通过 `setViewCacheExtension` 自定义缓存策略  
+
+### RecyclerView 分析
+
+RecyclerView 统一了传统滚动列表（ListView / GridView），并且做了完善，更灵活也更强大，尤其是 View 的回收复用极大程度上避免了不必要的视图绑定过程。但是过分追求灵活过分追求性能也暴露出了缺陷，比如说 RecyclerView 类自己本身的代码量就膨胀到几万行，代码注释中的 ugly, TODO, consider 等描述也是让人哭笑不得，毕竟越复杂越容易出 Bug。而 RecyclerView 使用起来也不够简洁，绝大部分情况下列表都是简单的传统列表，`LayoutManager` 却不能缺省，忘写了也不会报错，分割线不能缺省也不能静态指定，Adapter 的模板代码也很多  
 
 ## 参考
 
