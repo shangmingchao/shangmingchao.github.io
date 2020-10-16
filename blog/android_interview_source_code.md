@@ -412,7 +412,7 @@ ViewHolder getScrapOrHiddenOrCachedHolderForPosition(int position, boolean dryRu
 }
 ```
 
-所以取 ViewHolder（View） 的过程大体是这样的  
+所以取 ViewHolder(View) 的过程大体是这样的  
 
 - `getChangedScrapViewForPosition()`  *isPreLayout*  
 - **`getScrapOrHiddenOrCachedHolderForPosition()`**  
@@ -424,11 +424,11 @@ ViewHolder getScrapOrHiddenOrCachedHolderForPosition(int position, boolean dryRu
 - **`getRecycledViewPool().getRecycledView()`**  
 - `mAdapter.createViewHolder()`  
 
-每次 layout 或者 scroll 的时候都会取 ViewHolder 来更新 RecyclerView 的渲染（`dispatchLayoutStep2()` 最终会调用 `fill()`，`scrollBy()` 最终也会调用 `fill()`，`fill()` 就是不断地取 View 来填充满容器）  
-所以对于屏幕中已经有的 View 每次直接返回即可，这就是 `mAttachedScrap`，`ArrayList<ViewHolder>` 类型的  
-对于动画过程中已经隐藏的 View 也可以复用，这就是 `mHiddenViews`，`List<View>` 类型的  
-对于刚刚划出屏幕的 View 是可以马上拿过来显示的，这就是 `mCachedViews`，`ArrayList<ViewHolder>` 类型的  
-对于想要多个 RecyclerView 共享 View，可以使用 RecycledViewPool（如果不显式指定的话每个 RecyclerView 都会创建自己的 RecycledViewPool），这个 RecycledViewPool 里会维护一个 `SparseArray<ScrapData>`，key 就是 viewType，值是 `ArrayList<ViewHolder>` 类型的  
+每次 layout 或者 scroll 的时候都会取 ViewHolder(View) 来更新 RecyclerView 的渲染（`dispatchLayoutStep2()` 最终会调用 `fill()`，`scrollBy()` 最终也会调用 `fill()`，`fill()` 就是不断地取 ViewHolder(View) 来填充满容器）  
+所以对于屏幕中已经有的 View 直接用即可，这就是 `mAttachedScrap`，`ArrayList<ViewHolder>` 类型的  
+对于动画过程中隐藏的 View 也可以直接用，这就是 `mHiddenViews`，`List<View>` 类型的  
+对于刚刚划出屏幕的 View 是可以马上拿过来直接用或复用，这就是 `mCachedViews`，`ArrayList<ViewHolder>` 类型的  
+对于想要多个 RecyclerView 共享的 View，可以使用 RecycledViewPool（如果不显式指定的话每个 RecyclerView 都会创建自己的 RecycledViewPool），这个 RecycledViewPool 里会维护一个 `SparseArray<ScrapData>`，key 就是 viewType，值是 `ArrayList<ViewHolder>` 类型的  
 
 所以，真正的缓存（真正回收复用的缓存）有两个，一个是 `mCachedViews`，默认容量为 2，超过了就从头删（FIFO）:  
 
@@ -447,13 +447,70 @@ if (mScrap.get(viewType).mMaxScrap <= scrapHeap.size()) {
 }
 ```
 
-RecyclerView 缓存灵活的一点是对于动画过程中的 `mChangedScrap` 和 `mHiddenViews` 也可以回收复用，也可以通过 `setViewCacheExtension` 自定义 RecycledViewPool 前一级缓存  
+RecyclerView 缓存灵活的一点是可以通过 `setViewCacheExtension` 自定义 RecycledViewPool 前一级缓存  
 
 ### RecyclerView 分析
 
-RecyclerView 统一了传统滚动列表（ListView / GridView），并且做了完善，更灵活也更强大，尤其是 View 的回收复用极大程度上避免了不必要的视图绑定过程。但是过分追求灵活过分追求性能也暴露出了缺陷，比如说 RecyclerView 类自己本身的代码量就膨胀到几万行，代码注释中的 ugly, TODO, consider 等描述也是让人哭笑不得，毕竟越复杂越容易出 Bug。而 RecyclerView 使用起来也不够简洁，绝大部分情况下列表都是简单的传统列表，`LayoutManager` 却不能缺省，忘写了也不会报错，分割线不能缺省也不能静态指定，Adapter 的模板代码也很多  
+RecyclerView 统一了传统滚动列表（ListView / GridView），并且做了完善，更灵活也更强大，尤其是对 View 的回收复用极大程度上避免了不必要的视图绑定过程。但是过分追求灵活，过分追求性能也暴露出了缺陷，比如说 RecyclerView 类自己本身的代码量就膨胀到几万行，代码注释中的 ugly, TODO, consider 等描述也是让人哭笑不得，设计的越复杂越容易出 Bug。而 RecyclerView 使用起来也不够简洁，绝大部分情况下列表都是简单的竖向的传统列表，`LayoutManager` 却不能缺省，忘写了也不会报错，分割线不能缺省也不能静态指定，Adapter 的模板代码也非常多  
+
+## RxJava 3.0.0
+
+RxJava 是 ReactiveX 的 Java 实现，往高了说它提供了响应式和函数式编程范式，优雅地解决了异步和基于事件的编程问题，而实际上只是弥补了传统 Java 异步困难的设计缺陷。在传统 Java 中同步获取单个值是这样的 `T getData()`，同步获取多个值是这样的 `Iterable<T> getData()`。但是异步获取单个值却要开线程返回个包装类 `Future<T> getData()`，然后利用 `Future` 的 `get()` 方法才能拿到真正的值，而异步获取多个值好像只能这样了 `Iterable<Future<T>> getData()`。而问题是 `Future` 的 `get()` 方法是阻塞的，会阻塞之后代码的执行，这在逻辑稍微复杂（一个 Future 依赖另一个 Future）时阻塞会变成性能噩梦，而过多的回调和回调嵌套会变成回调地狱  
+所以，传统 Java 的 Future 在面对复杂异步操作时变得越来越无能为力，而 RxJava 的异步流正好弥补了这个缺陷，让所有的操作都是基于数据流的，异步对于流来说也仅仅是个操作符，逻辑一下子清晰了，代码一下子简洁了  
+
+### Observable
+
+`Observable` 就是数据源，既可以同步也可以异步地发射数据，既可以发射单个值也可以发射多个值，它是个抽象类，所以需要通过它的 `Create`、`Just`、`From` 等操作符来创建具体的 `Observable`:  
+
+```java
+Observable.just("Hello world").subscribe(System.out::println);
+```
+
+`Create` 操作符创建的是 `ObservableCreate`，`Just` 创建的是 `ObservableJust`，它们根据自己的需要实现 `subscribeActual()` 方法，如 `Create` 的:  
+
+```java
+@Override
+protected void subscribeActual(Observer<? super T> observer) {
+    ...
+    source.subscribe(parent);
+    ...
+}
+```
+
+只需要调用函数式接口 `ObservableOnSubscribe` 的 `subscribe()` 方法发射数据。而 `Just` 的实现更简单，直接调用 `observer.onNext(value);` 和 `observer.onComplete();`  
+
+### Observer
+
+声明观察者很简单，`onNext()`、`onError()`、`onComplete()` 中处理到来的数据或事件，`onSubscribe()` 中进行取消订阅的处理  
+
+### subscribe
+
+`Observable` 是一个异步 push 的数据流，所以每次订阅一个观察者时都调用 `subscribeActual()` 发射数据即可:  
+
+```java
+@Override
+public final void subscribe(@NonNull Observer<? super T> observer) {
+    Objects.requireNonNull(observer, "observer is null");
+    try {
+        ...
+        subscribeActual(observer);
+    }
+    ...
+}
+```
+
+即使你订阅（`subscribe()`）的时候不传 `Observer`，如传一个只处理数据的 Lambda，最终也会被封装成 `Observer`  
+
+### 常用操作符
+
+比较常用的包括 `Map`，`FlatMap`，`Filter`，`SubscribeOn`，`ObserveOn` 等操作符详见 [RxJava 常用操作符](https://github.com/shangmingchao/shangmingchao.github.io/blob/master/blog/rxjava_operators.md)  
+
+### RxJava 分析
+
+RxJava 真正强大的地方不是 `Observable` 和 `Observer`，不是观察者模式，而是丰富强大的操作符，这些操作符让异步变得清晰简单，又避免了复杂的错误处理过程。但是操作符又多又强大既是它的优点也是它的缺点，使用者需要花费大量时间和精力去学习各种操作符，而且很容易被滥用。所以我觉得应该在复杂业务逻辑时使用它，简单的不需要异步处理的逻辑应该尽量避免直接使用它  
 
 ## 参考
 
 - [Glide](https://github.com/bumptech/glide)
 - [Retrofit](https://github.com/square/retrofit)
+- [RxJava](https://github.com/ReactiveX/RxJava)

@@ -47,6 +47,7 @@
 - Parallel(Throughput) collector: 多线程 GC，适用于多处理器或多线程硬件上运行的对暂停时间要求不高的中到大型数据集的应用。`-XX:+UseParallelGC`，使用 `-XX:-UseParallelOldGC` 可以禁用并行紧凑整理（Compact），这样主要的收集工作就会在单线程中执行
 - Garbage-First (G1) garbage collector: 大概率满足暂停时间要求的同时最大化吞吐量，适用于多处理器大内存的服务器，`-XX:+UseG1GC`
 - Concurrent Mark Sweep（CMS） collector: 最小化停顿时间同时分享处理器资源，`-XX:+UseConcMarkSweepGC`
+- 类的生命周期：由对应类型的 ClassLoader **加载** 到内存中的方法区，在堆区创建 Class 对象 → 进行完整性校验，为静态成员分配空间并设置默认值，把常量池中的符号引用都解析成直接引用，即 **连接** 过程 → 如果主动直接引用了，就开始类的 **初始化** ：父类 static 成员及 static 代码块初始化，子类 static 成员及 static 代码块初始化，父类普通成员初始化，父类构造器，子类普通成员初始化，子类构造器 → **使用** 分为主动引用和被动引用，主动引用才会初始化类，被动引用（定义类数组，引用类中的常量，引用其父类的静态成员只会初始化父类）不会 → 使用完就可以 **卸载** 了
 
 ## Java 线程安全与锁优化
 
@@ -80,6 +81,44 @@
 ## JDK 语言机制
 
 Java8 之前创建的匿名内部类中不能访问局部变量，除非把局部变量声明成 `final` 的。因为局部变量只存在方法中，方法执行完了出栈后这个局部变量就没有了，所以匿名内部类会拷贝一份局部变量作为自己的成员变量才能继续使用它，由于变量传递的是引用（地址），所以如果局部变量被更改了，那么会产生数据不一致问题或安全问题，所以 java 直接强制这样的局部变量是不能更改的，即 `final` 的，Java8 之后只是不用显式声明成 `final` 的而已，编译器还是认为这个局部变量是 `final` 的  
+
+`ThreadLocal<T>` 用来管理每个线程独有的变量。`Thread` 会持有 `ThreadLocalMap` 成员，key 是 `ThreadLocal`，value 是 `ThreadLocalMap.Entry`。所以 `ThreadLocal` 对象并不存储值，只是用来表明每个线程会持有各自 T 类型的变量:  
+
+```java
+public void set(T value) {
+    Thread t = Thread.currentThread();
+    ThreadLocalMap map = getMap(t);
+    if (map != null)
+        map.set(this, value);
+    else
+        createMap(t, value);
+}
+public T get() {
+    Thread t = Thread.currentThread();
+    ThreadLocalMap map = getMap(t);
+    if (map != null) {
+        ThreadLocalMap.Entry e = map.getEntry(this);
+        if (e != null) {
+            @SuppressWarnings("unchecked")
+            T result = (T)e.value;
+            return result;
+        }
+    }
+    return setInitialValue();
+}
+```
+
+```java
+static final ThreadLocal<Looper> sThreadLocal = new ThreadLocal<Looper>();
+...
+sThreadLocal.set(new Looper(quitAllowed));
+...
+public static @Nullable Looper myLooper() {
+    return sThreadLocal.get();
+}
+```
+
+`Thread` 持有的 `ThreadLocalMap` 成员是强引用，虽然 `ThreadLocalMap` 的 `Entry` 继承了 `WeakReference<ThreadLocal<?>>`，但是这只表明 `ThreadLocal` 对象可以被回收，但是 value 不能被回收，所以如果不及时 `remove()` 掉，还是可能会出现内存泄漏的  
 
 ## 协程
 
