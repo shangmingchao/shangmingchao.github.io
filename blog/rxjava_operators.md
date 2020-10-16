@@ -226,9 +226,10 @@ observe 2      in Thread: [main]
 
 可见 `subscribeOn(Schedulers.io())` 让上游 `ObservableCreate` 和下游在 I/O 线程上发生的订阅，发射数据也就在这个线程上  
 
-> 不要多次使用 `subscribeOn()`，因为这没有意义，还会造成逻辑混乱，如过多次调用了，那么后来的 `subscribeOn()` 不会影响上下游发射数据所在的线程，只会影响中间订阅被执行的线程（而这对用户来说不会产生影响）。所以不要多次调用 `subscribeOn()`  
+> 不要多次使用 `subscribeOn()`，因为这没有意义，还会造成逻辑混乱，如果多次调用了，那么后来的 `subscribeOn()` 不会影响发射数据所在的线程，也不会影响下游操作符被执行的线程，只会影响中间订阅被执行的线程（而这对用户来说不会产生任何影响）。所以不要多次调用 `subscribeOn()`  
 
 ```java
+// 错误的用例
 Observable
     .create()
     .subscribeOn(Schedulers.io())
