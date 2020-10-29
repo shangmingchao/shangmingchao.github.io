@@ -5,7 +5,7 @@
 
 ## Map
 
-对上游的数据项进行简单的变换（映射），返回新的 `ObservableMap`，实现就是把下游的 `Observer` 包装成 `MapObserver` 订阅给上游  
+Map 对上游的数据项进行简单的变换（映射），返回新的 `ObservableMap`，实现就是把下游的 `Observer` 包装成 `MapObserver` 订阅给上游  
 
 ```java
 Observable
@@ -78,7 +78,10 @@ public final class ObservableFlatMap<T, U> extends AbstractObservableWithUpstrea
 ```
 
 简单点说就是把上游的数据项都变换成 `Observable`，把这些 `Observable` 都订阅给下游，但是对于只发射一个值的 `Observable` 做一下特殊处理，对于并发操作也要进行处理，所以要复杂一点  
-如果想要保证按顺序 merge 可以使用 `concatMap` 操作符
+
+> 如果想要保证按顺序 merge 可以使用 `concatMap` 操作符
+
+----
 
 ## SubscribeOn 和 ObserveOn
 
@@ -166,7 +169,7 @@ filter 2       in Thread: [RxComputationThreadPool-1]
 observe 2      in Thread: [RxComputationThreadPool-1]
 ```
 
-也就是说 `observeOn(Schedulers.computation())` 让下游 `MapObserver#onNext()` 在计算线程上执行了，当然 `observeOn()` 可以多次调用来改变下游 `onNext()` 在哪个线程上执行，如  
+也就是说 `observeOn(Schedulers.computation())` 让下游 `MapObserver#onNext()` 在计算线程上执行了。当然 `observeOn()` 可以多次调用来改变下游 `onNext()` 在哪个线程上执行，如  
 
 ```java
 Observable
@@ -226,7 +229,9 @@ observe 2      in Thread: [main]
 
 可见 `subscribeOn(Schedulers.io())` 让上游 `ObservableCreate` 和下游在 I/O 线程上发生的订阅，发射数据也就在这个线程上  
 
-> 不要多次使用 `subscribeOn()`，因为这没有意义，还会造成逻辑混乱，如果多次调用了，那么后来的 `subscribeOn()` 不会影响发射数据所在的线程，也不会影响下游操作符被执行的线程，只会影响中间订阅被执行的线程（而这对用户来说不会产生任何影响）。所以不要多次调用 `subscribeOn()`  
+简单点说，`subscribeOn()` 决定了最开始在哪个线程发射数据  
+
+> 不要多次使用 `subscribeOn()`，因为这没有任何意义，还会造成逻辑混乱。如果多次调用了，那么后来的 `subscribeOn()` 不会影响发射数据所在的线程，也不会影响下游操作符被执行的线程，只会影响中间订阅被执行的线程（而这对用户来说不会产生任何影响）。所以不要多次调用 `subscribeOn()`  
 
 ```java
 // 错误的用例
@@ -272,3 +277,135 @@ observe 2      in Thread: [RxCachedThreadScheduler-1]
 在 I/O 线程中执行 ~~`SubscribeOnObserver#onNext()`~~  
 在 I/O 线程中执行 `FilterObserver#onNext()`  
 在 I/O 线程中执行我们定义的 `onNext()`  
+
+----
+
+## Merge
+
+`merge()` 可以合并多个 `Observable`，其实就是把多个 `Observable` 变成集合后调用 `flatMap()`。所以 merge 是不保证顺序的  
+
+> 如果想要按顺序合并多个 `Observable`，可以使用 `concat()`  
+如果不想因为其中一个 `Observable` 的错误导致流中断，可以使用 `mergeDelayError()` 等到所有数据项都发射完再发射和处理错误  
+一个 `Observable` 实例可以使用 `mergeWith()` 来 merge 另一个实例  
+
+## Zip
+
+`zip()` 可以按顺序压缩所有 `Observable` 的第 i 个数据项。最少的那个 `Observable` 发射完了就算完成了，其他 `Observable` 可能会被马上 dispose 并且接收不到 `complete` 的回调（`doOnComplete()`）  
+
+> 一个 `Observable` 实例可以使用 `zipWith()` 来 zip 其他的实例  
+
+----
+
+## StartWith
+
+在发射数据项前发射一个（`startWithItem()`）或多个（`startWithArray`, `startWithIterable()`）数据项，当然，`startWith()` 一个 `Observable` 也可以  
+
+## Concat
+
+`concat()` 可以将多个 `Observable` 按顺序拼接起来，一个 `Observable` 发射完了再发射下一个。`concatWith` 可以再后面拼接一个  
+
+----
+
+## Timer
+
+`timer()` 可以在给定的时间延迟后发射一个 `0L`，默认在计算线程上发射，当然可以指定调度器  
+
+## Interval
+
+`interval()` 可以按照给定的时间间隔发射从 `0L` 开始递增的数字，默认在计算线程上发射，当然可以指定调度器  
+可以指定第一次的延迟: `interval(2, 1, TimeUnit.SECONDS)`，2s 后发射第一个数字 `0L`，然后每隔 1s 发射 `1L`, `2L`, ...  
+可以指定从哪个数字开始，一共发射几个数字: `intervalRange(5, 10, 2, 1, TimeUnit.SECONDS)`，从 `5L` 开始发射 10 个数字，2s 后发射第一个，然后每隔 1s 发射剩下的  
+
+## Delay
+
+`delay()` 让新的 `Observable` 在发射每个数据前都延迟给定时间后再发射，error 不会延迟发射  
+`delaySubscription()` 可以延迟订阅当前 `Observable`  
+
+----
+
+## SkipUntil 和 SkipWhile
+
+`skipUntil()` 让源 `Observable` 放弃发射数据，直到给定的 `Observable` 发射了数据它才可以正常发射数据  
+`skipWhile()` 让源 `Observable` 放弃发射数据，直到给定条件变成 `false`  
+
+## TakeUntil 和 TakeWhile
+
+`takeUntil()` 让源 `Observable` 在给定的 `Observable` 发射了数据后终止  
+`takeWhile()` 会镜像发射源 `Observable` 的数据，直到给定条件变成 `false`，然后马上终止  
+
+----
+
+## Catch
+
+Catch 操作符可以拦截 `onError` 通知，并且可以把它替换成数据项或数据项序列  
+`onErrorReturn()` 在 `Observable` 遇到 error 时不调用 `Observer` 的 `onError()` 方法，而是发射一个给定的数据项，然后 complete  
+`onErrorResumeNext()` 在 `Observable` 遇到 error 时不调用 `Observer` 的 `onError()` 方法，而是将控制权交给给定的 `Observable`  
+`onErrorComplete()` 在 `Observable` 遇到 error 时不调用 `Observer` 的 `onError()` 方法，错误通知被丢弃并直接complete  
+
+## Retry
+
+Retry 操作符可以在 `onError` 时重新订阅（也就是重试），重新发射数据  
+`retry()` 可以指定最大重试次数，也可以指定重试条件（断言函数）  
+`retryUntil()` 可以在给定的函数返回 `true` 时停止重试  
+`retryWhen()` 在源 `Observable` 遇到 error 时传递到给定的函数中，如果给定函数返回的 `Observable` 发射了 `onComplete` 或 `onError` 那么继续向下传递这个信号（不是原来的 error 信号），否则重新订阅源 `Observable`  
+
+```java
+Observable
+    .<String>create(emitter -> {
+        System.out.println(String.format(Locale.US, "emitting \"1\"     in Thread: [%s]", Thread.currentThread().getName()));
+        emitter.onNext("1");
+        emitter.onComplete();
+    })
+    .flatMap(s -> Observable.error(new RuntimeException("always fails")))
+    .retryWhen(attempts -> {
+        AtomicInteger counter = new AtomicInteger();
+        return attempts.takeWhile(e -> counter.getAndIncrement() != 3)
+                .flatMap(e -> {
+                    System.out.println(String.format(Locale.US, "retry delay %ds   in Thread: [%s]", counter.get(), Thread.currentThread().getName()));
+                    return Observable.timer(counter.get(), TimeUnit.SECONDS);
+                });
+    })
+    .subscribe(s -> {
+        System.out.println(String.format(Locale.US, "observe \"%s\"     in Thread: [%s]", s, Thread.currentThread().getName()));
+    }, throwable -> {
+        System.out.println(String.format(Locale.US, "observe error    in Thread: [%s]", Thread.currentThread().getName()));
+    }, () -> {
+        System.out.println(String.format(Locale.US, "observe complete in Thread: [%s]", Thread.currentThread().getName()));
+    });
+```
+
+```text
+18:33 emitting "1"     in Thread: [main]
+18:33 retry delay 1s   in Thread: [main]
+18:34 emitting "1"     in Thread: [RxComputationThreadPool-4]
+18:34 retry delay 2s   in Thread: [RxComputationThreadPool-4]
+18:36 emitting "1"     in Thread: [RxComputationThreadPool-1]
+18:36 retry delay 3s   in Thread: [RxComputationThreadPool-1]
+18:39 emitting "1"     in Thread: [RxComputationThreadPool-2]
+18:39 observe complete in Thread: [RxComputationThreadPool-2]
+```
+
+可见，重试 3 次后最后接收到的是 `onComplete` 信号，因为 `takeWhile()` 发射了 `onComplete`，直接就向下传递给了我们定义的观察者。如果想最终接收 `onError`，那么不应该使用 `takeWhile()`，而是在不满足重试条件时直接返回如 `Observable.error(throwable)` 这样的 `Observable`  
+
+## 更多操作符
+
+如果想自定义操作符或者将几个操作符组合成一个自定义的操作符，可以使用 `lift()` 自定义 `ObservableOperator`，或者使用 `compose()` 给上游 `Observable` 应用给定的 `ObservableTransformer`  
+
+## 更多 Observable
+
+有几个比较特殊的 `Observable`:  
+
+- `Flowable` 支持背压  
+- `Single` 发射 1 个成功值或 error  
+- `Completable` 发射 complete 或 error  
+- `Maybe` 发射 1 个成功值 或 complete 或 error  
+
+当然，这些都提供了函数可以相互转换  
+如果想要一个对象既是 `Observable` 又是 `Observer`，如果想要把一个异步操作转换成 `Observable`，如果想要创建一个热 `Observable`，就需要更灵活的 `Subject` 了  
+
+`Subject` 继承了 `Observable`，实现了 `Observer`，它有几个实现类  
+
+- `AsyncSubject` 只有在调用 `onComplete()` 时才会发射最近缓存的 1 个值和 complete，`onError()` 时就不发射最近的值了  
+- `BehaviorSubject` 一旦有 `Observer` 订阅了它就开始发射最近的值和后续的值，`onError()` 时就不发射最近的值了  
+- `PublishSubject` 可以在创建之后立即发射数据，它不会缓存任何数据  
+- `ReplaySubject` 不管 `Observer` 什么时候订阅都把所有数据再发一遍  
