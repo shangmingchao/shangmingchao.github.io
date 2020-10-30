@@ -518,7 +518,47 @@ RxJava 真正强大的地方不是 `Observable` 和 `Observer`，不是观察者
 
 ## LiveData 2.2.0
 
-Android 迫切需要一个能自动跟页面生命周期绑定的 `Observable`，
+Android 迫切需要一个能自动跟页面生命周期绑定的 `Observable`。但是 `Activity`，`Fragment`，`View` 三者并没有统一实现页面（生命周期）相关的逻辑，导致其他组件尊重这些 UI 组件生命周期的过程变得尤为困难，最简单暴力的方式就是在它们的声明周期方法回调中进行额外的处理，但是弊端很明显，特别繁琐，不容易统一控制，而且万一忘记了处理也不会马上发现  
+Android 团队终于意识到了这一点并从设计上设计了一个跟生命周期绑定的数据容器 `LiveData`，它严格意义上来说并不是自动跟声明周期绑定，只能说是能自动解绑，因为它的核心方法 `observe(LifecycleOwner, Observer<? super T>)` 除了观察者还是需要主动提供一个 UI 组件上下文（`Activity`/`Fragment`/`View`）的  
+`LiveData` 的实现很简单，就是把 `LifecycleOwner` 和 `Observer` 成对封装好，通过观察 `LifecycleOwner` 的状态来决定何时移除 `Observer`，来决定在什么状态下才可以通知 `Observer`  
+
+```java
+public void observe(@NonNull LifecycleOwner owner, @NonNull Observer<? super T> observer) {
+    ...
+    LifecycleBoundObserver wrapper = new LifecycleBoundObserver(owner, observer);
+    ObserverWrapper existing = mObservers.putIfAbsent(observer, wrapper);
+    ...
+    owner.getLifecycle().addObserver(wrapper);
+}
+
+class LifecycleBoundObserver extends ObserverWrapper implements LifecycleEventObserver {
+    ...
+    @Override
+    boolean shouldBeActive() {
+        return mOwner.getLifecycle().getCurrentState().isAtLeast(STARTED);
+    }
+    @Override
+    public void onStateChanged(@NonNull LifecycleOwner source,
+            @NonNull Lifecycle.Event event) {
+        Lifecycle.State currentState = mOwner.getLifecycle().getCurrentState();
+        if (currentState == DESTROYED) {
+            removeObserver(mObserver);
+            return;
+        }
+        Lifecycle.State prevState = null;
+        while (prevState != currentState) {
+            prevState = currentState;
+            activeStateChanged(shouldBeActive());
+            currentState = mOwner.getLifecycle().getCurrentState();
+        }
+    }
+    ...
+}
+```
+
+### LiveData 分析
+
+`LiveData` 把数据对象和页面生命后期关联了起来，而且是以一种简单的实现方式，所以它可以满足大部分数据驱动视图的需求。但是 `LiveData` 只能只是简单持有一个数据对象，缺乏流式处理的灵活性。而且由于封装数据，导致与其他同步或异步模块交互时需要额外的封装和解封装过程  
 
 ## 参考
 

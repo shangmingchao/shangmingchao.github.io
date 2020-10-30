@@ -229,9 +229,9 @@ Repository 提供的数据类型有很多种选择：
 
 这些方式各有利弊，需要我们从是不是易于组合多个操作，是不是可以异步，支持单向 pull 还是双向 push，是不是可以支持发射多个值，是不是支持 cold 和 hot stream，支持的操作符多不多，用起来是不是简洁高效这些方面去权衡  
 我觉得 LiveData 应该仅用于 View 和 ViewModel 交换信息上，其他地方包括 Repository 层不应该包含 LiveData 和其它与 Android 相关的元素，但是我又希望各层能有一个统一的数据类型，虽然这在目前来看不太现实  
-我觉得观察者模式不应该强制定义好谁是观察者谁是被观察者，两个对象应该都是普通对象，应该有个第三方的监控器来决定谁是观察者，谁要观察谁  
+我觉得观察者模式不应该强制定义好谁是观察者谁是被观察者，一个对象可能在不同场景下充当不同的角色，应该有个监控器来决定谁是观察者，谁要观察谁  
 我觉得目前的情况在 Repository 层用 Flow 结合协程要更好一点  
-我觉得 DTO、PO、VO 对象应该区分开来，不要用一个对象表示，对象间应该有个第三方工具来映射它们属性间的关系
+我觉得 DTO、PO、VO 对象应该区分开来，不要用一个对象表示，对象间应该有个第三方工具来映射它们属性间的关系  
 我觉得唯一数据源和数据驱动视图的思想应该作为一种原则  
 我觉得应该尽量少用 APT 这样的编译时代码生成技术，即使用了也不应该在源码中直接引用生成的代码，否则会影响编码体验  
 我觉得应该尽量少用 AOP 这样的技术，会影响编译速度  
@@ -242,6 +242,86 @@ Repository 提供的数据类型有很多种选择：
 我觉得基础设施建设不应该是一次性的任务，而应该是个长期的习惯  
 
 ## 附录
+
+### 业务逻辑示例
+
+```kotlin
+class RepoFragment : BaseFragment() {
+
+    override val layoutId = R.layout.fragment_repo
+    private val args by navArgs<RepoFragmentArgs>()
+    private val repoViewModel: RepoViewModel by viewModel { parametersOf(Bundle(), args.username) }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        repoViewModel.repo.observe(viewLifecycleOwner, Observer { resource ->
+            repoText.text = when (resource) {
+                is Loading -> getString(R.string.loading)
+                is Success -> resource.data.toString()
+                is Errors -> null
+            }
+        })
+    }
+}
+```
+
+```kotlin
+class RepoViewModel(
+    private val handle: SavedStateHandle,
+    private val username: String,
+    private val repoRepository: RepoRepository
+) : ViewModel() {
+
+    val repo by lazy { getRepo(username) }
+
+    private fun getRepo(username: String): LiveData<Resource<List<RepoVO>>> = getResource(
+        databaseQuery = { repoRepository.getLocalRepo(username) },
+        networkCall = { repoRepository.getRemoteRepo(username) },
+        dpMapping = { it.map { dto -> map(dto) } },
+        pvMapping = { it.map { po -> map(po) } },
+        saveCallResult = { repoRepository.saveLocalRepo(it) }
+    )
+}
+```
+
+```kotlin
+class RepoRepository(
+    private val repoService: RepoService,
+    private val repoDao: RepoDao
+) {
+
+    suspend fun getRemoteRepo(username: String): List<RepoDTO> =
+            repoService.listUserRepositories(username)
+
+    @ExperimentalCoroutinesApi
+    fun getLocalRepo(username: String): Flow<List<RepoPO>> =
+            repoDao.getUserRepos(username).distinctUntilChanged().map { it?.repos }
+
+    suspend fun saveLocalRepo(repos: List<RepoPO>) =
+            repoDao.saveRepo(repos)
+}
+```
+
+```kotlin
+fun <V, D, P> getResource(
+    databaseQuery: () -> Flow<P>,
+    networkCall: suspend () -> D,
+    dpMapping: (D) -> P,
+    pvMapping: (P) -> V,
+    saveCallResult: suspend (P) -> Unit
+): LiveData<Resource<V>> = liveData(Dispatchers.IO, 0) {
+    emit(Resource.Loading())
+    val localResource = getLocalResource(databaseQuery)
+    emitSource(localResource.map { resMapping(it, pvMapping) })
+    val remoteResource = getRemoteResource(networkCall)
+    if (remoteResource is Resource.Success) {
+        saveCallResult.invoke(dpMapping(remoteResource.data!!))
+    } else if (remoteResource is Resource.Errors) {
+        emit(Resource.Errors(remoteResource.errorInfo!!))
+        emitSource(localResource.map { resMapping(it, pvMapping) })
+    }
+}
+```
 
 ### Shell 语法
 

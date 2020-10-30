@@ -5,7 +5,7 @@
 
 ## Map
 
-Map 对上游的数据项进行简单的变换（映射），返回新的 `ObservableMap`，实现就是把下游的 `Observer` 包装成 `MapObserver` 订阅给上游  
+Map 对上游的数据项进行简单的变换（映射），返回新的 `ObservableMap`。实现就是把下游的 `Observer` 包装成 `MapObserver` 订阅给上游  
 
 ```java
 Observable
@@ -302,7 +302,9 @@ observe 2      in Thread: [RxCachedThreadScheduler-1]
 
 ## Concat
 
-`concat()` 可以将多个 `Observable` 按顺序拼接起来，一个 `Observable` 发射完了再发射下一个。`concatWith` 可以再后面拼接一个  
+`concat()` 可以将多个 `Observable` 按顺序拼接起来，一个 `Observable` 发射完了再发射下一个 `Observable` 的  
+
+> 一个 `Observable` 实例可以使用 `concatWith()` 来 concat 其他的实例
 
 ----
 
@@ -330,8 +332,8 @@ observe 2      in Thread: [RxCachedThreadScheduler-1]
 
 ## TakeUntil 和 TakeWhile
 
-`takeUntil()` 让源 `Observable` 在给定的 `Observable` 发射了数据后终止  
-`takeWhile()` 会镜像发射源 `Observable` 的数据，直到给定条件变成 `false`，然后马上终止  
+`takeUntil()` 让源 `Observable` 在给定的 `Observable` 发射了数据后马上 complete  
+`takeWhile()` 会镜像发射源 `Observable` 的数据，直到给定条件变成 `false` 时马上 complete  
 
 ----
 
@@ -340,7 +342,7 @@ observe 2      in Thread: [RxCachedThreadScheduler-1]
 Catch 操作符可以拦截 `onError` 通知，并且可以把它替换成数据项或数据项序列  
 `onErrorReturn()` 在 `Observable` 遇到 error 时不调用 `Observer` 的 `onError()` 方法，而是发射一个给定的数据项，然后 complete  
 `onErrorResumeNext()` 在 `Observable` 遇到 error 时不调用 `Observer` 的 `onError()` 方法，而是将控制权交给给定的 `Observable`  
-`onErrorComplete()` 在 `Observable` 遇到 error 时不调用 `Observer` 的 `onError()` 方法，错误通知被丢弃并直接complete  
+`onErrorComplete()` 在 `Observable` 遇到 error 时不调用 `Observer` 的 `onError()` 方法，错误通知被丢弃并直接 complete  
 
 ## Retry
 
@@ -406,6 +408,6 @@ Observable
 `Subject` 继承了 `Observable`，实现了 `Observer`，它有几个实现类  
 
 - `AsyncSubject` 只有在调用 `onComplete()` 时才会发射最近缓存的 1 个值和 complete，`onError()` 时就不发射最近的值了  
-- `BehaviorSubject` 一旦有 `Observer` 订阅了它就开始发射最近的值和后续的值，`onError()` 时就不发射最近的值了  
+- `BehaviorSubject` 一旦有 `Observer` 订阅了它就开始发射最近的值，`onError()` 时就不发射最近的值了  
 - `PublishSubject` 可以在创建之后立即发射数据，它不会缓存任何数据  
-- `ReplaySubject` 不管 `Observer` 什么时候订阅都把所有数据再发一遍  
+- `ReplaySubject` 不管 `Observer` 什么时候订阅都把之前发射过的所有数据再发一遍  
