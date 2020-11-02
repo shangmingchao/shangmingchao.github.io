@@ -518,11 +518,13 @@ RxJava 真正强大的地方不是 `Observable` 和 `Observer`，不是观察者
 
 ## LiveData 2.2.0
 
-Android 迫切需要一个能自动跟页面生命周期绑定的 `Observable`。但是 `Activity`，`Fragment`，`View` 三者并没有统一实现页面（生命周期）相关的逻辑，导致其他组件尊重这些 UI 组件生命周期的过程变得尤为困难，最简单暴力的方式就是在它们的声明周期方法回调中进行额外的处理，但是弊端很明显，特别繁琐，不容易统一控制，而且万一忘记了处理也不会马上发现  
-Android 团队终于意识到了这一点并从设计上设计了一个跟生命周期绑定的数据容器 `LiveData`，它严格意义上来说并不是自动跟声明周期绑定，只能说是能自动解绑，因为它的核心方法 `observe(LifecycleOwner, Observer<? super T>)` 除了观察者还是需要主动提供一个 UI 组件上下文（`Activity`/`Fragment`/`View`）的  
+Android 迫切需要一个能自动跟页面生命周期绑定的 `Observable`。但是 `Activity`，`Fragment`，`View` 三者并没有统一实现页面（生命周期）相关的逻辑，导致其他组件尊重这些 UI 组件生命周期的过程变得尤为困难，最简单暴力的方式就是在它们的生命周期方法回调中进行额外的处理，但是弊端很明显，特别繁琐，不容易统一控制，而且万一忘记了处理也不会马上发现  
+Android 团队终于意识到了这一点并从设计上设计了一个跟生命周期绑定的数据容器 `LiveData`，它严格意义上来说并不是自动跟生命周期绑定，只能说是能自动解绑，因为它的核心方法 `observe(LifecycleOwner, Observer<? super T>)` 除了观察者还是需要主动提供一个 UI 组件上下文（`Activity`/`Fragment`/`View`）的  
 `LiveData` 的实现很简单，就是把 `LifecycleOwner` 和 `Observer` 成对封装好，通过观察 `LifecycleOwner` 的状态来决定何时移除 `Observer`，来决定在什么状态下才可以通知 `Observer`  
 
 ```java
+private SafeIterableMap<Observer<? super T>, ObserverWrapper> mObservers = new SafeIterableMap<>();
+...
 public void observe(@NonNull LifecycleOwner owner, @NonNull Observer<? super T> observer) {
     ...
     LifecycleBoundObserver wrapper = new LifecycleBoundObserver(owner, observer);
@@ -555,6 +557,15 @@ class LifecycleBoundObserver extends ObserverWrapper implements LifecycleEventOb
     ...
 }
 ```
+
+可以看到:  
+由于 `LifecycleOwner` 和 `Observer` 是一对多的关系，所以利用 Map 对 `LifecycleOwner` 和对应的 `Observer`s 进行封装，key 是 `Observer`，value 是 `LifecycleBoundObserver`（LifecycleOwner, Observer）  
+只有 `STARTED` 和 `RESUMED` 状态下的 LifecycleOwner 才算是活跃的  
+只有活跃状态下的 Observer 才能接收通知  
+当 LifecycleOwner 状态变成活跃时，通知 `Observer`（这点至关重要，这也是 LiveData 最亮眼的一点，很多时候离开了某个页面，但是当对应的数据发生变化时，而我们又不希望马上更新一个看不见的页面，而是回到页面时才对页面进行更新，这种情况下 LiveData 就能很好地完成任务）  
+当 LifecycleOwner 状态变成 `DESTROYED` 时，移除 `Observer`  
+移除 `Observer` 时移除对应的 `LifecycleOwner` 的观察者  
+当 `Observer` 的数量由 0 到 1 时调用 `LiveData` 的 `onActive()`，从 1 到 0 时调用 `onInactive()`  
 
 ### LiveData 分析
 
