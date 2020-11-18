@@ -559,8 +559,8 @@ class LifecycleBoundObserver extends ObserverWrapper implements LifecycleEventOb
 ```
 
 可以看到:  
-由于 `LifecycleOwner` 和 `Observer` 是一对多的关系，所以利用 Map 对 `LifecycleOwner` 和对应的 `Observer`s 进行封装，key 是 `Observer`，value 是 `LifecycleBoundObserver`（LifecycleOwner, Observer）  
-只有 `STARTED` 和 `RESUMED` 状态下的 LifecycleOwner 才算是活跃的  
+由于 `LifecycleOwner` 和 `Observer` 是一对多的关系，所以利用 Map 存储 `LifecycleOwner` 和对应的 `Observer`s，key 是 `Observer`，value 是 `LifecycleBoundObserver`（LifecycleOwner, Observer）  
+只有 `STARTED` 和 `RESUMED` 状态下的 `LifecycleOwner` 才算是活跃的  
 只有活跃状态下的 `Observer` 才能接收通知  
 当 `LifecycleOwner` 状态变成活跃时，通知 `Observer`（这点至关重要，这也是 LiveData 最亮眼的一点，很多时候离开了某个页面，但是当对应的数据发生变化时，而我们又不希望马上更新一个看不见的页面，而是回到页面时才对页面进行更新，这种情况下 LiveData 就能很好地完成任务）  
 当 `LifecycleOwner` 状态变成 `DESTROYED` 时，移除 `Observer`  

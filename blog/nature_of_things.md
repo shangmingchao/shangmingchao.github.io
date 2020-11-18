@@ -3,7 +3,7 @@
 ## 思考
 
 为什么会存在这种技术？在没有它之前是怎么样的？它解决了哪些问题，又带来了哪些问题？它一定是最好的么？有没有比它更好的？  
-有什么技术是学不会的？包括算法，有什么算法是你能学会别人学不会的？如果你看过 ACM 总决赛你就会知道什么才叫真正的差距。2019 年 4 月 4 号在葡萄牙波尔图举办的第 43 届 ACM-ICPC World Finals 中，莫斯科国立大学获得了两连冠，俄罗斯的大学完成了八连冠  
+有什么技术是学不会的？包括算法，有什么算法是你能学会别人学不会的？2019 年 4 月 4 号在葡萄牙波尔图举办的第 43 届 ACM-ICPC World Finals 中，莫斯科国立大学获得了两连冠，俄罗斯的大学完成了八连冠  
 ![image.png](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/nature_of_things_1.png)  
 ![image.png](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/nature_of_things_2.png)  
 ![image.png](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/nature_of_things_3.png)  
@@ -80,7 +80,11 @@
 
 ## JDK 语言机制
 
+### Java 匿名内部类与局部变量
+
 Java8 之前创建的匿名内部类中不能访问局部变量，除非把局部变量声明成 `final` 的。因为局部变量只存在方法中，方法执行完了出栈后这个局部变量就没有了，所以匿名内部类会拷贝一份局部变量作为自己的成员变量才能继续使用它，由于变量传递的是引用（地址），所以如果局部变量被更改了，那么会产生数据不一致问题或安全问题，所以 java 直接强制这样的局部变量是不能更改的，即 `final` 的，Java8 之后只是不用显式声明成 `final` 的而已，编译器还是认为这个局部变量是 `final` 的  
+
+### 线程独有变量
 
 `ThreadLocal<T>` 用来管理每个线程独有的变量。`Thread` 会持有 `ThreadLocalMap` 成员，key 是 `ThreadLocal`，value 是 `ThreadLocalMap.Entry`。所以 `ThreadLocal` 对象并不存储值，只是用来表明每个线程会持有各自 T 类型的变量:  
 
@@ -119,6 +123,43 @@ public static @Nullable Looper myLooper() {
 ```
 
 `Thread` 持有的 `ThreadLocalMap` 成员是强引用，虽然 `ThreadLocalMap` 的 `Entry` 继承了 `WeakReference<ThreadLocal<?>>`，但是这只表明 `ThreadLocal` 对象可以被回收，但是 value 不能被回收，所以如果不及时 `remove()` 掉，还是可能会出现内存泄漏的  
+
+### 泛型
+
+```java
+// 编译错误: Type mismatch: cannot convert from Plate<Apple> to Plate<Fruit>
+Plate<Fruit> plate = new Plate<Apple>(apple);
+```
+
+因为在编译器看来，苹果虽然是水果，但是装苹果的盘子并不是装水果的盘子  
+为了弥补这个缺陷，需要使用通配符（`?`）和 `extends`/`super` 关键字来更灵活更精确地描述盘子（容器）  
+
+```java
+Plate<? extends Fruit> plate = new Plate<Apple>(apple);
+```
+
+也就是说，`Plate<? extends Fruit>` 是 `Plate<Fruit>` 以及 `Plate<Apple>` 的父类，装苹果的盘子可以给装水果的盘子赋值了  
+`<? extends Fruit>` 通常称为上界通配符，`<? super Fruit>` 为下界通配符  
+`<? extends Fruit>` 的副作用是，编译器只知道容器里可以放水果，但是具体是什么水果不知道，所以试图往里面 放 任何水果编译都不会通过  
+
+```java
+Plate<? extends Fruit> plate = new Plate<Apple>(apple);
+plate.set(apple);  // 编译错误
+plate.set(banana); // 编译错误
+```
+
+取的时候只能 **取** 为 `Fruit` 或它的基类  
+
+相反，`<? super Fruit>` 的副作用是，编译器知道容器中存 Fruit 基类的东西，所以往里面 **放** 任何水果都行，但是 取 的时候的只有所有类的父类 `Object` 能存下  
+
+```java
+Plate<? super Fruit> plate = new Plate<Fruit>(new Fruit());
+Fruit a = plate.get(); // 编译错误
+Apple a = plate.get(); // 编译错误
+```
+
+所以，可以看到，`<? extends Fruit>` 适合读取（返回）数据，`<? super Fruit>` 适合写入数据，这被称为 PECS 原则（Producer Extends Consumer Super）  
+Kotlin 中的 `out` 协变就相当 `<? extends Fruit>`，作为函数返回值，是生产者。`in` 逆变就相当 `<? super Fruit>`，作为函数参数，是消费者  
 
 ## 协程
 
@@ -211,6 +252,9 @@ AND
 Sn = 2^n - 1 = a_n+1 - 1  
 2 + 1 = 4 - 1  
 4 + 2 + 1 = 8 - 1  
+10 11 00 01  
+-2 -1  0  1  
+[-2^(n - 1), 2^(n - 1) - 1]
 
 ### 【拳脚功夫】二分枚举，暴力打表
 
