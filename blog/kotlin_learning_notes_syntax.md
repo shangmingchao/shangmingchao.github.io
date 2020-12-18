@@ -41,6 +41,13 @@ listOf(1, 2, 3, 4, 5).forEach lit@{
 如果不想取名字可以直接 `return@forEach`  
 或者只能用匿名函数替代 lambda 表达式了  
 
+### 类
+
+大部分类都不是基类，所以都不能被继承，如果想要作为基类被继承，需要使用 `open` 关键字修饰  
+大部分成员函数都不需要被覆写，如果想要被覆写，需要使用 `open` 关键字修饰  
+非空类型的属性必须直接初始化，或者在构造器中初始化，或者使用 `lateinit` 修饰（`isInitialized` 检测是否初始化完成），或者使用 `by` 进行委托  
+`by lazy` 默认是线程安全的（`LazyThreadSafetyMode.SYNCHRONIZED`），如果不需要线程同步可以使用 `LazyThreadSafetyMode.PUBLICATION`，如果初始化和使用肯定在相同的线程所以为了避免同步操作可以使用 `LazyThreadSafetyMode.NONE`  
+
 ### 对象声明和对象表达式
 
 对象声明的初始化过程是线程安全的并且是在首次访问时进行的  
@@ -58,6 +65,29 @@ person?.department?.head = managersPool.getManager()
 
 只有 `person` 和 `department` 都不为空时才会执行右侧的表达式和赋值  
 如果 `?:` 左侧表达式非空，就返回左侧表达式的值，否则返回右侧表达式的值。只有左侧为空时才会对右侧表达式求值  
+
+### 集合
+
+Kotlin 把集合分为只读的（read-only）和可变的（mutable），只读的集合是不能进行增删改操作的  
+集合默认是只读的  
+如果想使用可变集合，有对应 `Mutable` 前缀的，如 `mutableListOf(1, 2, 3)`  
+大部分列表都是读操作更频繁一点，所以 List 的默认实现是 `ArrayList`  
+大部分数学集合有个读写顺序更方便一点，所以 Set 的默认实现是 `LinkedHashSet`  
+大部分字典有个读写顺序更方便一点，所以 Map 的默认实现是 `LinkedHashMap`  
+创建集合最简单最推荐的方式是:  
+
+```kotlin
+val numbersSet = setOf("one", "two", "three", "four")
+val emptySet = mutableSetOf<String>()
+```
+
+只读空集合可以使用 `emptyList<String>()` 这样的函数  
+使用 Map 的 `"one" to 1` 构造 Map 时如果想提升性能（避免创建临时 Pair），可以这样 `mutableMapOf<String, String>().apply { this["one"] = "1"; this["two"] = "2" }`  
+每个集合操作符都会产生新的集合，不会对源集合产生影响  
+测试断言 `all()` 对于空集合总是返回 `true`  
+`any` 和 `none` 可以用来检测集合是不是空的  
+`groupBy()` 可以返回一个 Map，key 是 lambda 表达式的值，value 是对应的列表  
+取值时为了避免越界检查可以使用 `getOrNull(5)` 或者 `numbers.getOrElse(5, {it})`  
 
 ### 作用域函数
 
@@ -96,3 +126,41 @@ val adam = Person("Adam").apply {
 #### [lambda 表达式的值] let run with
 
 `let`，`run`，`with` 返回表达式的值，所以可以在对对象操作后返回一个想要的结果，或者不需要结果只是想多执行一些操作  
+
+#### 作用域函数的实际使用
+
+对一个可空对象执行操作，可以使用 `let`:  
+
+```kotlin
+val length = str?.let { 
+    println("let() called on $it")        
+    processNonNullString(it)
+    it.length
+}
+```
+
+对一个对象进行配置，可以使用 `apply`:  
+
+```kotlin
+val adam = Person("Adam").apply {
+    age = 32
+    city = "London"        
+}
+```
+
+对一个对象访问的同时执行一些操作，可以使用 `also`:  
+
+```kotlin
+numbers
+    .also { println("The list elements before adding new one: $it") }
+    .add("four")
+```
+
+用这个上下文对象做一些操作，可以使用 `with`:  
+
+```kotlin
+with(numbers) {
+    println("'with' is called with argument $this")
+    println("It contains $size elements")
+}
+```
