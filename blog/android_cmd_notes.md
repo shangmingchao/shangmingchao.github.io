@@ -70,16 +70,19 @@ macOS Big Sur 11.1 操作系统可以运行 `defaults write com.google.android.s
 
 #### merge
 
-![merging1](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/basic_merging_1.png)  
+本地提交了 C3 和 C5，同时远程 master 提交了 C4
+
+![basic_merging_1](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/basic_merging_1.png)  
+此时，需要把本地的 C3 和 C5 提交到远程 master:  
 
 ```shell
 git checkout master
 git merge iss53
 ```
 
-![merging2](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/basic_merging_2.png)  
+![basic_merging_2](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/basic_merging_2.png)  
 
-也就是说，这种情况，Git 会根据 C4，C5 和它们的共同祖先 C2 做一次合并，所以会出现一个 **C6 合并提交**。如果合并的过程中出现冲突，Git 会暂停下来，等待手动解决冲突。可以使用 `git status` 查看冲突的文件，解决完冲突后使用 `git add` 命令对每个文件标记为冲突已解决。很多时候手动删除冲突文件中的 `<<<<<<<`，`=======`，`>>>>>>>` 标记既繁琐又不直观，可以使用一些可视化工具完成（`git mergetool` 命令启动）。解决完冲突后就可以使用 `git commit` 命令完成合并提交了  
+也就是说，这种情况，Git 会根据 C4，C5 和它们的共同祖先 C2 做一次合并，会出现一个 **C6 合并提交**。如果合并的过程中出现冲突，Git 会暂停下来，等待手动解决冲突。可以使用 `git status` 查看冲突的文件，解决完冲突后使用 `git add` 命令对每个文件标记为冲突已解决。很多时候手动删除冲突文件中的 `<<<<<<<`，`=======`，`>>>>>>>` 标记既繁琐又不直观，可以使用一些可视化工具完成（`git mergetool` 命令启动）。解决完冲突后就可以使用 `git commit` 命令完成合并提交了  
 
 > 远程仓库的默认名字是 `origin`，`origin/master` 指向的就是上次拉取远程仓库代码时的位置，如果要同步本地仓库和远程仓库可以使用 `git fetch origin`  
 ![remote_branches_1](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/remote_branches_1.png)  
@@ -96,7 +99,7 @@ git checkout experiment
 git rebase master
 ```
 
-![basic_rebase_1](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/basic_rebase_2.png)  
+![basic_rebase_2](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/basic_rebase_2.png)  
 原理就是把 `experiment` 相应的修改存为临时文件，然后指向目标 `master` 基底 C3，最后将临时文件的修改依次应用  
 然后就可以回到 `master` 进行一次快速合并了  
 
@@ -105,7 +108,7 @@ git checkout master
 git merge experiment
 ```
 
-![basic_rebase_1](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/basic_rebase_3.png)  
+![basic_rebase_3](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/basic_rebase_3.png)  
 
 #### merge 和 rebase
 
