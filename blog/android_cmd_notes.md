@@ -16,7 +16,7 @@ Keymap 快捷键使用 `macOS`
 Editor -> General -> Save Files: 勾选中 裁剪末尾空格 和 确保文件末尾有换行  
 Editor -> General -> Auto Import: Java 和 Kotlin 都勾选中 打字时优化包的引入   
 Editor -> Code Style -> Scheme: 使用 `Default`  
-Editor -> Code Style -> Kotlin: 点击 `Set from...` 选择 `Kotlin style guide`。`Blank Lines` 从上到下设置为 1 1 0 0 0 1。`Imports` 勾选中 使用单命名引入  
+Editor -> Code Style -> Kotlin: 点击 `Set from...` 选择 `Kotlin style guide`。`Blank Lines` 从上到下设置为 1 1 0 0 0 1。`Imports` 勾选中 使用单命名引入 并且 取消所有对通配符（*）引入的勾选  
 Editor -> File and Code Templates -> Includes -> File Header: 设置为:  
 
 ```java
@@ -55,6 +55,12 @@ macOS Big Sur 11.1 操作系统可以运行 `defaults write com.google.android.s
 - 切换输入法: `control ;`
 - 复制文件路径: `command option C`
 - 显示隐藏文件: `command shift .`
+==========================
+- `lwm` 快捷 `android:layout_width="match_parent"`
+- `lhw` 快捷 `android:layout_height="wrap_content"`
+- `fun0`, `fun1` 等快捷声明函数  
+- `ifn` 快捷判空
+- `inn` 快捷判非空
 
 ## Git
 
