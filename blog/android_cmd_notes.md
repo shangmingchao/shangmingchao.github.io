@@ -55,7 +55,7 @@ macOS Big Sur 11.1 操作系统可以运行 `defaults write com.google.android.s
 - 切换输入法: `control ;`
 - 复制文件路径: `command option C`
 - 显示隐藏文件: `command shift .`
-==========================
+- ==========================
 - `lwm` 快捷 `android:layout_width="match_parent"`
 - `lhw` 快捷 `android:layout_height="wrap_content"`
 - `fun0`, `fun1` 等快捷声明函数  
