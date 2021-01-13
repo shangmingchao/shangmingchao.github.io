@@ -179,7 +179,8 @@ class UserFragmentTest {
 }
 ```
 
-有些开源的自动化测试框架也可以使用，如 Appium 可以摆脱只能用 Java/Kotlin 写测试用例的限制，SoloPi 不用写 UI 脚本就可以通过可视化录制回放功能完成自动化的 UI 操作，Airtest 可以写 Python 脚本的同时也同样支持录制和调试自动化的 UI 脚本  
+到目前为止我们讨论的都是白盒测试，就是开发的人自己知道要测试哪些行业务代码，知道要怎么写测试代码，知道预期的结果是什么样的。其实作为开发人员，目的很简单，就是为了证明刚才写的代码是没有问题的。这就要提到代码覆盖率的问题了，我们可能需要知道写的代码中有多少是经过测试的，也就是多少行是被测试用例的代码覆盖到的，这个覆盖率越高越能说明代码质量更可靠。在 Android 中我推荐 jacoco-android-gradle-plugin 和 Codecov 来生成代码覆盖率的报告  
+有些开源的自动化测试框架也可以使用，如 Appium 可以摆脱只能用 Java/Kotlin 写测试用例的限制，SoloPi 不用写 UI 脚本就可以通过可视化录制回放功能完成自动化的 UI 操作，Airtest 可以写 Python 脚本的同时也同样支持可视化录制脚本功能。这些工具不但是对于开发人员来说很方便，对于测试人员也特别有用  
 
 ## 参考
 
@@ -187,6 +188,8 @@ class UserFragmentTest {
 - [Junit 4](https://junit.org/junit4/)
 - [Google Truth](https://truth.dev/)
 - [Mockito](https://site.mockito.org/)
+- [jacoco-android-gradle-plugin](https://github.com/arturdm/jacoco-android-gradle-plugin)
+- [Codecov](https://codecov.io/)
 - [Appium](https://github.com/appium/appium)
 - [SoloPi](https://github.com/alipay/SoloPi)
 - [Airtest](https://github.com/AirtestProject/Airtest)
