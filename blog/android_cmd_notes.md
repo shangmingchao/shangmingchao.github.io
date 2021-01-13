@@ -128,3 +128,8 @@ rebase 和 merge 虽然最终结果没有区别。rebase 的提交是一条直�
 - 查看分支列表 `git branch`
 - 查看各个分支详情 `git log --oneline --decorate --graph --all`
 - 删除远程分支 `git push origin --delete serverfix`
+- 打轻量标签 `git tag v1.4`
+- 打附注标签 `git tag -a v1.4 -m "v1.4"`
+- 推送标签 `git push origin v1.4`  
+- 删除本地标签 `git tag -d v1.4`  
+- 删除远程标签 `git push origin --delete v1.4`

@@ -6,7 +6,7 @@ JUnit 可以方便地写测试，最新版本是 JUnit 5，但是我们更喜欢
 
 ### RunWith
 
-使用 JUnit 就不用再为每个测试专门书写包含 `main()` 函数的测试类了（这种类被称为 Runner），使用 `@RunWith` 注解就可以了  
+使用 JUnit 就不用再为每个测试专门书写可以直接运行的包含 `main()` 函数的测试类了（这种类被称为 Runner），如果不想使用默认的 Runner，使用 `@RunWith` 注解就可以了，如  
 
 ```kotlin
 @RunWith(AndroidJUnit4::class)
@@ -14,11 +14,11 @@ class MainFragmentTest {
 }
 ```
 
-比如在这里我们为了测试 Android 中的类，使用的是 `AndroidJUnit4` Runner，而不是 JUnit 默认的 Runner（`BlockJUnit4ClassRunner`） 或其他 Runner（`Suite`，`Parameterized`）  
+在这里我们为了测试 Android 中的类，使用的是 `AndroidJUnit4` Runner，而不是 JUnit 默认的 Runner（`BlockJUnit4ClassRunner`） 或其他 Runner（`Suite`，`Parameterized`）  
 
 ### Test
 
-在这个 Runner 中我们可以使用 `@Test` 注解标记测试函数，这个注解中可以指定这个函数期望抛出的异常，也可以指定这个函数超时时间
+在这个 Runner 中我们可以使用 `@Test` 注解标记测试函数，这个注解中可以指定这个函数期望抛出的异常，也可以指定这个函数超时时间，如  
 
 ```kotlin
 @Test(expected = IndexOutOfBoundsException::class)
@@ -179,10 +179,11 @@ class UserFragmentTest {
 }
 ```
 
-有些开源的自动化测试框架也可以使用，如 Appium，SoloPi，Airtest  
+有些开源的自动化测试框架也可以使用，如 Appium 可以摆脱只能用 Java/Kotlin 写测试用例的限制，SoloPi 不用写 UI 脚本就可以通过可视化录制回放功能完成自动化的 UI 操作，Airtest 可以写 Python 脚本的同时也同样支持录制和调试自动化的 UI 脚本  
 
 ## 参考
 
+- [Test apps on Android](https://developer.android.com/training/testing)
 - [Junit 4](https://junit.org/junit4/)
 - [Google Truth](https://truth.dev/)
 - [Mockito](https://site.mockito.org/)
