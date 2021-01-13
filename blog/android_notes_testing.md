@@ -188,5 +188,5 @@ class UserFragmentTest {
 - [Google Truth](https://truth.dev/)
 - [Mockito](https://site.mockito.org/)
 - [Appium](https://github.com/appium/appium)
-- [SoloPi](https://github.com/appium/appium)
+- [SoloPi](https://github.com/alipay/SoloPi)
 - [Airtest](https://github.com/AirtestProject/Airtest)
