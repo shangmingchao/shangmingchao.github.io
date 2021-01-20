@@ -168,6 +168,25 @@ dependencies {
 ```
 
 ```kotlin
+class ModelMapperTest {
+
+    @Test
+    fun testRepoPO2VO() {
+        val repoPO = RepoPO(2L, "name1", false, 1L)
+        val repoVO = ModelMapper.map(repoPO)
+        assertThat(repoVO.desc).isEqualTo("name1")
+        assertThat(repoVO.isPrivate).isFalse()
+    }
+
+    @Test
+    fun testUserPO2VO() {
+        val userPO = UserPO(1L, "login1", "name1")
+        val userVO = ModelMapper.map(userPO)
+        assertThat(userVO.username).isEqualTo("name1")
+    }
+}
+```
+```kotlin
 @RunWith(AndroidJUnit4::class)
 class UserFragmentTest {
     @Test
@@ -187,6 +206,8 @@ class UserFragmentTest {
 不需要配置，在 GitHub 上直接下载 [SoloPi.apk](https://github.com/alipay/SoloPi/releases) 安装就可以了。或者 clone 下源码自己编译运行也可以  
 第一次打开 SoloPi 的时候需要授予调试权限并且使用 `adb tcpip 5555` 命令建立连接  
 然后就可以录制脚本和回放了  
+导出用例 `adb pull /storage/emulated/0/solopi/export`  
+导入用例 `adb push filename.json /storage/emulated/0/solopi/import`  
 
 ## 参考
 

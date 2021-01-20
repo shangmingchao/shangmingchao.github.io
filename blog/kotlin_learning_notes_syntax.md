@@ -87,7 +87,8 @@ val emptySet = mutableSetOf<String>()
 测试断言 `all()` 对于空集合总是返回 `true`  
 `any` 和 `none` 可以用来检测集合是不是空的  
 `groupBy()` 可以返回一个 Map，key 是 lambda 表达式的值，value 是对应的列表  
-取值时为了避免越界检查可以使用 `getOrNull(5)` 或者 `numbers.getOrElse(5, {it})`  
+取值时为了避免越界检查可以使用 `getOrNull(5)` 或者 `numbers.getOrElse(5, {0})`  
+只取前 2 个 `list.take(2)`，如果小于 2 个会返回整个集合，所以很安全  
 
 ### 作用域函数
 
