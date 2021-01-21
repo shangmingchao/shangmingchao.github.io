@@ -1,7 +1,7 @@
 # Kotlin 学习笔记协程篇
 
-> Coroutines are computer program components that generalize subroutines for non-preemptive multitasking, by allowing execution to be suspended and resumed
-> Donald Knuth, Melvin Conway  1958, 1963
+> Coroutines are computer program components that generalize subroutines for non-preemptive multitasking, by allowing execution to be suspended and resumed.  
+>Donald Knuth, Melvin Conway  1958, 1963
 
 - 核心: 协作，积极性，自觉
 - 一个协程 **让（yielding）** 给另一个协程去执行 和 简单调用另一段程序执行 的本质区别是 两个协程的关系不是调用者和被调用者的关系，而是完全对等的关系（symmetric）
