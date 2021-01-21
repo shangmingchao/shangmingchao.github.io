@@ -230,6 +230,8 @@ class MyActivity : AppCompatActivity(), CoroutineScope by MainScope() {
 }
 ```
 
+其实，在 `Activity` 或 `Fragment` 中直接使用 `lifecycleScope.launch(Dispatchers.IO) {}` 更直观一点，`ViewModel` 中可以使用 `viewModelScope.launch(Dispatchers.IO) {}`，通过协程构造 `LiveData` 时可以使用 `liveData(Dispatchers.IO, 0) {}`  
+
 ## Flow
 
 挂起函数只能异步地返回单个值，如果我想异步返回多个值咋办，传统集合这个数据结构还能用吗？能用倒是能用，但是得一次性返回：
@@ -276,6 +278,7 @@ Flow
 `launchIn` 操作符等价于 `scope.launch { flow.collect() }`，就是启动一个协程去收集，而不用阻塞其后代码的执行  
 `flow{}` builder 会在自动在每次发射值时检测 `isActive` 状态，所以它可以及时取消。其它 builder 不会加这个自动检测  
 `cancellable` 操作符等价于 `.onEach { currentCoroutineContext().ensureActive() }` 可以自动检测 `isActive` 状态  
+`Flow` 转 `LiveData` 可以使用 `asLiveData()` 扩展函数，同样 `LiveData` 转 `Flow` 可以使用 `asFlow()` 扩展函数  
 
 ## Channel
 
