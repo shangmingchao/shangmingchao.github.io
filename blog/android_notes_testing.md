@@ -212,6 +212,7 @@ class UserFragmentTest {
 ## 参考
 
 - [Test apps on Android](https://developer.android.com/training/testing)
+- [Use Kotlin Coroutines in your Android App](https://developer.android.com/codelabs/kotlin-coroutines#0)
 - [Junit 4](https://junit.org/junit4/)
 - [Google Truth](https://truth.dev/)
 - [Mockito](https://site.mockito.org/)
@@ -220,3 +221,4 @@ class UserFragmentTest {
 - [Appium](https://github.com/appium/appium)
 - [SoloPi](https://github.com/alipay/SoloPi)
 - [Airtest](https://github.com/AirtestProject/Airtest)
+- [kotlinx-coroutines-test](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-test/)

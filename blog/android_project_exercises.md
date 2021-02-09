@@ -726,3 +726,7 @@ versionBuild = 0
 ```
 
 ### checkstyle.xml
+
+## 参考
+
+- [Advanced Android in Kotlin 03.2: Animation with MotionLayout](https://codelabs.developers.google.com/codelabs/motion-layout#0)
