@@ -83,8 +83,6 @@ public class OkHttpUserService implements UserService {
 也就是说生成一个实现类，实现每个 API 方法，每个方法的内部实现 okhttp3.Call 的组装和调用，完成请求的执行以及结果的解析和封装  
 实现这样的代码生成有两种方式，一种是利用 [编译时注解和 APT 技术](https://github.com/shangmingchao/shangmingchao.github.io/blob/master/blog/android_annotation_exercises.md) 在编译时自动生成这样的实现类然后手动创建对象，一种是利用 [运行时注解和动态代理技术](https://github.com/shangmingchao/shangmingchao.github.io/blob/master/blog/design_pattern_proxy.md) 在运行时动态生成代理对象。Retrofit 选择了后者，即在运行时通过反射解析接口并生成代理对象  
 
-> 对于开发者，尤其是 Android 开发者，对性能的要求甚至到了苛刻的地步，对于枚举和反射等技术的使用更是敏感。传统方式虽然也能完成枚举和反射的工作，也会比枚举和反射更快一点，但是复杂度要更高，直观性不好。而枚举反射虽然性能差了一些但是要更加的简单直观，我觉得这是一个权衡问题（Trade off）。很多时候总是要做取舍的，就像有人花费了大量的时间、精力和资源把性能提升了一二十，可能在我看来不值得也没有必要。我用简单的方式实现了一个功能，可能在他人看来不够完美精致。所以我觉得以包容的态度看待技术还是很重要的  
-
 ### create
 
 Retrofit 的 `create` 就是用来创建代理对象的，这个代理对象封装并实现了具体的网络请求逻辑。通过 [设计模式：代理模式](https://github.com/shangmingchao/shangmingchao.github.io/blob/master/blog/design_pattern_proxy.md) 一文我们已经知道，动态代理会把代理对象的 `hashCode()`, `equals()`, `toString()`, `getASingleUser()` 方法的调用都转发给 `InvocationHandler` 的 `invoke` 处理，所以只需要在 `invoke` 完成对 API 的解析和请求逻辑的封装即可，而 `hashCode()`, `equals()`, `toString()` 这些方法不需要特别处理：  

@@ -12,7 +12,7 @@
 
 ## 了解
 
-- 计算机的存储系统受限于目前的技术水平和制作工艺，没办法设计制造体积小容量大读写快成本小的存储元件，所以按照速度从快到慢、容量从小到大、距离 CPU 从近到远的存储元件有: CPU 核心内部的各种寄存器，一般是 TTL 或 CMOS 芯片 → 缓存，就是集成到 CPU 内部的一些 SRAM 芯片 → 内存，就是俗称的内存条，一般是 DRAM 芯片 → 固态硬盘或机械硬盘等即使关机断电也不会丢失数据的大容量存储介质
+- 计算机的存储系统受限于目前的技术水平和制作工艺，没办法设计制造体积小容量大读写快成本小的存储元件，所以按照速度从快到慢、容量从小到大、距离 CPU 从近到远的存储元件有: CPU 核心内部的各种寄存器，一般是 TTL 或 CMOS 芯片 → 缓存，就是集成到 CPU 内部的一些 SRAM 芯片 → 内存，就是俗称的内存条，一般是 DRAM/DDR 芯片 → 固态硬盘/机械硬盘等即使关机断电也不会丢失数据的大容量存储介质
 - CPU，以 [Core i7-8700K CPU](https://ark.intel.com/content/www/us/en/ark/products/126684/intel-core-i7-8700k-processor-12m-cache-up-to-4-70-ghz.html) 为例，拥有 6 个核心，每个核心内部都有一级缓存 L1 和二级缓存 L2，一级缓存 L1 **32KB**，包括一级数据缓存 L1d 和 一级指令缓存 L1i。二级缓存 L2 **256KB**。而三级缓存 L3 **12MB**，是 **所有核心共享的**
 - 并不是缓存层数越多缓存越大越好，缓存过大反而会增加缓存查找时间进而影响性能，试想一下，在小房间里找东西肯定比在大房间里找东西要快啊，所以一味地增加缓存容量对性能的提升并不明显
 - 虽然 Core i7-8700K CPU 有 6 个核心，但是利用超线程技术每个核心可以同时处理 2 个线程，一共支持 12 个线程，也就是说这个 CPU 在操作系统和普通用户看来 **就像** 有 12 个核心可以同时工作一样。线程本来是软件层面的概念，硬件不应该关心和参与，所以硬件层面支持多线程并行其实是在没有其它更好提升硬件性能的办法时的无奈之举，而且这样一来 CPU 就是把 **性能提升的责任** 部分地推给了操作系统和软件开发者
@@ -214,6 +214,71 @@ TCP 的四次挥手：
 2. 服务端确认断开请求：可以断开，但是等我先销毁一下资料。ACK = 1, seq = y, ack = x + 1  
 3. 服务端请求断开连接：资料已销毁，再见吧我的朋友。FIN = 1, ACK = 1, seq = z, ack = x + 1  
 4. 客户端确认断开请求：好的，再见。ACK = 1, seq = x + 1, ack = z + 1  
+
+## Android 事件分发机制
+
+`Activity/View` 有 `dispatchTouchEvent()`、`onTouchEvent()` 回调，ViewGroup 额外有 `onInterceptTouchEvent()` 回调  
+事件产生时，会首先 dispatch:  
+
+* `true`. 只分发到这里，本函数直接消费
+* `false`. 不分发也不消费，逐层返回给父 View 消费
+
+`super.dispatchTouchEvent(ev)` 系统默认处理，如果有子 view 就分发给自己的子 view，如果自己是最小颗粒的 view 了，就直接调用 `onTouchEvent()` 消费
+
+`onInterceptTouchEvent()` 时:  
+
+* `true`. 当前 `onTouchEvent()` 消费
+* `false`/`super`. 不拦截，继续分发
+
+到达 `onTouchEvent()` 时:  
+
+* `true`. 消费，事件结束
+* `false`/`super`. 不消费，逐层返回给父 View 消费
+
+默认点击事件:
+
+```text
+Activity: dispatchTouchEvent---ACTION_DOWN
+ViewGroup: dispatchTouchEvent---ACTION_DOWN
+ViewGroup: onInterceptTouchEvent---ACTION_DOWN
+View: dispatchTouchEvent---ACTION_DOWN
+View: onTouchEvent---ACTION_DOWN
+ViewGroup: onTouchEvent---ACTION_DOWN
+Activity: onTouchEvent---ACTION_DOWN
+Activity: dispatchTouchEvent---ACTION_MOVE
+Activity: onTouchEvent---ACTION_MOVE
+Activity: dispatchTouchEvent---ACTION_UP
+Activity: onTouchEvent---ACTION_UP
+```
+
+**DOWN 事件的分发是为了寻找消费者，找到了，后续的事件直接交给消费者去处理**  
+
+上面的 ACTION_DOWN 只有 Activity 消费了，所以后续的 ACTION_MOVE 和 ACTION_UP 直接交给 Activity 处理了  
+
+如果 ViewGroup 的 dispatch 返回了 true，那么直接消费，不会经过 `onInterceptTouchEvent()` 和 `onTouchEvent()`  
+
+```text
+Activity: dispatchTouchEvent---ACTION_DOWN
+ViewGroup: dispatchTouchEvent---ACTION_DOWN
+Activity: dispatchTouchEvent---ACTION_MOVE
+ViewGroup: dispatchTouchEvent---ACTION_MOVE
+Activity: dispatchTouchEvent---ACTION_UP
+ViewGroup: dispatchTouchEvent---ACTION_UP
+```
+
+如果返回了 `false`  
+
+```text
+Activity: dispatchTouchEvent---ACTION_DOWN
+ViewGroup: dispatchTouchEvent---ACTION_DOWN
+Activity: onTouchEvent---ACTION_DOWN
+Activity: dispatchTouchEvent---ACTION_MOVE
+Activity: onTouchEvent---ACTION_MOVE
+Activity: dispatchTouchEvent---ACTION_UP
+Activity: onTouchEvent---ACTION_UP
+```
+
+分发是自上而下的，消费是自下而上的
 
 ## 算法
 
