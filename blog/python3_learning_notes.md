@@ -2,42 +2,76 @@
 
 ## 数据类型
 
-- 数字的类型： `int` , `float` , `bool` , `complex`
+- `/` 总是返回浮点数，向下取整要用 `//`  
+- 幂运算符为 `**`  
 - `type()` 不会认为子类是一种父类类型， `isinstance()` 会认为子类是一种父类类型
-- `//` 向下取整的除法， `**` 幂运算， `**` 比 `-` 的优先级要高
 - 交互模式下最后打印的表达式被赋值给变量 `_` ，可以直接使用它参与后来的运算，但它是只读的，不要主动给它赋值
-- `j` 或 `J` 后缀表示复数的虚数部分，如 `3+5j`
-- 字符串可以用单引号或双引号包裹，用 `\` 转义，引号前加 `r` 表示字符串为原始字符串
 - 多行字符串可以用三个单引号或三个双引号包裹，可以每行末尾添加 `\` 防止默认自动添加的换行
 - 字符串 `+` 表示拼接， `*` 表示重复，两个挨着的字符串字面量不用 `+` 也会自动拼接
 - 没有字符类型，只有字符串类型
 - 字符串索引（indexing）可以是负的，表示从右开始计数，从 -1 开始，-0 和 0 是一样的
-- 字符串切片（slicing）就是截取子串，开始总是 included 的结尾总是 excluded 的以保证 `s[:i] + s[i:]` 总是等于 `s` ，缺省的第一个索引等于 0 ，缺省的第二个索引等于字符串长度，切片时的索引是可以越界的，因为可以优雅处理越界行为
-- 内置函数 `len()` 可以返回字符串长度，如 `len(s)`
-- 有序列表 list 用方括号包裹，用逗号隔开，每一项可以是不同类型的
-- 像 list 等序列类型都可以像字符串一样被索引和切片，也可以用 `+` 拼接两个列表， `len()` 函数同样适用于 list，可以嵌套，如 `x = [a, n]`
+- 为切片赋值甚至可以清空列表：`letters[:] = []`
+- 布尔类型的值是 `True` 和 `False`，空类型的值是 `None`  
 
 ## 语法
 
-```python
-a, b = 0, 1
-while a < 10:
-    print(a)
-    a, b = b, a + b
+### 循环迭代
 
-```
-
-- 第一行展示了多重赋值（multiple assignment）， `a` 和 `b` 被同时赋值为 0 和 1，最后一行也是多重赋值，但是评估表达式的优先级比赋值操作要高，因此先从左到右评估表达式 `b` 和 `a + b` 再分别赋值给 `a` 和 `b`
-- 训练条件可以是各种各样的，不是 0  的整数就是 True，长度不为 0  的序列也是 True
+for-in 简单迭代：
 
 ```python
-for i in range(5) :
-    print(i)
-
+for i in range(5):
+    print(i, end=',' if i < 4 else '\n')
+# 0,1,2,3,4
 ```
+
+带索引的迭代：
+
+```python
+fruits = ['apple', 'banana', 'cherry']
+for index, fruit in enumerate(fruits):
+    print(index, fruit)
+# 0 apple
+# 1 banana
+# 2 cherry
+```
+
+### 函数
+
+定义函数时使用 `def` 关键字：
+
+```python
+def fib():
+    """文档注释"""
+```
+
+文档字符串放到函数体的第一行。没有 return 或者 return 没有表达式表明函数返回 `None`
+
+
+### 输出格式化
+
+```python
+num = 3.14
+
+# 使用format()
+print("Using format(): {:.2f}".format(num))
+
+# 使用f-string
+print(f"Using f-string: {num:.2f}")
+
+# 使用%格式化
+print("Using %% formatting: %.2f" % num)
+
+# 使用round()
+print("Using round():", round(num, 2))
+```
+
+建议使用 f-string  
+f-string 中左右中对齐符号为 `<`, `>`, `^`，如 `f"Left aligned: {text:<10}"`。  
+f-string 中可以直接调用函数或方法。  
+f-string 中可以使用条件表达式：`print(f"Result: {'Pass' if score >= 60 else 'Fail'}")`  
+`{num:,.2f}` ：千分位分割且保留两位小数，`{0.25:.2%}` 百分比格式且保留两位小数  
 
 ## 参考
 
-- [The Python Tutorial](https://docs.python.org/3/tutorial/index.html)
-- [Python 3 教程](https://www.runoob.com/python3/python3-tutorial.html)
-- [小白的Python 学习笔记（一）List 常用方法汇总](https://juejin.im/post/5cfaa7cf51882542000628ec)
+- [The Python Tutorial](https://docs.python.org/zh-cn/3.13/tutorial/index.html)
