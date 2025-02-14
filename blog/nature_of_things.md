@@ -72,8 +72,7 @@
 - 如果自旋期间也没能成功拿到锁，就只能升级成重量级锁了，让出 CPU ，阻塞线程  
 - JIT 编译时，会自动消除不需要加锁的锁操作，从而对不必要的锁进行消除  
 - Java 提供了两个实用的并发控制工具类 CountDownLatch 和 CyclicBarrier  
-- CountDownLatch 的 `await()` 方法会等到计数减到 0 时才能向下继续执行（countDown()）  
-- CountDownLatch 是一次性的，减到 0 后就不能用了  
+- CountDownLatch 的 `await()` 方法会等到计数减（countDown()）到 0 时才能向下继续执行。CountDownLatch 是一次性的，减到 0 后就不能用了  
 - CyclicBarrier 要更强大一点，可以等到所有线程都到达屏障后再继续执行，否则阻塞在 await() 处，重点是之后 CyclicBarrier 可以再设置一个屏障（reset()），继续当计数器使用  
 - 信号量 Semaphore 可以控制资源访问，acquire() 申请，release() 释放  
 - Exchanger 用于两个线程交换数据，阻塞在 exchange() 处，等待另一个线程准备好数据后交换，之后再继续向下执行  
@@ -211,8 +210,8 @@ TCP 的三次握手：
 TCP 的四次挥手：  
 
 1. 客户端请求断开连接：东风同志你好，我是白杨，我要走了，不要联系了。FIN = 1, seq = x  
-2. 服务端确认断开请求：可以断开，但是等我先销毁一下资料。ACK = 1, seq = y, ack = x + 1  
-3. 服务端请求断开连接：资料已销毁，再见吧我的朋友。FIN = 1, ACK = 1, seq = z, ack = x + 1  
+2. 服务端确认断开请求：可以断开，但是等我先销毁一下资料。ACK = 1, seq = y, ack = x + 1  `CLOSE_WAIT` 
+3. 服务端请求断开连接：资料已销毁，再见吧我的朋友。FIN = 1, ACK = 1, seq = z, ack = x + 1  `LAST_ACK`
 4. 客户端确认断开请求：好的，再见。ACK = 1, seq = x + 1, ack = z + 1  
 
 ## Android 事件分发机制
@@ -312,32 +311,46 @@ AND
 ![image.png](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/nature_of_things_14.png)  
 ![image.png](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/nature_of_things_15.png)
 
-0000 | 0000  
-128 64 32 16 | 8 4 2 1  
-Sn = 2^n - 1 = a_n+1 - 1  
-2 + 1 = 4 - 1  
-4 + 2 + 1 = 8 - 1  
+```shell
+0   0  0   0 | 0 0 0 0  
+128 64 32 16 | 8 4 2 1 
+``` 
+
+$$S_n = 2^n - 1 = a_{n+1} - 1$$  
+$$2 + 1 = 4 - 1$$  
+$$4 + 2 + 1 = 8 - 1$$  
+$$8 + 4 + 2 + 1 = 16 - 1$$  
+
+```shell
 10 11 00 01  
 -2 -1  0  1  
+[-2, 1]
+[-128, 127]
 [-2^(n - 1), 2^(n - 1) - 1]
+```
+
 
 ### 【拳脚功夫】二分枚举，暴力打表
 
-#### 正常二分查
+#### 正常二分查(LeetCode 704)
 
 ```java
-int l = 0, r = a.length - 1;
-while (l <= r) {
-    int m = (l + r) >>> 1;
-    if (a[m] == key) {
-        return m;
-    } else if (a[m] > key) {
-        r = m - 1;
-    } else {
-        l = m + 1;
+class Solution {
+    public int search(int[] nums, int target) {
+        int l = 0, r = nums.length - 1;
+        while (l <= r) {
+            int m = (l + r) >> 1;
+            if (nums[m] == target) {
+                return m;
+            } else if (nums[m] > target) {
+                r = m - 1;
+            } else if (nums[m] < target) {
+                l = m + 1;
+            }
+        }
+        return -1;
     }
 }
-return -1;
 ```
 
 #### 查找和在数组中的位置
