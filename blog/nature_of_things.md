@@ -57,9 +57,10 @@
 - 为了提高性能，指令可能并不是按照预期的顺序执行，可能会被 **重排** ，重排对单线程没有影响，但是多线程可能 **也会** 出现线程安全问题  
 ![rearrangement](https://raw.githubusercontent.com/shangmingchao/shangmingchao.github.io/master/images/nature_of_things_9.png)
 
-- 原子性（Atomicity）: 像原子一样不能分割。对于原子性操作，要么不做，要么一口气做完
-- 可见性（Visibility）: 当一个线程修改了共享变量的值，其他线程能马上知道。指令重排可能会影响可见性。释放 monitor 锁 或者对 volatile 的变量的修改行为会导致变量的值马上写回主存并将它的所有缓存副本标记为无效
+- 原子性（Atomicity）: 像原子一样不能分割。对于原子性操作，要么不做，要么一口气做完。对于复杂操作（如 i++），需要使用同步机制（如 synchronized 或 Atomic 类）来保证原子性
+- 可见性（Visibility）: 当一个线程修改了共享变量的值，其他线程能马上知道。指令重排可能会影响可见性。`synchronized` 释放锁或者对 `volatile` 变量的修改（会导致变量的值马上写回主存并将它的所有缓存副本标记为无效）可以保证可见性，`final` 属性会在构造完成后对其他线程可见
 - 有序性（Ordering）: 一个操作一定在哪个操作前执行。先天有序性的 `happens-before` 规则: 程序语义上顺序执行; 对于同一个锁的解锁操作肯定先于加锁; 对于 volatile 变量的写操作肯定先于读操作; 线程的 `start()` 方法肯定先于内部的其它操作; A 先于 B，B 先于 C，那么 A 肯定先于 C; 线程内部的所有操作肯定在结束前（`join()` 返回前）执行; 线程的 `interrupt()` 肯定先于中断检测（Thread.interrupted()）; 对象的初始化肯定先于 `finalize()`
+- `volatile` 能保证可见性和有序性
 - `join()`: 等待加入的线程执行完成后再继续执行后面的操作
 - `Thread` 的静态方法 `sleep()` 只会让出 CPU 从而进入休眠（TIMED_WAITING），不会释放已经获得对象锁。而对象的 `wait()` 方法只能在同步方法或同步块中调用表示虽然自己拿到了锁但是不满足某个条件从而释放对象锁并进入等待池（WAITING），等待被 `notift()` 或 `notifyAll` 通知的时候才有资格获取 CPU 时间片（RANNABLE）
 - `Condition` 对象的 `await()` / `signal()` 和对象的 `wait()` / `notift()` 一样，线程池正是利用了条件对象的 `await()` 和 `signal()` 完成对线程的保活处理的  
@@ -76,6 +77,32 @@
 - CyclicBarrier 要更强大一点，可以等到所有线程都到达屏障后再继续执行，否则阻塞在 await() 处，重点是之后 CyclicBarrier 可以再设置一个屏障（reset()），继续当计数器使用  
 - 信号量 Semaphore 可以控制资源访问，acquire() 申请，release() 释放  
 - Exchanger 用于两个线程交换数据，阻塞在 exchange() 处，等待另一个线程准备好数据后交换，之后再继续向下执行  
+
+```java
+/**
+ * 双检锁单例
+ */
+public class Singleton {
+
+    private static volatile Singleton instance;
+
+    private Singleton() {}
+
+    public static Singleton getInstance() {
+        // 避免不必要的同步操作
+        if (instance == null) {
+            synchronized(Singleton.class) {
+                // 再次检查，避免第二个线程拿到锁后再次创建对象
+                if (instance == null) {
+                    // volatile 保证可见性和顺序性
+                    instance = new Singleton();
+                }
+            }
+        }
+        return instance;
+    } 
+}
+```
 
 ## JDK 语言机制
 
@@ -213,71 +240,6 @@ TCP 的四次挥手：
 2. 服务端确认断开请求：可以断开，但是等我先销毁一下资料。ACK = 1, seq = y, ack = x + 1  `CLOSE_WAIT` 
 3. 服务端请求断开连接：资料已销毁，再见吧我的朋友。FIN = 1, ACK = 1, seq = z, ack = x + 1  `LAST_ACK`
 4. 客户端确认断开请求：好的，再见。ACK = 1, seq = x + 1, ack = z + 1  
-
-## Android 事件分发机制
-
-`Activity/View` 有 `dispatchTouchEvent()`、`onTouchEvent()` 回调，ViewGroup 额外有 `onInterceptTouchEvent()` 回调  
-事件产生时，会首先 dispatch:  
-
-* `true`. 只分发到这里，本函数直接消费
-* `false`. 不分发也不消费，逐层返回给父 View 消费
-
-`super.dispatchTouchEvent(ev)` 系统默认处理，如果有子 view 就分发给自己的子 view，如果自己是最小颗粒的 view 了，就直接调用 `onTouchEvent()` 消费
-
-`onInterceptTouchEvent()` 时:  
-
-* `true`. 当前 `onTouchEvent()` 消费
-* `false`/`super`. 不拦截，继续分发
-
-到达 `onTouchEvent()` 时:  
-
-* `true`. 消费，事件结束
-* `false`/`super`. 不消费，逐层返回给父 View 消费
-
-默认点击事件:
-
-```text
-Activity: dispatchTouchEvent---ACTION_DOWN
-ViewGroup: dispatchTouchEvent---ACTION_DOWN
-ViewGroup: onInterceptTouchEvent---ACTION_DOWN
-View: dispatchTouchEvent---ACTION_DOWN
-View: onTouchEvent---ACTION_DOWN
-ViewGroup: onTouchEvent---ACTION_DOWN
-Activity: onTouchEvent---ACTION_DOWN
-Activity: dispatchTouchEvent---ACTION_MOVE
-Activity: onTouchEvent---ACTION_MOVE
-Activity: dispatchTouchEvent---ACTION_UP
-Activity: onTouchEvent---ACTION_UP
-```
-
-**DOWN 事件的分发是为了寻找消费者，找到了，后续的事件直接交给消费者去处理**  
-
-上面的 ACTION_DOWN 只有 Activity 消费了，所以后续的 ACTION_MOVE 和 ACTION_UP 直接交给 Activity 处理了  
-
-如果 ViewGroup 的 dispatch 返回了 true，那么直接消费，不会经过 `onInterceptTouchEvent()` 和 `onTouchEvent()`  
-
-```text
-Activity: dispatchTouchEvent---ACTION_DOWN
-ViewGroup: dispatchTouchEvent---ACTION_DOWN
-Activity: dispatchTouchEvent---ACTION_MOVE
-ViewGroup: dispatchTouchEvent---ACTION_MOVE
-Activity: dispatchTouchEvent---ACTION_UP
-ViewGroup: dispatchTouchEvent---ACTION_UP
-```
-
-如果返回了 `false`  
-
-```text
-Activity: dispatchTouchEvent---ACTION_DOWN
-ViewGroup: dispatchTouchEvent---ACTION_DOWN
-Activity: onTouchEvent---ACTION_DOWN
-Activity: dispatchTouchEvent---ACTION_MOVE
-Activity: onTouchEvent---ACTION_MOVE
-Activity: dispatchTouchEvent---ACTION_UP
-Activity: onTouchEvent---ACTION_UP
-```
-
-分发是自上而下的，消费是自下而上的
 
 ## 算法
 
@@ -541,7 +503,7 @@ public List<Integer> search(String text, String pattern) {
 #### 线性模型
 
 - 钢条切割，长度为 i 英寸的钢条价格为 P[i]，给定长度为 n 的钢条如何切割使收益 r[n] **最大** ？  
-r[n] = max{ P[i], r[n - i] }, i >= 0 && i <= n  
+r[n] = max{ P[i] + r[n - i] }, i >= 0 && i <= n  
 - 在一个夜黑风高的晚上，有n（n <= 50）个小朋友在桥的这边，现在他们需要过桥，但是由于桥很窄，每次只允许不大于两人通过，他们只有一个手电筒，所以每次过桥的两个人需要把手电筒带回来，i 号小朋友过桥的时间为T[i]，两个人过桥的总时间为二者中时间最长的那个。问所有小朋友过桥的总时间 **最短** 是多少？  
 f[i] = min { f[i - 1] + T[1] + T[i], f[i - 2] + T[1] + T[i] + T[2] + T[2] }  
 

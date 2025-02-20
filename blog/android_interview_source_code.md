@@ -561,13 +561,16 @@ class LifecycleBoundObserver extends ObserverWrapper implements LifecycleEventOb
 只有 `STARTED` 和 `RESUMED` 状态下的 `LifecycleOwner` 才算是活跃的  
 只有活跃状态下的 `Observer` 才能接收通知  
 当 `LifecycleOwner` 状态变成活跃时，通知 `Observer`（这点至关重要，这也是 LiveData 最亮眼的一点，很多时候离开了某个页面，但是当对应的数据发生变化时，而我们又不希望马上更新一个看不见的页面，而是回到页面时才对页面进行更新，这种情况下 LiveData 就能很好地完成任务）  
+但是总有些人有意或者无意的在 LiveData 观察到数据变化后进行额外的操作（比如页面跳转），这个粘性通知功能就会从 feature 变成 bug，也就是说当页面重新变得活跃（销毁重建）时，所有 `observe(LifecycleOwner, Observer<? super T>)` 的地方的都会收到回调，也就是他们说的数据倒灌。虽然可以通过手动添加版本号或者反射修改版本号的方式把 LiveData 变成事件广播，但是毕竟违背了 LiveData 的名字和设计初衷，也不够优雅。所以 LiveData 的观察者观察到数据变化后只能进行无副作用的 UI 更新，而对于事件可以使用广播或者 SharedFlow 去完成  
 当 `LifecycleOwner` 状态变成 `DESTROYED` 时，移除 `Observer`  
 移除 `Observer` 时移除对应的 `LifecycleOwner` 的观察者  
 当 `Observer` 的数量由 0 到 1 时调用 `LiveData` 的 `onActive()`，从 1 到 0 时调用 `onInactive()`  
+频繁 `postValue()` 可能会导致还没来得及通知的值丢失，也就是说可能出现连续两次 `postValue()` 但是只有第二次的执行了 onChanged 的情况  
+
 
 ### LiveData 分析
 
-`LiveData` 把数据对象和页面生命周期关联了起来，而且是以一种简单的方式实现，它可以满足大部分数据驱动视图的需求。但是 `LiveData` 只能只是简单持有一个数据对象，缺乏流式处理的灵活性。而且由于封装数据，导致与其他同步或异步模块交互时需要额外的封装和解封装过程  
+`LiveData` 把数据对象和页面生命周期关联了起来，而且是以一种简单的方式实现，它可以满足大部分数据驱动视图的需求。但是 `LiveData` 只能只是简单持有一个数据对象，缺乏流式处理的灵活性。而且由于封装数据，导致与其他同步或异步模块交互时需要额外的封装和解封装过程，所以建议使用 StateFlow 和 SharedFlow 代替 LiveData  
 
 ## 参考
 
