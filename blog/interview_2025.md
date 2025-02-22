@@ -1,11 +1,11 @@
 # R&D 备考 2025
 
-## 项目
+## 介绍一下项目？
 
 - 项目的难点：广告组件的滑动请求、业务解耦、开屏广告策略模式，可视化合规工具（appOpsManager.setOnOpNotedCallback）
 - 使用到的设计模式：策略模式，模板方法模式
 
-## Kotlin 协程实现原理
+## Kotlin 协程实现原理是什么？
 
 协程的核心是挂起（suspend）和恢复（resume），实现原理就是CPS：把 `suspend` 函数转换成 Continuation 和状态机实现协程的挂起和恢复  
 
@@ -20,6 +20,9 @@ fun testCoroutine(completion: Continuation<Any?>): Any? {
     }
 }
 ```
+
+挂起：执行到挂起函数时由调度器负责停止执行并调度其他协程去执行  
+恢复：调度器通过 resumeWith 调度 continuation 继续执行  
 
 ### 协程调度器有哪些？
 
@@ -84,7 +87,7 @@ singleTask 一般用于 MainActivity 或 SettingActivity，表示任务栈中唯
 
 ## Kotlin
 
-### object 关键字
+### object 关键字的用法有哪些
 
 - 单例（线程安全、访问再初始化）
 - 伴生对象（可以实现接口）
@@ -170,26 +173,39 @@ Choreographer.getInstance().postCallback(
 
 ## 显示相关
 
-`Activity` 中获取 View 宽高的方式：
+### Activity 中获取 View 宽高的方式？
 
 - `ViewTreeObserver` 监听
 - `view.post()`
-- `onResume()`
 - `onWindowFocusChanged()`
+
+### Activity 显示过程是怎样的？
+
+- Activity attach 创建 PhoneWindow
+- onCreate + setContentView 获取或创建 DecorView
+- Activity resume： PhoneWindow ViewRootImpl.setView
+- onAttachedToWindow, measure, layout, draw
+- 将 PhoneWindow 添加到 WMS 上
+
+也就是说第一次 resume 时不能获取宽高，因为 resume 之后才通过 Handler 去通知 measure  
+
+### `getMeasuredWidth()` 和 `getWidth()` 什么情况下不一样？
+
+布局完成前可能不一样，布局完成后一样  
+onMeasure() 之后才会确定测量宽度，onLayout() 后才会确定实际宽度  
 
 ## Android 事件分发机制
 
-`Activity/View` 有 `dispatchTouchEvent()`、`onTouchEvent()` 回调，ViewGroup 额外有 `onInterceptTouchEvent()` 回调  
 事件产生时，会首先 dispatch:  
 
 * `true`. 只分发到这里，本函数直接消费
 * `false`. 不分发也不消费，逐层返回给父 View 消费
 
-`super.dispatchTouchEvent(ev)` 系统默认处理，如果有子 view 就分发给自己的子 view，如果自己是最小颗粒的 view 了，就直接调用 `onTouchEvent()` 消费
+`super.dispatchTouchEvent(ev)` 系统默认处理：如果有子 view 就分发给子 view，如果自己是最小颗粒的 view 了，就直接调用 `onTouchEvent()` 消费
 
 `onInterceptTouchEvent()` 时:  
 
-* `true`. 当前 `onTouchEvent()` 消费
+* `true`. ACTION_DOWN 返回 true 时当前 `onTouchEvent()` 消费
 * `false`/`super`. 不拦截，继续分发
 
 到达 `onTouchEvent()` 时:  
@@ -267,7 +283,7 @@ B dispatchTouchEvent ACTION_UP
 B onTouchEvent ACTION_UP
 ```
 
-也就是说 `onInterceptTouchEvent` 如果后续事件返回了 true，那么子 View 将会收到 ACTION_CANCEL，并且后续事件将不会再走这个方法，而是直接走 `onTouchEvent`  
+也就是说 `onInterceptTouchEvent` 如果后续事件返回了 true，那么原来的目标子 View 将会收到 ACTION_CANCEL，并且后续事件将不会再走 `onInterceptTouchEvent`，而是直接走 `onTouchEvent`  
 
 
 
