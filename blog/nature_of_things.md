@@ -451,38 +451,39 @@ public int rk(String t, String p) {
 KMP（Knuth–Morris–Pratt）算法只是简化了回退的步骤：
 
 ```java
-public int[] kmp(String pattern) {
-    int[] next = new int[pattern.length()];
-    int l = 0;
-    for (int i = 1; i < pattern.length(); i++) {
-        while (l > 0 && pattern.charAt(i) != pattern.charAt(l)) {
-            l = next[l - 1];
-        }
-        if (pattern.charAt(i) == pattern.charAt(l)) {
-            l++;
-        }
-        next[i] = l;
-    }
-    return next;
-}
-public List<Integer> search(String text, String pattern) {
-    List<Integer> res = new ArrayList<>();
-    int[] maxMatchLens = kmp(pattern);
-    int j = 0;
-    for (int i = 0; i < text.length(); i++) {
-        while (j > 0 && text.charAt(i) != pattern.charAt(j)) {
-            j = maxMatchLens[j - 1];
-        }
-        if (pattern.charAt(j) == text.charAt(i)) {
-            j++;
+    static int kmp(String text, String pattern) {
+        int[] next = buildNext(pattern);
+        int i = 0, j = 0;
+        while (i < text.length() && j < pattern.length()) {
+            if (j == -1 || text.charAt(i) == pattern.charAt(j)) {
+                i++;
+                j++;
+            } else {
+                j = next[j];
+            }
         }
         if (j == pattern.length()) {
-            res.add(i - j + 1);
-            j = maxMatchLens[j - 1];
+            return i - j;
+        } else {
+            return -1;
         }
     }
-    return res;
-}
+
+    static int[] buildNext(String pattern) {
+        int[] next = new int[pattern.length()];
+        next[0] = -1;
+        int i = 0, j = -1;
+        while (i < pattern.length() - 1) {
+            if (j == -1 || pattern.charAt(i) == pattern.charAt(j)) {
+                i++;
+                j++;
+                next[i] = j;
+            } else {
+                j = next[j];
+            }
+        }
+        return next;
+    }
 ```
 
 ### 【内功】动态规划
