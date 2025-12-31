@@ -1,33 +1,173 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="zh-CN">
 <head>
-    <meta charset="utf-8">
-    <title>Frank's Blog</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frank 的技术博客</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            line-height: 1.6;
+            background-color: #ffffff;
+            color: #333333;
+            padding: 20px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #1a1a1a;
+        }
+
+        section {
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            border-left: 4px solid #3498db;
+            padding-left: 12px;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        li {
+            margin-bottom: 12px;
+        }
+
+        a {
+            color: #3498db;
+            text-decoration: none;
+            transition: color 0.2s, opacity 0.2s;
+            font-size: 1rem;
+        }
+
+        a:hover {
+            color: #2980b9;
+            opacity: 0.8;
+        }
+
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #777777;
+            font-size: 0.9rem;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #1a1a1a;
+                color: #e0e0e0;
+            }
+
+            h1 {
+                color: #f0f0f0;
+            }
+
+            h2 {
+                color: #b0b0b0;
+                border-left-color: #5dade2;
+            }
+
+            a {
+                color: #5dade2;
+            }
+
+            a:hover {
+                color: #85c1e9;
+            }
+
+            header {
+                border-bottom-color: #333333;
+            }
+
+            footer {
+                border-top-color: #333333;
+                color: #888888;
+            }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 1.75rem;
+            }
+
+            h2 {
+                font-size: 1.3rem;
+            }
+
+            a {
+                font-size: 0.95rem;
+            }
+        }
+    </style>
 </head>
-
 <body>
-    <h4>我的技术博客:</h4>
-    <ul>
-        <li><a href="https://github.com/shangmingchao/shangmingchao.github.io/blob/master/blog/groovy_to_kts.md" target="_blank" rel="noopener noreferrer">是时候把构建脚本从 Groovy 迁移至 Kotlin 了</a></li>
-        <li><a href="https://github.com/shangmingchao/shangmingchao.github.io/blob/master/blog/ai_parachuting.md#ai-%E4%B9%8B%E6%97%85%E8%B7%B3%E4%BC%9E" target="_blank" rel="noopener noreferrer">AI 之旅：跳伞</a></li>
-        <li><a href="https://github.com/shangmingchao/shangmingchao.github.io/blob/master/blog/ai_flower.md#ai-%E4%B9%8B%E6%97%85%E8%8A%B1%E6%B5%B7" target="_blank" rel="noopener noreferrer">AI 之旅：花海</a></li>
-        <li><a href="https://github.com/shangmingchao/shangmingchao.github.io/blob/master/blog/ai_sail.md#ai-%E4%B9%8B%E6%97%85%E5%90%AF%E7%A8%8B" target="_blank" rel="noopener noreferrer">AI 之旅：启程</a></li>
-        <li><a href="https://github.com/shangmingchao/shangmingchao.github.io/blob/master/blog/kotlin_learning_notes_coroutine.md#kotlin-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E5%8D%8F%E7%A8%8B%E7%AF%87" target="_blank" rel="noopener noreferrer">Kotlin 学习笔记协程篇</a></li>
-        <li><a href="https://github.com/shangmingchao/shangmingchao.github.io/blob/master/blog/android_notes_testing.md#android-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E6%B5%8B%E8%AF%95%E7%AF%87" target="_blank" rel="noopener noreferrer">Android 学习笔记测试篇</a></li>
-        <li><a href="https://github.com/shangmingchao/shangmingchao.github.io/blob/master/blog/android_notes_thinking.md#android-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E6%80%9D%E8%80%83%E7%AF%87" target="_blank" rel="noopener noreferrer">Android 学习笔记思考篇</a></li>
-        <li><a href="https://github.com/shangmingchao/shangmingchao.github.io/blob/master/blog/android_notes_arch.md#android-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E6%9E%B6%E6%9E%84%E7%AF%87" target="_blank" rel="noopener noreferrer">Android 学习笔记架构篇</a></li>
-        <li><a href="https://github.com/shangmingchao/shangmingchao.github.io/blob/master/blog/android_notes_core.md#android-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E6%A0%B8%E5%BF%83%E7%AF%87" target="_blank" rel="noopener noreferrer">Android 学习笔记核心篇</a></li>
-        <li><a href="https://github.com/shangmingchao/shangmingchao.github.io/tree/master/blog" target="_blank" rel="noopener noreferrer">更多>></a></li>
-    </ul>
-    <h4>关于我:</h4>
-    <ul>
-        <li><a href="https://github.com/shangmingchao/shangmingchao.github.io/blob/master/profile/my_profile.md#%E6%88%91%E7%9A%84%E8%B5%84%E6%96%99" target="_blank" rel="noopener noreferrer">我的资料</a></li>
-        <li><a href="https://juejin.im/user/5a96922b5188257a865da3f2" target="_blank" rel="noopener noreferrer">我的掘金</a></li>
-        <li><a href="https://me.csdn.net/shangmingchao" target="_blank" rel="noopener noreferrer">我的 CSDN</a></li>
-        <li><a href="https://www.jianshu.com/u/64ac160aaac8" target="_blank" rel="noopener noreferrer">我的简书</a></li>
-        <li><a href="https://github.com/shangmingchao" target="_blank" rel="noopener noreferrer">我的 GitHub</a></li>
-    </ul>
-</body>
+    <div class="container">
+        <header>
+            <h1>Frank 的技术博客</h1>
+        </header>
 
+        <main>
+            <section>
+                <h2>我的技术博客</h2>
+                <ul>
+                    <li><a href="https://github.com/shangmingchao/shangmingchao.github.io/blob/master/blog/groovy_to_kts.md" target="_blank" rel="noopener noreferrer">是时候把构建脚本从 Groovy 迁移至 Kotlin 了</a></li>
+                    <li><a href="https://github.com/shangmingchao/shangmingchao.github.io/blob/master/blog/ai_parachuting.md#ai-%E4%B9%8B%E6%97%85%E8%B7%B3%E4%BC%9E" target="_blank" rel="noopener noreferrer">AI 之旅：跳伞</a></li>
+                    <li><a href="https://github.com/shangmingchao/shangmingchao.github.io/blob/master/blog/ai_flower.md#ai-%E4%B9%8B%E6%97%85%E8%8A%B1%E6%B5%B7" target="_blank" rel="noopener noreferrer">AI 之旅：花海</a></li>
+                    <li><a href="https://github.com/shangmingchao/shangmingchao.github.io/blob/master/blog/ai_sail.md#ai-%E4%B9%8B%E6%97%85%E5%90%AF%E7%A8%8B" target="_blank" rel="noopener noreferrer">AI 之旅：启程</a></li>
+                    <li><a href="https://github.com/shangmingchao/shangmingchao.github.io/blob/master/blog/kotlin_learning_notes_coroutine.md#kotlin-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E5%8D%8F%E7%A8%8B%E7%AF%87" target="_blank" rel="noopener noreferrer">Kotlin 学习笔记协程篇</a></li>
+                    <li><a href="https://github.com/shangmingchao/shangmingchao.github.io/blob/master/blog/android_notes_testing.md#android-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E6%B5%8B%E8%AF%95%E7%AF%87" target="_blank" rel="noopener noreferrer">Android 学习笔记测试篇</a></li>
+                    <li><a href="https://github.com/shangmingchao/shangmingchao.github.io/blob/master/blog/android_notes_thinking.md#android-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E6%80%9D%E8%80%83%E7%AF%87" target="_blank" rel="noopener noreferrer">Android 学习笔记思考篇</a></li>
+                    <li><a href="https://github.com/shangmingchao/shangmingchao.github.io/blob/master/blog/android_notes_arch.md#android-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E6%9E%B6%E6%9E%84%E7%AF%87" target="_blank" rel="noopener noreferrer">Android 学习笔记架构篇</a></li>
+                    <li><a href="https://github.com/shangmingchao/shangmingchao.github.io/blob/master/blog/android_notes_core.md#android-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E6%A0%B8%E5%BF%83%E7%AF%87" target="_blank" rel="noopener noreferrer">Android 学习笔记核心篇</a></li>
+                    <li><a href="https://github.com/shangmingchao/shangmingchao.github.io/tree/master/blog" target="_blank" rel="noopener noreferrer">更多&gt;&gt;</a></li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>关于我</h2>
+                <ul>
+                    <li><a href="https://github.com/shangmingchao/shangmingchao.github.io/blob/master/profile/my_profile.md#%E6%88%91%E7%9A%84%E8%B5%84%E6%96%99" target="_blank" rel="noopener noreferrer">我的资料</a></li>
+                    <li><a href="https://juejin.im/user/5a96922b5188257a865da3f2" target="_blank" rel="noopener noreferrer">我的掘金</a></li>
+                    <li><a href="https://me.csdn.net/shangmingchao" target="_blank" rel="noopener noreferrer">我的 CSDN</a></li>
+                    <li><a href="https://www.jianshu.com/u/64ac160aaac8" target="_blank" rel="noopener noreferrer">我的简书</a></li>
+                    <li><a href="https://github.com/shangmingchao" target="_blank" rel="noopener noreferrer">我的 GitHub</a></li>
+                </ul>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 Frank. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
 </html>
